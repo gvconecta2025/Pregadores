@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App para Pregadores - Beta V3.1</title>
+    <title>App para Pregadores - Beta V3.2</title>
     <style>
         :root {
             --bg-color: #f8fafc;
@@ -80,9 +80,11 @@
             transition: all 0.3s ease;
         }
 
+        /* Cor quando o bloco está ABERTO */
         .accordion-item.active {
             box-shadow: var(--shadow-md);
             border-color: #c7d2fe;
+            background-color: #f0fdfa; /* Um leve tom diferenciado para dar foco */
         }
 
         .accordion-header {
@@ -276,14 +278,28 @@ Leitura de João 3:16</div>
         }
 
         function preventToggleIfEditing(event) {
+            // No modo de edição, impede que clicar no texto feche a sanfona, 
+            // mas permite clicar no ícone de '+' para fechar/abrir.
             if (isEditMode) {
                 event.stopPropagation();
             }
         }
 
+        // LÓGICA CORRIGIDA DA SANFONA
         function toggleAccordion(headerElement) {
-            const item = headerElement.parentElement;
-            item.classList.toggle('active');
+            const currentItem = headerElement.closest('.accordion-item');
+            const isCurrentlyActive = currentItem.classList.contains('active');
+
+            // 1. Fecha todos os outros blocos (Dinâmica clássica de sanfona)
+            const allItems = document.querySelectorAll('.accordion-item');
+            allItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // 2. Se o bloco que clicamos estava fechado, ele abre (se estava aberto, apenas fecha todos)
+            if (!isCurrentlyActive) {
+                currentItem.classList.add('active');
+            }
         }
 
         function formatText(command) {
@@ -313,13 +329,10 @@ Leitura de João 3:16</div>
             }
 
             const wrapper = document.getElementById('blocks-wrapper');
-            if (!wrapper) {
-                alert("Erro: O contêiner 'blocks-wrapper' não foi encontrado. Verifique se o código HTML foi copiado integralmente.");
-                return;
-            }
+            if (!wrapper) return;
             
             const newBlockHTML = `
-                <div class="accordion-item active">
+                <div class="accordion-item">
                     <div class="accordion-header" onclick="toggleAccordion(this)">
                         <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)"></div>
                         <span class="toggle-icon">+</span>
@@ -343,8 +356,13 @@ Leitura de João 3:16</div>
             
             wrapper.insertAdjacentHTML('beforeend', newBlockHTML);
 
+            // Seleciona o recém-criado bloco
             const newBlocks = wrapper.querySelectorAll('.accordion-item');
             const lastBlock = newBlocks[newBlocks.length - 1];
+            
+            // Força a sanfona a abrir exclusivamente este novo bloco
+            toggleAccordion(lastBlock.querySelector('.accordion-header'));
+
             lastBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
             lastBlock.querySelector('.header-content').focus();
         }
