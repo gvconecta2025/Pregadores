@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App para Pregadores</title>
+    <style>
+        /* Estilos Base e Responsividade */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px; /* Adapta bem para PC e Tablet */
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        /* Estilos da Sanfona (Accordion) */
+        .accordion-item {
+            background-color: #ffffff;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Cor quando o bloco está ABERTO */
+        .accordion-item.active {
+            background-color: #f0f8ff; /* Azul bem claro */
+            border-color: #bae6fd;
+        }
+
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            cursor: pointer;
+        }
+
+        /* Input onde vai o Título/Versículo */
+        .header-input {
+            flex-grow: 1;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            background: transparent;
+            color: #2c3e50;
+            outline: none;
+        }
+
+        .header-input::placeholder {
+            color: #94a3b8;
+            font-weight: normal;
+        }
+
+        .toggle-icon {
+            font-size: 1.5rem;
+            color: #64748b;
+            transition: transform 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .accordion-item.active .toggle-icon {
+            transform: rotate(45deg);
+            color: #0284c7;
+        }
+
+        /* Corpo da Sanfona (Escondido por padrão) */
+        .accordion-body {
+            display: none;
+            padding: 0 20px 20px 20px;
+        }
+
+        .accordion-item.active .accordion-body {
+            display: block;
+        }
+
+        /* Painel de Edição (Toolbar) */
+        .toolbar {
+            display: flex;
+            gap: 5px;
+            padding: 10px 0;
+            border-bottom: 1px solid #cbd5e1;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar button {
+            background: #e2e8f0;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .toolbar button:hover {
+            background: #cbd5e1;
+        }
+
+        /* Área de Texto Rico */
+        .editor-area {
+            min-height: 150px;
+            outline: none;
+            line-height: 1.6;
+            font-size: 1.05rem;
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .editor-area:focus {
+            border-color: #7dd3fc;
+            box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.3);
+        }
+
+        /* Botão de adicionar novo tópico */
+        .btn-add {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #0ea5e9;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn-add:hover {
+            background-color: #0284c7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app-container">
+        <h1>Meu Esboço</h1>
+        
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <input type="text" class="header-input" value="Introdução - João 3:16" onclick="event.stopPropagation();">
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="toolbar">
+                    <button type="button" onclick="formatText('bold')"><b>B</b></button>
+                    <button type="button" onclick="formatText('italic')"><i>I</i></button>
+                    <button type="button" onclick="formatText('underline')"><u>U</u></button>
+                    <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
+                    <button type="button" onclick="formatText('insertOrderedList')">1. Lista</button>
+                    <button type="button" onclick="formatText('formatBlock', 'H3')">Título</button>
+                </div>
+                <div class="editor-area" contenteditable="true">
+                    Escreva os detalhes deste ponto aqui... <br><br>
+                    <ul>
+                        <li>Falar sobre o amor de Deus.</li>
+                        <li>Lembrar de dar o exemplo da cruz.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <input type="text" class="header-input" placeholder="Digite o próximo tópico ou versículo..." onclick="event.stopPropagation();">
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="toolbar">
+                    <button type="button" onclick="formatText('bold')"><b>B</b></button>
+                    <button type="button" onclick="formatText('italic')"><i>I</i></button>
+                    <button type="button" onclick="formatText('underline')"><u>U</u></button>
+                    <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
+                    <button type="button" onclick="formatText('insertOrderedList')">1. Lista</button>
+                    <button type="button" onclick="formatText('formatBlock', 'H3')">Título</button>
+                </div>
+                <div class="editor-area" contenteditable="true"></div>
+            </div>
+        </div>
+
+        <button class="btn-add" onclick="alert('Na versão final, isso criará um novo bloco logo abaixo!')">+ Adicionar Novo Tópico</button>
+
+    </div>
+
+    <script>
+        // Função para abrir/fechar a sanfona
+        function toggleAccordion(headerElement) {
+            const item = headerElement.parentElement;
+            
+            // Fecha todos os outros (opcional: se quiser que só um fique aberto por vez)
+            // const allItems = document.querySelectorAll('.accordion-item');
+            // allItems.forEach(i => {
+            //    if(i !== item) i.classList.remove('active');
+            // });
+
+            // Alterna o status de aberto/fechado do item clicado
+            item.classList.toggle('active');
+        }
+
+        // Função simples para o painel de edição (Negrito, Itálico, Listas)
+        function formatText(command, value = null) {
+            document.execCommand(command, false, value);
+            // Retorna o foco para a área de texto
+            event.preventDefault();
+        }
+    </script>
+</body>
+</html>
