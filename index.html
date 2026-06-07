@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App para Pregadores - Beta V5</title>
+    <title>App para Pregadores - Beta V6</title>
     <style>
         :root {
             --bg-color: #f1f5f9;
@@ -71,18 +71,15 @@
             box-sizing: border-box;
         }
 
-        #blocks-wrapper {
-            display: flex;
-            flex-direction: column;
-        }
+        #blocks-wrapper { display: flex; flex-direction: column; }
 
-        /* CABEÇAS (Títulos) - Design Plano */
+        /* CABEÇAS (Títulos) */
         .accordion-header {
             background-color: var(--primary);
             color: white;
             display: flex;
-            align-items: flex-start;
-            padding: 18px 20px;
+            align-items: center;
+            padding: 16px 20px;
             cursor: pointer;
             border-radius: 12px;
             margin-bottom: 12px;
@@ -90,7 +87,6 @@
             transition: border-radius 0.2s ease, margin 0.2s ease;
         }
 
-        /* O Segredo do Cabeçalho Fixo (Topo) */
         .accordion-header.sticky-top {
             position: -webkit-sticky;
             position: sticky;
@@ -101,7 +97,6 @@
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
         }
 
-        /* O Segredo do Rodapé Fixo (Embaixo) */
         .accordion-header.sticky-bottom {
             position: -webkit-sticky;
             position: sticky;
@@ -127,20 +122,46 @@
             font-weight: 500;
         }
 
+        /* VISOR DO CRONÔMETRO */
+        .header-timer {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-size: 0.9rem;
+            margin-right: 12px;
+            font-family: monospace;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: background-color 0.3s;
+        }
+
+        .header-timer.over-time {
+            background-color: var(--danger);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
         .toggle-icon {
             font-size: 1.5rem;
             color: white;
             transition: transform 0.3s ease;
-            margin-left: 12px;
             line-height: 1;
         }
         .accordion-header.sticky-top .toggle-icon { transform: rotate(45deg); }
 
-        /* CORPO DA SANFONA (Claro) */
+        /* CORPO DA SANFONA */
         .accordion-body {
             display: none;
             background-color: var(--card-bg);
-            padding: 0 20px 20px 20px;
+            padding: 20px;
             border: 1px solid var(--border-light);
             border-top: none;
             border-radius: 0 0 12px 12px;
@@ -150,15 +171,39 @@
 
         .accordion-body.active { 
             display: block; 
-            /* Empurra o rodapé para o fim da tela caso o texto seja curto */
             min-height: calc(100vh - 180px);
         }
+
+        /* CONFIGURAÇÃO DE TEMPO NO MODO EDIÇÃO */
+        .time-settings {
+            background: #f8fafc;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .time-settings label { font-weight: 600; color: var(--text-main); font-size: 0.95rem; }
+        
+        .time-settings input {
+            width: 70px;
+            padding: 6px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+        }
+        .time-settings input:focus { border-color: var(--primary); }
 
         /* Editor e Ferramentas */
         .toolbar {
             display: flex;
             gap: 8px;
-            padding: 12px 0;
+            padding: 0 0 12px 0;
             border-bottom: 1px solid var(--border-light);
             margin-bottom: 16px;
             flex-wrap: wrap;
@@ -230,8 +275,8 @@
         /* REGRAS DO MODO DE LEITURA (TRAVADO) */
         body.view-mode .toolbar, 
         body.view-mode .box-actions, 
-        body.view-mode .btn-add { display: none !important; }
-        /* Removemos o bloqueio de ponteiro para você poder rolar a tela tocando no texto livremente! */
+        body.view-mode .btn-add,
+        body.view-mode .time-settings { display: none !important; }
     </style>
 </head>
 <body class="edit-mode">
@@ -244,12 +289,19 @@
     <div class="container" id="app-container">
         
         <div id="blocks-wrapper">
-            <div class="accordion-header active" onclick="toggleAccordion(this)">
+            <div class="accordion-header active sticky-top" onclick="toggleAccordion(this)" data-elapsed="0" data-estimated="5">
                 <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)">1. Introdução
 Leitura de João 3:16</div>
+                <div class="header-timer">
+                    <span class="time-elapsed">00:00</span>&nbsp;/&nbsp;<span class="time-estimated">5</span>m
+                </div>
                 <span class="toggle-icon">+</span>
             </div>
             <div class="accordion-body active">
+                <div class="time-settings">
+                    <label>⏱️ Tempo estimado (minutos):</label>
+                    <input type="number" class="time-input" value="5" min="1" placeholder="Ex: 10" oninput="updateEstimatedTime(this)">
+                </div>
                 <div class="toolbar">
                     <button type="button" onclick="formatText('bold')"><b>B</b></button>
                     <button type="button" onclick="formatText('italic')"><i>I</i></button>
@@ -263,12 +315,19 @@ Leitura de João 3:16</div>
                 </div>
             </div>
 
-            <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-header sticky-bottom" onclick="toggleAccordion(this)" data-elapsed="0" data-estimated="15">
                 <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)">2. Desenvolvimento
 O Amor de Deus</div>
+                <div class="header-timer">
+                    <span class="time-elapsed">00:00</span>&nbsp;/&nbsp;<span class="time-estimated">15</span>m
+                </div>
                 <span class="toggle-icon">+</span>
             </div>
             <div class="accordion-body">
+                <div class="time-settings">
+                    <label>⏱️ Tempo estimado (minutos):</label>
+                    <input type="number" class="time-input" value="15" min="1" placeholder="Ex: 10" oninput="updateEstimatedTime(this)">
+                </div>
                 <div class="toolbar">
                     <button type="button" onclick="formatText('bold')"><b>B</b></button>
                     <button type="button" onclick="formatText('italic')"><i>I</i></button>
@@ -289,28 +348,83 @@ O Amor de Deus</div>
 
     <script>
         let isEditMode = true;
+        let timerInterval = null;
 
-        // Atualiza a inteligência de quem fica no Topo e quem fica no Rodapé
+        // INICIA O CRONÔMETRO
+        function startTimer(headerElement) {
+            stopTimer(); // Garante que não há outro rodando
+            
+            timerInterval = setInterval(() => {
+                let elapsed = parseInt(headerElement.getAttribute('data-elapsed') || '0');
+                elapsed++;
+                headerElement.setAttribute('data-elapsed', elapsed);
+                renderTimerDisplay(headerElement);
+            }, 1000); // Roda a cada 1 segundo
+        }
+
+        // PAUSA O CRONÔMETRO
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        // ATUALIZA O VISOR DA CABEÇA
+        function renderTimerDisplay(headerElement) {
+            let elapsed = parseInt(headerElement.getAttribute('data-elapsed') || '0');
+            let estimatedStr = headerElement.getAttribute('data-estimated');
+            let estimated = parseInt(estimatedStr || '0');
+
+            let timerContainer = headerElement.querySelector('.header-timer');
+            let elapsedSpan = headerElement.querySelector('.time-elapsed');
+            let estimatedSpan = headerElement.querySelector('.time-estimated');
+
+            // Formata decorrido em MM:SS
+            let m = Math.floor(elapsed / 60).toString().padStart(2, '0');
+            let s = (elapsed % 60).toString().padStart(2, '0');
+            elapsedSpan.innerText = `${m}:${s}`;
+
+            if (estimated > 0) {
+                timerContainer.style.display = 'flex';
+                estimatedSpan.innerText = estimated;
+                
+                // Se o tempo falado for maior que o tempo estimado em minutos
+                if (elapsed >= estimated * 60) {
+                    timerContainer.classList.add('over-time');
+                } else {
+                    timerContainer.classList.remove('over-time');
+                }
+            } else {
+                // Se o usuário apagou o campo de estimativa, oculta o limite
+                estimatedSpan.innerText = '-';
+                timerContainer.classList.remove('over-time');
+            }
+        }
+
+        // SALVA A ESTIMATIVA DIGITADA PELO USUÁRIO
+        function updateEstimatedTime(inputElement) {
+            let body = inputElement.closest('.accordion-body');
+            let header = body.previousElementSibling;
+            header.setAttribute('data-estimated', inputElement.value);
+            renderTimerDisplay(header);
+        }
+
         function updateStickyHeaders() {
             const headers = document.querySelectorAll('.accordion-header');
             let activeFound = false;
 
             headers.forEach((header) => {
                 header.classList.remove('sticky-top', 'sticky-bottom');
-
                 if (header.classList.contains('active')) {
                     activeFound = true;
                     header.classList.add('sticky-top');
                 } else if (activeFound) {
-                    // Esta é exatamente a próxima cabeça! Ela vira o rodapé do app.
                     header.classList.add('sticky-bottom');
                     activeFound = false; 
                 }
             });
         }
-
-        // Executa no primeiro carregamento da página
-        document.addEventListener('DOMContentLoaded', updateStickyHeaders);
 
         function toggleAppMode() {
             isEditMode = !isEditMode;
@@ -323,16 +437,12 @@ O Amor de Deus</div>
                 body.classList.add('edit-mode');
                 btn.innerHTML = '🔓 Editando';
                 btn.classList.remove('locked');
-                
-                // Libera edição (o teclado vai funcionar)
                 editables.forEach(el => el.setAttribute('contenteditable', 'true'));
             } else {
                 body.classList.remove('edit-mode');
                 body.classList.add('view-mode');
                 btn.innerHTML = '🔒 Leitura';
                 btn.classList.add('locked');
-                
-                // Bloqueia edição (Impede 100% que o teclado virtual suba no celular)
                 editables.forEach(el => el.setAttribute('contenteditable', 'false'));
             }
         }
@@ -344,14 +454,18 @@ O Amor de Deus</div>
         function toggleAccordion(clickedHeader) {
             const isCurrentlyActive = clickedHeader.classList.contains('active');
 
-            // Fecha todos
+            // Fecha todos e PARA O CRONÔMETRO
             document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
             document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('active'));
+            stopTimer();
 
             if (!isCurrentlyActive) {
                 clickedHeader.classList.add('active');
                 clickedHeader.nextElementSibling.classList.add('active');
                 
+                // INICIA O CRONÔMETRO DA NOVA CABEÇA
+                startTimer(clickedHeader);
+
                 updateStickyHeaders();
 
                 setTimeout(() => {
@@ -393,11 +507,18 @@ O Amor de Deus</div>
             if (!wrapper) return;
             
             const newBlockHTML = `
-                <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-header" onclick="toggleAccordion(this)" data-elapsed="0" data-estimated="10">
                     <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)"></div>
+                    <div class="header-timer">
+                        <span class="time-elapsed">00:00</span>&nbsp;/&nbsp;<span class="time-estimated">10</span>m
+                    </div>
                     <span class="toggle-icon">+</span>
                 </div>
                 <div class="accordion-body">
+                    <div class="time-settings">
+                        <label>⏱️ Tempo estimado (minutos):</label>
+                        <input type="number" class="time-input" value="10" min="1" placeholder="Ex: 10" oninput="updateEstimatedTime(this)">
+                    </div>
                     <div class="toolbar">
                         <button type="button" onclick="formatText('bold')"><b>B</b></button>
                         <button type="button" onclick="formatText('italic')"><i>I</i></button>
@@ -420,6 +541,14 @@ O Amor de Deus</div>
             toggleAccordion(lastHeader);
             lastHeader.querySelector('.header-content').focus();
         }
+
+        // Inicializa as cabeças no primeiro carregamento
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStickyHeaders();
+            // Inicia o cronômetro para a cabeça que já nasce aberta (Bloco 1)
+            const firstActive = document.querySelector('.accordion-header.active');
+            if(firstActive) startTimer(firstActive);
+        });
     </script>
 </body>
 </html>
