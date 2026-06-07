@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App para Pregadores - Beta V5</title>
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #94a3b8;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --success: #10b981;
+            --danger: #ef4444;
+            --border-light: #e2e8f0;
+            --main-header-height: 64px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        /* Cabeçalho Principal */
+        .main-header {
+            background-color: var(--card-bg);
+            height: var(--main-header-height);
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-bottom: 1px solid var(--border-light);
+            box-sizing: border-box;
+        }
+
+        .main-header h1 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .btn-toggle-mode {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-toggle-mode.locked { background-color: var(--text-muted); }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 16px 10px;
+            box-sizing: border-box;
+        }
+
+        #blocks-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* CABEÇAS (Títulos) - Design Plano */
+        .accordion-header {
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: flex-start;
+            padding: 18px 20px;
+            cursor: pointer;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: border-radius 0.2s ease, margin 0.2s ease;
+        }
+
+        /* O Segredo do Cabeçalho Fixo (Topo) */
+        .accordion-header.sticky-top {
+            position: -webkit-sticky;
+            position: sticky;
+            top: var(--main-header-height);
+            z-index: 90;
+            border-radius: 12px 12px 0 0;
+            margin-bottom: 0;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+
+        /* O Segredo do Rodapé Fixo (Embaixo) */
+        .accordion-header.sticky-bottom {
+            position: -webkit-sticky;
+            position: sticky;
+            bottom: 0;
+            z-index: 80;
+            box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.15);
+        }
+
+        .header-content {
+            flex-grow: 1;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: white;
+            outline: none;
+            min-height: 28px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .header-content:empty:before {
+            content: "Digite o tópico aqui...";
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+        }
+
+        .toggle-icon {
+            font-size: 1.5rem;
+            color: white;
+            transition: transform 0.3s ease;
+            margin-left: 12px;
+            line-height: 1;
+        }
+        .accordion-header.sticky-top .toggle-icon { transform: rotate(45deg); }
+
+        /* CORPO DA SANFONA (Claro) */
+        .accordion-body {
+            display: none;
+            background-color: var(--card-bg);
+            padding: 0 20px 20px 20px;
+            border: 1px solid var(--border-light);
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .accordion-body.active { 
+            display: block; 
+            /* Empurra o rodapé para o fim da tela caso o texto seja curto */
+            min-height: calc(100vh - 180px);
+        }
+
+        /* Editor e Ferramentas */
+        .toolbar {
+            display: flex;
+            gap: 8px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar button {
+            background: #f1f5f9;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #475569;
+            font-weight: 600;
+        }
+        .toolbar button:hover { background: #e2e8f0; color: var(--text-main); }
+
+        .editor-area {
+            outline: none;
+            line-height: 1.7;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            padding: 10px 0;
+        }
+
+        .editor-area:empty:before {
+            content: "Escreva suas anotações aqui...";
+            color: var(--text-muted);
+        }
+
+        .box-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn-action {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+        }
+        .btn-save { background-color: var(--primary); }
+        .btn-delete { background-color: white; color: var(--danger); border: 1px solid var(--danger); }
+
+        .btn-add {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 18px;
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px dashed var(--primary);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-bottom: 60px;
+        }
+        .btn-add:hover { background-color: #e0e7ff; }
+
+        /* REGRAS DO MODO DE LEITURA (TRAVADO) */
+        body.view-mode .toolbar, 
+        body.view-mode .box-actions, 
+        body.view-mode .btn-add { display: none !important; }
+        /* Removemos o bloqueio de ponteiro para você poder rolar a tela tocando no texto livremente! */
+    </style>
+</head>
+<body class="edit-mode">
+
+    <header class="main-header">
+        <h1>Meu Esboço</h1>
+        <button id="toggleModeBtn" class="btn-toggle-mode" onclick="toggleAppMode()">🔓 Editando</button>
+    </header>
+
+    <div class="container" id="app-container">
+        
+        <div id="blocks-wrapper">
+            <div class="accordion-header active" onclick="toggleAccordion(this)">
+                <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)">1. Introdução
+Leitura de João 3:16</div>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="accordion-body active">
+                <div class="toolbar">
+                    <button type="button" onclick="formatText('bold')"><b>B</b></button>
+                    <button type="button" onclick="formatText('italic')"><i>I</i></button>
+                    <button type="button" onclick="formatText('underline')"><u>U</u></button>
+                    <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
+                </div>
+                <div class="editor-area" contenteditable="true">Escreva a introdução aqui...</div>
+                <div class="box-actions">
+                    <button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button>
+                    <button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button>
+                </div>
+            </div>
+
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)">2. Desenvolvimento
+O Amor de Deus</div>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="accordion-body">
+                <div class="toolbar">
+                    <button type="button" onclick="formatText('bold')"><b>B</b></button>
+                    <button type="button" onclick="formatText('italic')"><i>I</i></button>
+                    <button type="button" onclick="formatText('underline')"><u>U</u></button>
+                    <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
+                </div>
+                <div class="editor-area" contenteditable="true">Aprofunde o assunto aqui...</div>
+                <div class="box-actions">
+                    <button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button>
+                    <button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-add" onclick="addNewBlock()">+ Adicionar Novo Tópico</button>
+
+    </div>
+
+    <script>
+        let isEditMode = true;
+
+        // Atualiza a inteligência de quem fica no Topo e quem fica no Rodapé
+        function updateStickyHeaders() {
+            const headers = document.querySelectorAll('.accordion-header');
+            let activeFound = false;
+
+            headers.forEach((header) => {
+                header.classList.remove('sticky-top', 'sticky-bottom');
+
+                if (header.classList.contains('active')) {
+                    activeFound = true;
+                    header.classList.add('sticky-top');
+                } else if (activeFound) {
+                    // Esta é exatamente a próxima cabeça! Ela vira o rodapé do app.
+                    header.classList.add('sticky-bottom');
+                    activeFound = false; 
+                }
+            });
+        }
+
+        // Executa no primeiro carregamento da página
+        document.addEventListener('DOMContentLoaded', updateStickyHeaders);
+
+        function toggleAppMode() {
+            isEditMode = !isEditMode;
+            const body = document.body;
+            const btn = document.getElementById('toggleModeBtn');
+            const editables = document.querySelectorAll('.header-content, .editor-area');
+
+            if (isEditMode) {
+                body.classList.remove('view-mode');
+                body.classList.add('edit-mode');
+                btn.innerHTML = '🔓 Editando';
+                btn.classList.remove('locked');
+                
+                // Libera edição (o teclado vai funcionar)
+                editables.forEach(el => el.setAttribute('contenteditable', 'true'));
+            } else {
+                body.classList.remove('edit-mode');
+                body.classList.add('view-mode');
+                btn.innerHTML = '🔒 Leitura';
+                btn.classList.add('locked');
+                
+                // Bloqueia edição (Impede 100% que o teclado virtual suba no celular)
+                editables.forEach(el => el.setAttribute('contenteditable', 'false'));
+            }
+        }
+
+        function preventToggleIfEditing(event) {
+            if (isEditMode) event.stopPropagation();
+        }
+
+        function toggleAccordion(clickedHeader) {
+            const isCurrentlyActive = clickedHeader.classList.contains('active');
+
+            // Fecha todos
+            document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
+            document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('active'));
+
+            if (!isCurrentlyActive) {
+                clickedHeader.classList.add('active');
+                clickedHeader.nextElementSibling.classList.add('active');
+                
+                updateStickyHeaders();
+
+                setTimeout(() => {
+                    const mainHeaderHeight = document.querySelector('.main-header').offsetHeight;
+                    const y = clickedHeader.getBoundingClientRect().top + window.scrollY - mainHeaderHeight;
+                    window.scrollTo({top: y, behavior: 'smooth'});
+                }, 100); 
+            } else {
+                updateStickyHeaders();
+            }
+        }
+
+        function formatText(command) { document.execCommand(command, false, null); }
+
+        function deleteBox(btn) {
+            if(confirm('Tem certeza que deseja excluir este tópico?')) {
+                const body = btn.closest('.accordion-body');
+                const header = body.previousElementSibling;
+                body.remove();
+                header.remove();
+                updateStickyHeaders();
+            }
+        }
+
+        function saveBox(btn) {
+            const textoOriginal = btn.innerHTML;
+            btn.innerHTML = '✅ Salvo!';
+            btn.style.backgroundColor = 'var(--success)';
+            setTimeout(() => {
+                btn.innerHTML = textoOriginal;
+                btn.style.backgroundColor = 'var(--primary)'; 
+            }, 2000);
+        }
+
+        function addNewBlock() {
+            if (!isEditMode) toggleAppMode();
+
+            const wrapper = document.getElementById('blocks-wrapper');
+            if (!wrapper) return;
+            
+            const newBlockHTML = `
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)"></div>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="toolbar">
+                        <button type="button" onclick="formatText('bold')"><b>B</b></button>
+                        <button type="button" onclick="formatText('italic')"><i>I</i></button>
+                        <button type="button" onclick="formatText('underline')"><u>U</u></button>
+                        <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
+                    </div>
+                    <div class="editor-area" contenteditable="true"></div>
+                    <div class="box-actions">
+                        <button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button>
+                        <button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button>
+                    </div>
+                </div>
+            `;
+            
+            wrapper.insertAdjacentHTML('beforeend', newBlockHTML);
+
+            const newHeaders = wrapper.querySelectorAll('.accordion-header');
+            const lastHeader = newHeaders[newHeaders.length - 1];
+            
+            toggleAccordion(lastHeader);
+            lastHeader.querySelector('.header-content').focus();
+        }
+    </script>
+</body>
+</html>
