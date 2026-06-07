@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App para Pregadores - Beta V3</title>
+    <title>App para Pregadores - Beta V3.1</title>
     <style>
-        /* Paleta e Tipografia Modernas */
         :root {
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --text-main: #334155;
             --text-muted: #94a3b8;
-            --primary: #4f46e5; /* Indigo moderno */
+            --primary: #4f46e5;
             --primary-hover: #4338ca;
             --success: #10b981;
             --danger: #ef4444;
-            --danger-hover: #dc2626;
             --border-light: #e2e8f0;
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
         }
 
         body {
@@ -30,7 +28,6 @@
             line-height: 1.5;
         }
 
-        /* Cabeçalho Minimalista e Elegante */
         .main-header {
             background-color: var(--card-bg);
             padding: 16px 20px;
@@ -49,7 +46,6 @@
             font-size: 1.25rem;
             color: var(--primary);
             font-weight: 700;
-            letter-spacing: -0.025em;
         }
 
         .btn-toggle-mode {
@@ -57,19 +53,15 @@
             color: white;
             border: none;
             padding: 8px 16px;
-            border-radius: 9999px; /* Formato pílula */
+            border-radius: 9999px;
             font-weight: 600;
             font-size: 0.875rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: var(--shadow-sm);
         }
 
-        .btn-toggle-mode.locked {
-            background-color: var(--text-muted);
-        }
+        .btn-toggle-mode.locked { background-color: var(--text-muted); }
 
-        /* Container centralizado */
         .container {
             width: 100%;
             max-width: 800px;
@@ -78,11 +70,6 @@
             box-sizing: border-box;
         }
 
-        @media (min-width: 768px) {
-            .container { padding: 30px 20px; }
-        }
-
-        /* Estilo dos Cards (Sanfona) */
         .accordion-item {
             background-color: var(--card-bg);
             border-radius: 12px;
@@ -93,10 +80,9 @@
             transition: all 0.3s ease;
         }
 
-        /* Foco e destaque no card aberto */
         .accordion-item.active {
             box-shadow: var(--shadow-md);
-            border-color: #c7d2fe; /* Borda indigo suave */
+            border-color: #c7d2fe;
         }
 
         .accordion-header {
@@ -104,7 +90,6 @@
             align-items: flex-start;
             padding: 16px 20px;
             cursor: pointer;
-            background-color: transparent;
         }
 
         .header-content {
@@ -127,11 +112,9 @@
         .toggle-icon {
             font-size: 1.5rem;
             color: var(--text-muted);
-            transition: transform 0.3s ease, color 0.3s ease;
+            transition: transform 0.3s ease;
             margin-left: 12px;
             line-height: 1;
-            display: flex;
-            align-items: center;
         }
 
         .accordion-item.active .toggle-icon {
@@ -144,17 +127,8 @@
             padding: 0 20px 20px 20px;
         }
 
-        .accordion-item.active .accordion-body {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
+        .accordion-item.active .accordion-body { display: block; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Painel de Edição (Toolbar moderno) */
         .toolbar {
             display: flex;
             gap: 8px;
@@ -175,12 +149,10 @@
             font-size: 0.9rem;
             color: #475569;
             font-weight: 500;
-            transition: background 0.2s;
         }
 
         .toolbar button:hover { background: #e2e8f0; color: var(--text-main); }
 
-        /* Área de Texto Minimalista */
         .editor-area {
             min-height: 120px;
             outline: none;
@@ -188,7 +160,6 @@
             font-size: 1.05rem;
             background: transparent;
             padding: 10px 0;
-            color: var(--text-main);
         }
 
         .editor-area:empty:before {
@@ -196,7 +167,6 @@
             color: var(--text-muted);
         }
 
-        /* Botões de Ação do Box */
         .box-actions {
             display: flex;
             justify-content: flex-end;
@@ -212,16 +182,11 @@
             font-weight: 600;
             cursor: pointer;
             color: white;
-            transition: background-color 0.2s;
         }
 
         .btn-save { background-color: var(--primary); }
-        .btn-save:hover { background-color: var(--primary-hover); }
-        
         .btn-delete { background-color: white; color: var(--danger); border: 1px solid var(--danger); }
-        .btn-delete:hover { background-color: #fef2f2; }
 
-        /* Botão Novo Tópico Elegante */
         .btn-add {
             display: flex;
             align-items: center;
@@ -238,21 +203,15 @@
             cursor: pointer;
             margin-top: 10px;
             margin-bottom: 40px;
-            transition: all 0.2s;
         }
 
-        .btn-add:hover {
-            background-color: #e0e7ff;
-            border-color: var(--primary);
-        }
+        .btn-add:hover { background-color: #e0e7ff; }
 
-        /* REGRAS DO MODO DE LEITURA (TRAVADO) */
-        body.view-mode .toolbar { display: none !important; }
-        body.view-mode .box-actions { display: none !important; }
+        body.view-mode .toolbar, 
+        body.view-mode .box-actions, 
         body.view-mode .btn-add { display: none !important; }
-        body.view-mode .header-content { pointer-events: none; }
+        body.view-mode .header-content, 
         body.view-mode .editor-area { pointer-events: none; }
-
     </style>
 </head>
 <body class="edit-mode">
@@ -265,7 +224,6 @@
     <div class="container" id="app-container">
         
         <div id="blocks-wrapper">
-            
             <div class="accordion-item active">
                 <div class="accordion-header" onclick="toggleAccordion(this)">
                     <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)">1. Introdução
@@ -287,10 +245,9 @@ Leitura de João 3:16</div>
                     </div>
                 </div>
             </div>
-
         </div>
 
-        <button class="btn-add" id="btnAddTopico" onclick="addNewBlock()">
+        <button class="btn-add" onclick="addNewBlock()">
             <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4.5v15m7.5-7.5h-15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Adicionar Novo Tópico
         </button>
@@ -344,23 +301,23 @@ Leitura de João 3:16</div>
             const textoOriginal = btn.innerHTML;
             btn.innerHTML = '✅ Salvo!';
             btn.style.backgroundColor = 'var(--success)';
-            
             setTimeout(() => {
                 btn.innerHTML = textoOriginal;
-                btn.style.backgroundColor = ''; 
+                btn.style.backgroundColor = 'var(--primary)'; 
             }, 2000);
         }
 
-        // NOVO: Função real para criar um novo bloco
         function addNewBlock() {
-            // Se estiver travado, destrava automaticamente para poder editar o novo bloco
             if (!isEditMode) {
                 toggleAppMode();
             }
 
             const wrapper = document.getElementById('blocks-wrapper');
+            if (!wrapper) {
+                alert("Erro: O contêiner 'blocks-wrapper' não foi encontrado. Verifique se o código HTML foi copiado integralmente.");
+                return;
+            }
             
-            // Template HTML do novo bloco
             const newBlockHTML = `
                 <div class="accordion-item active">
                     <div class="accordion-header" onclick="toggleAccordion(this)">
@@ -384,15 +341,11 @@ Leitura de João 3:16</div>
                 </div>
             `;
             
-            // Adiciona o novo bloco no final da lista
             wrapper.insertAdjacentHTML('beforeend', newBlockHTML);
 
-            // Rola a página suavemente até o novo bloco criado
             const newBlocks = wrapper.querySelectorAll('.accordion-item');
             const lastBlock = newBlocks[newBlocks.length - 1];
             lastBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            
-            // Foca no título do novo bloco para digitar imediatamente
             lastBlock.querySelector('.header-content').focus();
         }
     </script>
