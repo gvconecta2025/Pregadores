@@ -3,225 +3,350 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App para Pregadores</title>
+    <title>App para Pregadores - Beta V3.1</title>
     <style>
-        /* Estilos Base e Responsividade */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #94a3b8;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --success: #10b981;
+            --danger: #ef4444;
+            --border-light: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
         }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        .main-header {
+            background-color: var(--card-bg);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .main-header h1 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .btn-toggle-mode {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-toggle-mode.locked { background-color: var(--text-muted); }
 
         .container {
             width: 100%;
-            max-width: 800px; /* Adapta bem para PC e Tablet */
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 10px;
+            box-sizing: border-box;
         }
 
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-
-        /* Estilos da Sanfona (Accordion) */
         .accordion-item {
-            background-color: #ffffff;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
             overflow: hidden;
-            transition: background-color 0.3s ease;
-            border: 1px solid #e2e8f0;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
         }
 
-        /* Cor quando o bloco está ABERTO */
         .accordion-item.active {
-            background-color: #f0f8ff; /* Azul bem claro */
-            border-color: #bae6fd;
+            box-shadow: var(--shadow-md);
+            border-color: #c7d2fe;
         }
 
         .accordion-header {
             display: flex;
-            align-items: center;
-            padding: 15px 20px;
+            align-items: flex-start;
+            padding: 16px 20px;
             cursor: pointer;
         }
 
-        /* Input onde vai o Título/Versículo */
-        .header-input {
+        .header-content {
             flex-grow: 1;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border: none;
-            background: transparent;
-            color: #2c3e50;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-main);
             outline: none;
+            min-height: 28px;
+            white-space: pre-wrap;
+            word-break: break-word;
         }
 
-        .header-input::placeholder {
-            color: #94a3b8;
-            font-weight: normal;
+        .header-content:empty:before {
+            content: "Digite o tópico aqui...";
+            color: var(--text-muted);
+            font-weight: 400;
         }
 
         .toggle-icon {
             font-size: 1.5rem;
-            color: #64748b;
+            color: var(--text-muted);
             transition: transform 0.3s ease;
-            margin-left: 10px;
+            margin-left: 12px;
+            line-height: 1;
         }
 
         .accordion-item.active .toggle-icon {
             transform: rotate(45deg);
-            color: #0284c7;
+            color: var(--primary);
         }
 
-        /* Corpo da Sanfona (Escondido por padrão) */
         .accordion-body {
             display: none;
             padding: 0 20px 20px 20px;
         }
 
-        .accordion-item.active .accordion-body {
-            display: block;
-        }
+        .accordion-item.active .accordion-body { display: block; }
 
-        /* Painel de Edição (Toolbar) */
         .toolbar {
             display: flex;
-            gap: 5px;
-            padding: 10px 0;
-            border-bottom: 1px solid #cbd5e1;
-            margin-bottom: 10px;
+            gap: 8px;
+            padding: 12px 0;
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 16px;
+            margin-top: 8px;
             flex-wrap: wrap;
         }
 
         .toolbar button {
-            background: #e2e8f0;
+            background: #f1f5f9;
             border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
+            padding: 8px 12px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 0.9rem;
             color: #475569;
+            font-weight: 500;
         }
 
-        .toolbar button:hover {
-            background: #cbd5e1;
-        }
+        .toolbar button:hover { background: #e2e8f0; color: var(--text-main); }
 
-        /* Área de Texto Rico */
         .editor-area {
-            min-height: 150px;
+            min-height: 120px;
             outline: none;
-            line-height: 1.6;
+            line-height: 1.7;
             font-size: 1.05rem;
-            background: #ffffff;
-            padding: 15px;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
+            background: transparent;
+            padding: 10px 0;
         }
 
-        .editor-area:focus {
-            border-color: #7dd3fc;
-            box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.3);
+        .editor-area:empty:before {
+            content: "Escreva suas anotações aqui...";
+            color: var(--text-muted);
         }
 
-        /* Botão de adicionar novo tópico */
-        .btn-add {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: #0ea5e9;
-            color: white;
-            text-align: center;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
+        .box-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
             margin-top: 20px;
         }
 
-        .btn-add:hover {
-            background-color: #0284c7;
+        .btn-action {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
         }
+
+        .btn-save { background-color: var(--primary); }
+        .btn-delete { background-color: white; color: var(--danger); border: 1px solid var(--danger); }
+
+        .btn-add {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 16px;
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px dashed #c7d2fe;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-bottom: 40px;
+        }
+
+        .btn-add:hover { background-color: #e0e7ff; }
+
+        body.view-mode .toolbar, 
+        body.view-mode .box-actions, 
+        body.view-mode .btn-add { display: none !important; }
+        body.view-mode .header-content, 
+        body.view-mode .editor-area { pointer-events: none; }
     </style>
 </head>
-<body>
+<body class="edit-mode">
+
+    <header class="main-header">
+        <h1>Meu Esboço</h1>
+        <button id="toggleModeBtn" class="btn-toggle-mode" onclick="toggleAppMode()">🔓 Editando</button>
+    </header>
 
     <div class="container" id="app-container">
-        <h1>Meu Esboço</h1>
         
-        <div class="accordion-item">
-            <div class="accordion-header" onclick="toggleAccordion(this)">
-                <input type="text" class="header-input" value="Introdução - João 3:16" onclick="event.stopPropagation();">
-                <span class="toggle-icon">+</span>
-            </div>
-            <div class="accordion-body">
-                <div class="toolbar">
-                    <button type="button" onclick="formatText('bold')"><b>B</b></button>
-                    <button type="button" onclick="formatText('italic')"><i>I</i></button>
-                    <button type="button" onclick="formatText('underline')"><u>U</u></button>
-                    <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
-                    <button type="button" onclick="formatText('insertOrderedList')">1. Lista</button>
-                    <button type="button" onclick="formatText('formatBlock', 'H3')">Título</button>
+        <div id="blocks-wrapper">
+            <div class="accordion-item active">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)">1. Introdução
+Leitura de João 3:16</div>
+                    <span class="toggle-icon">+</span>
                 </div>
-                <div class="editor-area" contenteditable="true">
-                    Escreva os detalhes deste ponto aqui... <br><br>
-                    <ul>
-                        <li>Falar sobre o amor de Deus.</li>
-                        <li>Lembrar de dar o exemplo da cruz.</li>
-                    </ul>
+                <div class="accordion-body">
+                    <div class="toolbar">
+                        <button type="button" onclick="formatText('bold')"><b>B</b></button>
+                        <button type="button" onclick="formatText('italic')"><i>I</i></button>
+                        <button type="button" onclick="formatText('underline')"><u>U</u></button>
+                        <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
+                        <button type="button" onclick="formatText('insertOrderedList')">1. Lista</button>
+                    </div>
+                    <div class="editor-area" contenteditable="true">Escreva a introdução da pregação aqui...</div>
+                    <div class="box-actions">
+                        <button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button>
+                        <button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="accordion-item">
-            <div class="accordion-header" onclick="toggleAccordion(this)">
-                <input type="text" class="header-input" placeholder="Digite o próximo tópico ou versículo..." onclick="event.stopPropagation();">
-                <span class="toggle-icon">+</span>
-            </div>
-            <div class="accordion-body">
-                <div class="toolbar">
-                    <button type="button" onclick="formatText('bold')"><b>B</b></button>
-                    <button type="button" onclick="formatText('italic')"><i>I</i></button>
-                    <button type="button" onclick="formatText('underline')"><u>U</u></button>
-                    <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
-                    <button type="button" onclick="formatText('insertOrderedList')">1. Lista</button>
-                    <button type="button" onclick="formatText('formatBlock', 'H3')">Título</button>
-                </div>
-                <div class="editor-area" contenteditable="true"></div>
-            </div>
-        </div>
-
-        <button class="btn-add" onclick="alert('Na versão final, isso criará um novo bloco logo abaixo!')">+ Adicionar Novo Tópico</button>
+        <button class="btn-add" onclick="addNewBlock()">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4.5v15m7.5-7.5h-15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Adicionar Novo Tópico
+        </button>
 
     </div>
 
     <script>
-        // Função para abrir/fechar a sanfona
+        let isEditMode = true;
+
+        function toggleAppMode() {
+            isEditMode = !isEditMode;
+            const body = document.body;
+            const btn = document.getElementById('toggleModeBtn');
+
+            if (isEditMode) {
+                body.classList.remove('view-mode');
+                body.classList.add('edit-mode');
+                btn.innerHTML = '🔓 Editando';
+                btn.classList.remove('locked');
+            } else {
+                body.classList.remove('edit-mode');
+                body.classList.add('view-mode');
+                btn.innerHTML = '🔒 Leitura';
+                btn.classList.add('locked');
+            }
+        }
+
+        function preventToggleIfEditing(event) {
+            if (isEditMode) {
+                event.stopPropagation();
+            }
+        }
+
         function toggleAccordion(headerElement) {
             const item = headerElement.parentElement;
-            
-            // Fecha todos os outros (opcional: se quiser que só um fique aberto por vez)
-            // const allItems = document.querySelectorAll('.accordion-item');
-            // allItems.forEach(i => {
-            //    if(i !== item) i.classList.remove('active');
-            // });
-
-            // Alterna o status de aberto/fechado do item clicado
             item.classList.toggle('active');
         }
 
-        // Função simples para o painel de edição (Negrito, Itálico, Listas)
-        function formatText(command, value = null) {
-            document.execCommand(command, false, value);
-            // Retorna o foco para a área de texto
-            event.preventDefault();
+        function formatText(command) {
+            document.execCommand(command, false, null);
+        }
+
+        function deleteBox(btn) {
+            if(confirm('Tem certeza que deseja excluir este tópico?')) {
+                const box = btn.closest('.accordion-item');
+                box.remove();
+            }
+        }
+
+        function saveBox(btn) {
+            const textoOriginal = btn.innerHTML;
+            btn.innerHTML = '✅ Salvo!';
+            btn.style.backgroundColor = 'var(--success)';
+            setTimeout(() => {
+                btn.innerHTML = textoOriginal;
+                btn.style.backgroundColor = 'var(--primary)'; 
+            }, 2000);
+        }
+
+        function addNewBlock() {
+            if (!isEditMode) {
+                toggleAppMode();
+            }
+
+            const wrapper = document.getElementById('blocks-wrapper');
+            if (!wrapper) {
+                alert("Erro: O contêiner 'blocks-wrapper' não foi encontrado. Verifique se o código HTML foi copiado integralmente.");
+                return;
+            }
+            
+            const newBlockHTML = `
+                <div class="accordion-item active">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)"></div>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="accordion-body">
+                        <div class="toolbar">
+                            <button type="button" onclick="formatText('bold')"><b>B</b></button>
+                            <button type="button" onclick="formatText('italic')"><i>I</i></button>
+                            <button type="button" onclick="formatText('underline')"><u>U</u></button>
+                            <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
+                            <button type="button" onclick="formatText('insertOrderedList')">1. Lista</button>
+                        </div>
+                        <div class="editor-area" contenteditable="true"></div>
+                        <div class="box-actions">
+                            <button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button>
+                            <button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            wrapper.insertAdjacentHTML('beforeend', newBlockHTML);
+
+            const newBlocks = wrapper.querySelectorAll('.accordion-item');
+            const lastBlock = newBlocks[newBlocks.length - 1];
+            lastBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            lastBlock.querySelector('.header-content').focus();
         }
     </script>
 </body>
