@@ -3,322 +3,336 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App para Pregadores - V2</title>
+    <title>App para Pregadores - Beta V3</title>
     <style>
-        /* Estilos Base */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 0; /* Removemos o padding geral para aproveitar o celular */
+        /* Paleta e Tipografia Modernas */
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #94a3b8;
+            --primary: #4f46e5; /* Indigo moderno */
+            --primary-hover: #4338ca;
+            --success: #10b981;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --border-light: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
 
-        /* Cabeçalho Principal Fixo */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        /* Cabeçalho Minimalista e Elegante */
         .main-header {
-            background-color: #1e293b;
-            color: white;
-            padding: 15px 10px;
+            background-color: var(--card-bg);
+            padding: 16px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-sm);
+            border-bottom: 1px solid var(--border-light);
         }
 
         .main-header h1 {
             margin: 0;
-            font-size: 1.2rem;
-            color: #f8fafc;
+            font-size: 1.25rem;
+            color: var(--primary);
+            font-weight: 700;
+            letter-spacing: -0.025em;
         }
 
-        /* Botão de Travar/Destravar */
         .btn-toggle-mode {
-            background-color: #10b981; /* Verde quando destravado */
+            background-color: var(--success);
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.9rem;
+            padding: 8px 16px;
+            border-radius: 9999px; /* Formato pílula */
+            font-weight: 600;
+            font-size: 0.875rem;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
         }
 
         .btn-toggle-mode.locked {
-            background-color: #ef4444; /* Vermelho quando travado */
+            background-color: var(--text-muted);
         }
 
-        /* Container ajustável (Mobile vs PC/Tablet) */
+        /* Container centralizado */
         .container {
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            padding: 10px 5px; /* Margens curtas no mobile */
+            padding: 20px 10px;
             box-sizing: border-box;
         }
 
-        /* Espaço de sobra para PC e Tablet */
         @media (min-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-            .main-header {
-                padding: 15px 30px;
-            }
+            .container { padding: 30px 20px; }
         }
 
-        /* Estilos da Sanfona */
+        /* Estilo dos Cards (Sanfona) */
         .accordion-item {
-            background-color: #ffffff;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
             overflow: hidden;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-            border: 1px solid #e2e8f0;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
         }
 
+        /* Foco e destaque no card aberto */
         .accordion-item.active {
-            background-color: #f0f8ff;
-            border-color: #bae6fd;
+            box-shadow: var(--shadow-md);
+            border-color: #c7d2fe; /* Borda indigo suave */
         }
 
         .accordion-header {
             display: flex;
             align-items: flex-start;
-            padding: 15px 15px;
+            padding: 16px 20px;
             cursor: pointer;
+            background-color: transparent;
         }
 
-        /* Cabeçalho de Múltiplas Linhas (Div Editável) */
         .header-content {
             flex-grow: 1;
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #2c3e50;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-main);
             outline: none;
-            min-height: 24px; /* Garante espaço mesmo vazio */
-            white-space: pre-wrap; /* Permite quebras de linha com Enter */
+            min-height: 28px;
+            white-space: pre-wrap;
             word-break: break-word;
         }
 
         .header-content:empty:before {
             content: "Digite o tópico aqui...";
-            color: #94a3b8;
-            font-weight: normal;
+            color: var(--text-muted);
+            font-weight: 400;
         }
 
         .toggle-icon {
             font-size: 1.5rem;
-            color: #64748b;
-            transition: transform 0.3s ease;
-            margin-left: 10px;
+            color: var(--text-muted);
+            transition: transform 0.3s ease, color 0.3s ease;
+            margin-left: 12px;
             line-height: 1;
+            display: flex;
+            align-items: center;
         }
 
         .accordion-item.active .toggle-icon {
             transform: rotate(45deg);
-            color: #0284c7;
+            color: var(--primary);
         }
 
         .accordion-body {
             display: none;
-            padding: 0 15px 15px 15px;
+            padding: 0 20px 20px 20px;
         }
 
         .accordion-item.active .accordion-body {
             display: block;
+            animation: fadeIn 0.4s ease;
         }
 
-        /* Painel de Edição */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Painel de Edição (Toolbar moderno) */
         .toolbar {
             display: flex;
-            gap: 5px;
-            padding: 10px 0;
-            border-bottom: 1px solid #cbd5e1;
-            margin-bottom: 10px;
+            gap: 8px;
+            padding: 12px 0;
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 16px;
+            margin-top: 8px;
             flex-wrap: wrap;
         }
 
         .toolbar button {
-            background: #e2e8f0;
+            background: #f1f5f9;
             border: none;
             padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            color: #475569;
-        }
-
-        .toolbar button:hover { background: #cbd5e1; }
-
-        /* Área de Texto */
-        .editor-area {
-            min-height: 100px;
-            outline: none;
-            line-height: 1.6;
-            font-size: 1.05rem;
-            background: #ffffff;
-            padding: 15px;
             border-radius: 6px;
-            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #475569;
+            font-weight: 500;
+            transition: background 0.2s;
         }
 
-        .editor-area:focus {
-            border-color: #7dd3fc;
-            box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.3);
+        .toolbar button:hover { background: #e2e8f0; color: var(--text-main); }
+
+        /* Área de Texto Minimalista */
+        .editor-area {
+            min-height: 120px;
+            outline: none;
+            line-height: 1.7;
+            font-size: 1.05rem;
+            background: transparent;
+            padding: 10px 0;
+            color: var(--text-main);
         }
 
-        /* Botões de Ação do Box (Salvar/Excluir) */
+        .editor-area:empty:before {
+            content: "Escreva suas anotações aqui...";
+            color: var(--text-muted);
+        }
+
+        /* Botões de Ação do Box */
         .box-actions {
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 20px;
         }
 
         .btn-action {
-            padding: 10px 15px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: bold;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
             color: white;
             transition: background-color 0.2s;
         }
 
-        .btn-save { background-color: #0ea5e9; }
-        .btn-save:hover { background-color: #0284c7; }
+        .btn-save { background-color: var(--primary); }
+        .btn-save:hover { background-color: var(--primary-hover); }
         
-        .btn-delete { background-color: #f43f5e; }
-        .btn-delete:hover { background-color: #e11d48; }
+        .btn-delete { background-color: white; color: var(--danger); border: 1px solid var(--danger); }
+        .btn-delete:hover { background-color: #fef2f2; }
 
-        /* Botão Novo Tópico */
+        /* Botão Novo Tópico Elegante */
         .btn-add {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             width: 100%;
-            padding: 15px;
-            background-color: #10b981;
-            color: white;
-            text-align: center;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            padding: 16px;
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px dashed #c7d2fe;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
             cursor: pointer;
             margin-top: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            transition: all 0.2s;
+        }
+
+        .btn-add:hover {
+            background-color: #e0e7ff;
+            border-color: var(--primary);
         }
 
         /* REGRAS DO MODO DE LEITURA (TRAVADO) */
         body.view-mode .toolbar { display: none !important; }
         body.view-mode .box-actions { display: none !important; }
         body.view-mode .btn-add { display: none !important; }
-        body.view-mode .editor-area {
-            border: none;
-            background: transparent;
-            padding: 0;
-            min-height: auto;
-        }
-        /* Ao travar, cliques no texto passam direto para a sanfona abrir/fechar */
-        body.view-mode .header-content {
-            pointer-events: none; 
-        }
+        body.view-mode .header-content { pointer-events: none; }
+        body.view-mode .editor-area { pointer-events: none; }
 
     </style>
 </head>
-<body class="edit-mode"> <header class="main-header">
+<body class="edit-mode">
+
+    <header class="main-header">
         <h1>Meu Esboço</h1>
         <button id="toggleModeBtn" class="btn-toggle-mode" onclick="toggleAppMode()">🔓 Editando</button>
     </header>
 
     <div class="container" id="app-container">
         
-        <div class="accordion-item active">
-            <div class="accordion-header" onclick="toggleAccordion(this)">
-                <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)">1. Introdução
+        <div id="blocks-wrapper">
+            
+            <div class="accordion-item active">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)">1. Introdução
 Leitura de João 3:16</div>
-                <span class="toggle-icon">+</span>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="toolbar">
+                        <button type="button" onclick="formatText('bold')"><b>B</b></button>
+                        <button type="button" onclick="formatText('italic')"><i>I</i></button>
+                        <button type="button" onclick="formatText('underline')"><u>U</u></button>
+                        <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
+                        <button type="button" onclick="formatText('insertOrderedList')">1. Lista</button>
+                    </div>
+                    <div class="editor-area" contenteditable="true">Escreva a introdução da pregação aqui...</div>
+                    <div class="box-actions">
+                        <button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button>
+                        <button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button>
+                    </div>
+                </div>
             </div>
-            <div class="accordion-body">
-                <div class="toolbar">
-                    <button type="button" onclick="formatText('bold')"><b>B</b></button>
-                    <button type="button" onclick="formatText('italic')"><i>I</i></button>
-                    <button type="button" onclick="formatText('underline')"><u>U</u></button>
-                    <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
-                    <button type="button" onclick="formatText('insertOrderedList')">1. Lista</button>
-                </div>
-                <div class="editor-area" contenteditable="true">
-                    Escreva a introdução da pregação aqui...
-                </div>
-                <div class="box-actions">
-                    <button class="btn-action btn-delete" onclick="deleteBox(this)">🗑 Excluir</button>
-                    <button class="btn-action btn-save" onclick="saveBox(this)">💾 Salvar</button>
-                </div>
-            </div>
+
         </div>
 
-        <button class="btn-add" id="btnAddTopico" onclick="alert('Isso criará uma cópia vazia de um bloco!')">+ Adicionar Novo Tópico</button>
+        <button class="btn-add" id="btnAddTopico" onclick="addNewBlock()">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4.5v15m7.5-7.5h-15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Adicionar Novo Tópico
+        </button>
 
     </div>
 
     <script>
-        let isEditMode = true; // Controle global de estado
+        let isEditMode = true;
 
-        // Função para Alternar Modo (Travar / Destravar)
         function toggleAppMode() {
             isEditMode = !isEditMode;
             const body = document.body;
             const btn = document.getElementById('toggleModeBtn');
 
             if (isEditMode) {
-                // Destravado para Edição
                 body.classList.remove('view-mode');
                 body.classList.add('edit-mode');
                 btn.innerHTML = '🔓 Editando';
                 btn.classList.remove('locked');
-                
-                // Reativar edição dos campos
-                document.querySelectorAll('.header-content, .editor-area').forEach(el => {
-                    el.setAttribute('contenteditable', 'true');
-                });
             } else {
-                // Travado para Leitura
                 body.classList.remove('edit-mode');
                 body.classList.add('view-mode');
                 btn.innerHTML = '🔒 Leitura';
                 btn.classList.add('locked');
-                
-                // Bloquear edição dos campos
-                document.querySelectorAll('.header-content, .editor-area').forEach(el => {
-                    el.setAttribute('contenteditable', 'false');
-                });
             }
         }
 
-        // Função para não fechar a sanfona se o usuário clicar no texto para digitar
         function preventToggleIfEditing(event) {
             if (isEditMode) {
-                event.stopPropagation(); // Impede o clique de chegar na sanfona
+                event.stopPropagation();
             }
         }
 
-        // Função para abrir/fechar a sanfona
         function toggleAccordion(headerElement) {
             const item = headerElement.parentElement;
             item.classList.toggle('active');
         }
 
-        // Formatação de texto
         function formatText(command) {
             document.execCommand(command, false, null);
         }
 
-        // Excluir um box específico
         function deleteBox(btn) {
             if(confirm('Tem certeza que deseja excluir este tópico?')) {
                 const box = btn.closest('.accordion-item');
@@ -326,17 +340,60 @@ Leitura de João 3:16</div>
             }
         }
 
-        // Salvar um box específico
         function saveBox(btn) {
             const textoOriginal = btn.innerHTML;
             btn.innerHTML = '✅ Salvo!';
-            btn.style.backgroundColor = '#10b981'; // Fica verde
+            btn.style.backgroundColor = 'var(--success)';
             
-            // Retorna ao estado normal após 2 segundos
             setTimeout(() => {
                 btn.innerHTML = textoOriginal;
-                btn.style.backgroundColor = ''; // Remove a cor extra
+                btn.style.backgroundColor = ''; 
             }, 2000);
+        }
+
+        // NOVO: Função real para criar um novo bloco
+        function addNewBlock() {
+            // Se estiver travado, destrava automaticamente para poder editar o novo bloco
+            if (!isEditMode) {
+                toggleAppMode();
+            }
+
+            const wrapper = document.getElementById('blocks-wrapper');
+            
+            // Template HTML do novo bloco
+            const newBlockHTML = `
+                <div class="accordion-item active">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)"></div>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="accordion-body">
+                        <div class="toolbar">
+                            <button type="button" onclick="formatText('bold')"><b>B</b></button>
+                            <button type="button" onclick="formatText('italic')"><i>I</i></button>
+                            <button type="button" onclick="formatText('underline')"><u>U</u></button>
+                            <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
+                            <button type="button" onclick="formatText('insertOrderedList')">1. Lista</button>
+                        </div>
+                        <div class="editor-area" contenteditable="true"></div>
+                        <div class="box-actions">
+                            <button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button>
+                            <button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Adiciona o novo bloco no final da lista
+            wrapper.insertAdjacentHTML('beforeend', newBlockHTML);
+
+            // Rola a página suavemente até o novo bloco criado
+            const newBlocks = wrapper.querySelectorAll('.accordion-item');
+            const lastBlock = newBlocks[newBlocks.length - 1];
+            lastBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Foca no título do novo bloco para digitar imediatamente
+            lastBlock.querySelector('.header-content').focus();
         }
     </script>
 </body>
