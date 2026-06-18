@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pregadores - Premium V11.0</title>
+    <title>Pregadores - Premium V12.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
@@ -58,13 +58,60 @@
         #main-header, #app-container { display: none; }
 
         /* -------------------------------------------
+           MENU LATERAL (SIDEBAR) & OVERLAY
+        ------------------------------------------- */
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+            z-index: 199; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .sidebar-overlay.show { opacity: 1; pointer-events: auto; }
+
+        .sidebar {
+            position: fixed; top: 0; left: -320px; width: 320px; height: 100vh;
+            background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border); z-index: 200;
+            display: flex; flex-direction: column; box-shadow: 10px 0 40px rgba(0,0,0,0.7);
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sidebar.open { left: 0; }
+
+        .sidebar-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 24px; border-bottom: 1px solid var(--glass-border);
+        }
+        .sidebar-header h2 { margin: 0; font-size: 1.2rem; color: white; font-weight: 700; letter-spacing: -0.5px;}
+        
+        .sidebar-body { padding: 24px; flex-grow: 1; overflow-y: auto; }
+        .btn-new-sermon {
+            width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.05rem; font-weight: 700; 
+            cursor: pointer; margin-bottom: 30px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        .btn-new-sermon:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+        .sermon-list-title { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 15px; display: block; }
+        .sermon-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+        .sermon-item {
+            padding: 14px 16px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px;
+            color: var(--text-muted); font-weight: 500; transition: all 0.2s; border: 1px solid transparent; font-size: 0.95rem;
+        }
+        .sermon-item:hover { background: rgba(255,255,255,0.05); color: white; }
+        .sermon-item.active { background: rgba(99, 102, 241, 0.15); color: var(--primary); border-color: rgba(99, 102, 241, 0.3); font-weight: 600; }
+
+        /* -------------------------------------------
            CABEÇALHO PRINCIPAL E MENU DA CONTA
         ------------------------------------------- */
         .main-header {
             background: rgba(2, 6, 23, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             height: var(--main-header-height); padding: 0 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--glass-border); box-sizing: border-box;
         }
-        .header-title-group { display: flex; align-items: center; gap: 20px; }
+        .header-title-group { display: flex; align-items: center; gap: 15px; }
+        
+        /* Botão Hamburger */
+        .btn-hamburger { background: transparent; color: white; border: 1px solid var(--glass-border); padding: 8px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .btn-hamburger:hover { background: rgba(255,255,255,0.1); }
+
         .main-header h1 { margin: 0; font-size: 1.4rem; color: white; font-weight: 800; letter-spacing: -0.5px; }
         .global-timer { background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 8px 16px; border-radius: 99px; font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(16, 185, 129, 0.2); box-shadow: 0 0 10px rgba(16, 185, 129, 0.1); }
         
@@ -74,41 +121,25 @@
         .btn-icon { background: transparent; color: var(--text-muted); border: 1px solid var(--glass-border); padding: 10px; border-radius: 50%; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;}
         .btn-icon:hover { color: white; border-color: rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.1); }
 
-        /* Estilos do Menu Dropdown "Minha Conta" */
+        /* Menu Dropdown "Minha Conta" */
         .user-menu-wrapper { position: relative; }
         .user-dropdown {
             display: none; position: absolute; top: calc(100% + 15px); right: 0;
             background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-            width: 260px; overflow: hidden; z-index: 200;
-            animation: fadeIn 0.2s ease;
+            border: 1px solid var(--glass-border); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            width: 260px; overflow: hidden; z-index: 200; animation: fadeIn 0.2s ease;
         }
         .user-dropdown.show { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .user-dropdown-header {
-            padding: 20px; border-bottom: 1px solid var(--glass-border);
-            display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.02);
-        }
-        .user-avatar {
-            width: 45px; height: 45px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, #a855f7 100%);
-            color: white; display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 1.3rem; flex-shrink: 0;
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
-        }
+        .user-dropdown-header { padding: 20px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.02); }
+        .user-avatar { width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, #a855f7 100%); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.3rem; flex-shrink: 0; box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
         .user-info { display: flex; flex-direction: column; overflow: hidden; }
         .user-title { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 2px;}
         .user-email { font-size: 0.95rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
         
         .user-dropdown-body { padding: 10px; }
-        .dropdown-item {
-            width: 100%; text-align: left; padding: 12px 15px;
-            background: transparent; border: none; border-radius: 10px;
-            color: var(--text-muted); font-size: 0.95rem; font-weight: 600; cursor: pointer;
-            display: flex; align-items: center; gap: 10px; transition: all 0.2s;
-        }
+        .dropdown-item { width: 100%; text-align: left; padding: 12px 15px; background: transparent; border: none; border-radius: 10px; color: var(--text-muted); font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.2s; }
         .dropdown-item:hover { background: rgba(255,255,255,0.05); color: white; }
         .dropdown-item.text-danger { color: #fca5a5; margin-top: 5px;}
         .dropdown-item.text-danger:hover { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
@@ -123,22 +154,16 @@
             background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border); border-radius: 20px;
             display: flex; align-items: center; padding: 20px 24px; cursor: pointer;
-            position: relative; margin-bottom: 20px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; margin-bottom: 20px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         .accordion-header.active {
             border-color: rgba(99, 102, 241, 0.4); border-bottom: 1px solid transparent; 
-            border-radius: 20px 20px 0 0; margin-bottom: 0;
-            background: rgba(30, 41, 59, 0.95);
+            border-radius: 20px 20px 0 0; margin-bottom: 0; background: rgba(30, 41, 59, 0.95);
             box-shadow: 0 -10px 30px rgba(99, 102, 241, 0.15);
         }
 
         .accordion-header.sticky-top { position: -webkit-sticky; position: sticky; top: var(--main-header-height); z-index: 90; }
-        .accordion-header.sticky-bottom { 
-            position: -webkit-sticky; position: sticky; bottom: 0; z-index: 80; 
-            border-radius: 20px 20px 0 0; margin-bottom: 0; box-shadow: 0 -15px 30px rgba(0,0,0,0.6); background: rgba(15, 23, 42, 0.98);
-        }
+        .accordion-header.sticky-bottom { position: -webkit-sticky; position: sticky; bottom: 0; z-index: 80; border-radius: 20px 20px 0 0; margin-bottom: 0; box-shadow: 0 -15px 30px rgba(0,0,0,0.6); background: rgba(15, 23, 42, 0.98); }
 
         .accordion-body { 
             display: none; padding: 0 24px 24px 24px; 
@@ -218,6 +243,27 @@
 </head>
 <body class="edit-mode">
 
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Os Meus Esboços</h2>
+            <button id="btnCloseSidebar" class="btn-icon" title="Fechar Menu"><i data-lucide="x" style="width: 20px;"></i></button>
+        </div>
+        <div class="sidebar-body">
+            <button class="btn-new-sermon" onclick="alert('No futuro, isto criará um esboço novo em branco!')">
+                <i data-lucide="plus"></i> Novo Esboço
+            </button>
+            <span class="sermon-list-title">Pregações Guardadas</span>
+            <ul class="sermon-list">
+                <li class="sermon-item active"><i data-lucide="file-text" style="width: 18px;"></i> A Fé de Abraão</li>
+                <li class="sermon-item" onclick="alert('Carregará o esboço...')"><i data-lucide="file-text" style="width: 18px;"></i> O Amor de Deus</li>
+                <li class="sermon-item" onclick="alert('Carregará o esboço...')"><i data-lucide="file-text" style="width: 18px;"></i> O Bom Samaritano</li>
+                <li class="sermon-item" onclick="alert('Carregará o esboço...')"><i data-lucide="file-text" style="width: 18px;"></i> João 3:16</li>
+            </ul>
+        </div>
+    </aside>
+
     <div id="auth-screen">
         <div class="auth-card">
             <i data-lucide="book-open" style="color: var(--primary); width: 48px; height: 48px; margin-bottom: 20px;"></i>
@@ -240,7 +286,10 @@
 
     <header class="main-header" id="main-header">
         <div class="header-title-group">
-            <i data-lucide="book-open" style="color: var(--primary);"></i>
+            <button id="btnOpenSidebar" class="btn-hamburger" title="Ver Esboços">
+                <i data-lucide="menu" style="width: 22px;"></i>
+            </button>
+            <i data-lucide="book-open" style="color: var(--primary); display: none;"></i>
             <h1>Pregadores</h1>
             <div class="global-timer" title="Tempo total restante">
                 <i data-lucide="hourglass" style="width: 16px;"></i>
@@ -351,7 +400,6 @@ O Início da Mensagem</div>
         const appContainer = document.getElementById('app-container');
         const errorMsg = document.getElementById('auth-error');
         
-        // Elementos do Menu da Conta
         const displayUserEmail = document.getElementById('displayUserEmail');
         const userAvatar = document.getElementById('userAvatar');
         const userDropdown = document.getElementById('userDropdown');
@@ -367,13 +415,10 @@ O Início da Mensagem</div>
             }
         });
 
-        // Toggle do Menu Dropdown
         document.getElementById('btnUserMenu').addEventListener('click', (e) => {
-            userDropdown.classList.toggle('show');
-            e.stopPropagation();
+            userDropdown.classList.toggle('show'); e.stopPropagation();
         });
 
-        // Fechar Menu ao clicar fora
         document.addEventListener('click', (e) => {
             if(userDropdown.classList.contains('show') && !e.target.closest('.user-menu-wrapper')) {
                 userDropdown.classList.remove('show');
@@ -382,7 +427,6 @@ O Início da Mensagem</div>
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Atualiza o painel da conta com os dados do usuário
                 displayUserEmail.innerText = user.email;
                 userAvatar.innerText = user.email.charAt(0).toUpperCase();
 
@@ -405,12 +449,9 @@ O Início da Mensagem</div>
                 .catch(() => errorMsg.innerText = "Erro ao registar. O e-mail pode já estar em uso.");
         });
 
-        // Botões de Log Out no Menu
         const performLogout = () => { 
-            signOut(auth); 
-            userDropdown.classList.remove('show');
-            document.getElementById('email').value = ''; 
-            document.getElementById('password').value = '';
+            signOut(auth); userDropdown.classList.remove('show');
+            document.getElementById('email').value = ''; document.getElementById('password').value = '';
         };
 
         document.getElementById('btnLogout').addEventListener('click', performLogout);
@@ -420,6 +461,28 @@ O Início da Mensagem</div>
     <script>
         lucide.createIcons();
 
+        // CONTROLO DO MENU LATERAL (SIDEBAR)
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const btnOpenSidebar = document.getElementById('btnOpenSidebar');
+        const btnCloseSidebar = document.getElementById('btnCloseSidebar');
+
+        function toggleSidebar() {
+            const isOpen = sidebar.classList.contains('open');
+            if (isOpen) {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('show');
+            } else {
+                sidebar.classList.add('open');
+                sidebarOverlay.classList.add('show');
+            }
+        }
+
+        btnOpenSidebar.addEventListener('click', toggleSidebar);
+        btnCloseSidebar.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        // LÓGICA PRINCIPAL DO APP
         let isEditMode = true; 
         let masterClock = null;
 
@@ -578,7 +641,6 @@ O Início da Mensagem</div>
         window.toggleAccordion = function(clickedHeader) {
             const isActive = clickedHeader.classList.contains('active');
             
-            // Pausa a todos e oculta corpos
             document.querySelectorAll('.accordion-header').forEach(h => {
                 h.classList.remove('active');
                 h.setAttribute('data-state', 'paused');
@@ -589,7 +651,6 @@ O Início da Mensagem</div>
             document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('active'));
 
             if (!isActive) {
-                // Ativa a cabeça clicada
                 clickedHeader.classList.add('active'); 
                 clickedHeader.nextElementSibling.classList.add('active'); 
 
