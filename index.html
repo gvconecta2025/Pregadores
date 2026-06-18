@@ -3,58 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App para Pregadores - Beta V9 (Dark Mode)</title>
+    <title>App Pregadores - Premium V10</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
-        /* PALETA DARK MODE MODERNA */
+        /* PALETA PREMIUM DARK (Glassmorphism & Neon) */
         :root {
-            --bg-color: #0f172a;       /* Fundo da Tela */
-            --card-bg: #1e293b;        /* Fundo do Bloco */
-            --text-main: #f8fafc;      /* Texto Branco/Gelo */
-            --text-muted: #94a3b8;     /* Texto Secundário Cinza */
-            --primary: #4f46e5;        /* Azul Indigo */
-            --primary-hover: #4338ca;  
+            --bg-gradient: radial-gradient(circle at 10% 0%, #1e1b4b 0%, #020617 100%);
+            --glass-bg: rgba(30, 41, 59, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-glow: rgba(99, 102, 241, 0.5);
+            --primary: #6366f1; /* Indigo vibrante */
+            --primary-hover: #4f46e5;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --border-light: #334155;   /* Bordas Escuras */
-            --main-header-height: 70px;
+            --main-header-height: 75px;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
             color: var(--text-main);
             margin: 0;
             padding: 0;
             line-height: 1.6;
+            min-height: 100vh;
         }
 
         /* -------------------------------------------
-           TELA DE LOGIN
+           TELA DE LOGIN (ESTILO APPLE)
         ------------------------------------------- */
         #auth-screen {
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 20px; box-sizing: border-box;
+            padding: 20px; box-sizing: border-box;
         }
 
         .auth-card {
-            background: var(--card-bg); padding: 40px 30px; border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 100%; max-width: 400px; text-align: center; border: 1px solid var(--border-light);
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: 50px 40px; border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            width: 100%; max-width: 420px; text-align: center; 
+            border: 1px solid var(--glass-border);
         }
 
-        .auth-card h2 { color: var(--text-main); margin-top: 0; margin-bottom: 25px; font-weight: 800; font-size: 1.5rem; }
+        .auth-card h2 { color: white; margin-top: 0; margin-bottom: 30px; font-weight: 800; font-size: 1.8rem; letter-spacing: -0.5px;}
         
         .auth-input {
-            width: 100%; padding: 14px 15px; margin-bottom: 15px; background: #0f172a; color: var(--text-main);
-            border: 1px solid var(--border-light); border-radius: 8px; font-size: 1rem; box-sizing: border-box; outline: none;
+            width: 100%; padding: 16px 20px; margin-bottom: 20px; 
+            background: rgba(0,0,0,0.2); color: white;
+            border: 1px solid var(--glass-border); border-radius: 12px; 
+            font-size: 1.05rem; box-sizing: border-box; outline: none;
+            transition: all 0.3s ease;
         }
-        .auth-input:focus { border-color: var(--primary); }
+        .auth-input:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--accent-glow); }
         .auth-input::placeholder { color: var(--text-muted); }
 
-        .auth-btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-bottom: 10px; }
-        .btn-login { background-color: var(--primary); color: white; }
-        .btn-register { background-color: transparent; color: var(--primary); border: 2px solid var(--primary); }
-        .error-msg { color: var(--danger); font-size: 0.9rem; margin-bottom: 15px; min-height: 20px; font-weight: 600; }
+        .auth-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-bottom: 12px; transition: all 0.3s ease; }
+        .btn-login { background-color: var(--primary); color: white; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
+        .btn-login:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .btn-register { background-color: transparent; color: white; border: 1px solid var(--glass-border); }
+        .btn-register:hover { background: rgba(255,255,255,0.05); }
+        
+        .error-msg { color: #fca5a5; font-size: 0.95rem; margin-bottom: 20px; min-height: 20px; font-weight: 500; }
 
         #main-header, #app-container { display: none; }
 
@@ -62,186 +78,258 @@
            CABEÇALHO PRINCIPAL
         ------------------------------------------- */
         .main-header {
-            background-color: var(--bg-color); height: var(--main-header-height); padding: 0 20px; display: flex;
+            background: rgba(2, 6, 23, 0.7);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            height: var(--main-header-height); padding: 0 24px; display: flex;
             justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
-            border-bottom: 1px solid var(--border-light); box-sizing: border-box;
+            border-bottom: 1px solid var(--glass-border); box-sizing: border-box;
         }
 
-        .header-title-group { display: flex; align-items: center; gap: 15px; }
-        .main-header h1 { margin: 0; font-size: 1.3rem; color: var(--text-main); font-weight: 800; letter-spacing: -0.5px; }
+        .header-title-group { display: flex; align-items: center; gap: 20px; }
+        .main-header h1 { margin: 0; font-size: 1.4rem; color: white; font-weight: 800; letter-spacing: -0.5px; }
 
         .global-timer {
-            background-color: var(--card-bg); color: var(--success); padding: 6px 12px;
-            border-radius: 6px; font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 6px; font-family: monospace; border: 1px solid var(--border-light);
+            background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 8px 16px;
+            border-radius: 99px; font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; 
+            border: 1px solid rgba(16, 185, 129, 0.2); box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
         }
 
-        .header-actions { display: flex; gap: 10px; }
-        .btn-toggle-mode { background-color: var(--success); color: white; border: none; padding: 8px 16px; border-radius: 99px; font-weight: 600; font-size: 0.875rem; cursor: pointer; }
-        .btn-toggle-mode.locked { background-color: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border-light); }
-        .btn-logout { background-color: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 8px 16px; border-radius: 99px; font-weight: 600; font-size: 0.875rem; cursor: pointer; }
+        .header-actions { display: flex; gap: 12px; }
+        .btn-toggle-mode { 
+            background-color: var(--primary); color: white; border: none; padding: 10px 20px; 
+            border-radius: 99px; font-weight: 600; font-size: 0.95rem; cursor: pointer; 
+            display: flex; align-items: center; gap: 8px; transition: all 0.3s;
+        }
+        .btn-toggle-mode.locked { background-color: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--glass-border); }
+        
+        .btn-icon { background: transparent; color: var(--text-muted); border: 1px solid var(--glass-border); padding: 10px; border-radius: 50%; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;}
+        .btn-icon:hover { color: var(--danger); border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.1); }
 
-        .container { width: 100%; margin: 0 auto; box-sizing: border-box; }
-        #blocks-wrapper { display: flex; flex-direction: column; }
+        .container { width: 100%; margin: 0 auto; box-sizing: border-box; padding-top: 20px; }
+        #blocks-wrapper { display: flex; flex-direction: column; gap: 20px; }
 
-        /* CABEÇAS (Títulos) */
+        /* -------------------------------------------
+           CABEÇAS (Títulos & Cronômetro)
+        ------------------------------------------- */
+        .accordion-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .accordion-item.active {
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.4);
+            background: rgba(30, 41, 59, 0.7);
+        }
+
         .accordion-header {
-            background-color: var(--primary); color: white; display: flex; align-items: center; padding: 18px 20px; cursor: pointer;
-            border-radius: 12px; margin-bottom: 12px; transition: border-radius 0.2s ease, margin 0.2s ease; position: relative;
+            display: flex; align-items: center; padding: 20px 24px; cursor: pointer;
+            position: relative;
         }
-        .accordion-header.sticky-top { position: sticky; top: var(--main-header-height); z-index: 90; border-radius: 12px 12px 0 0; margin-bottom: 0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); }
-        .accordion-header.sticky-bottom { position: sticky; bottom: 0; z-index: 80; box-shadow: 0 -10px 15px -3px rgba(0,0,0,0.5); }
 
-        .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: rgba(0,0,0,0.2); border-radius: 0 0 12px 12px; overflow: hidden; pointer-events: none; }
-        .accordion-header.sticky-top .progress-bar-container { border-radius: 0; }
-        .progress-bar-fill { height: 100%; width: 0%; background-color: var(--success); transition: width 1s linear, background-color 0.5s ease; }
+        .accordion-header.sticky-top { 
+            position: sticky; top: var(--main-header-height); z-index: 90; 
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
 
-        .header-content { flex-grow: 1; font-size: 1.2rem; font-weight: 700; color: white; outline: none; min-height: 28px; white-space: pre-wrap; word-break: break-word; }
-        .header-content:empty:before { content: "Digite o tópico aqui..."; color: rgba(255, 255, 255, 0.5); font-weight: 500; }
+        .accordion-header.sticky-bottom { 
+            position: sticky; bottom: 20px; z-index: 80; 
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+        }
 
+        .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: rgba(0,0,0,0.3); }
+        .progress-bar-fill { height: 100%; width: 0%; background-color: var(--primary); transition: width 1s linear, background-color 0.5s ease; box-shadow: 0 0 10px var(--primary); }
+
+        .header-content { flex-grow: 1; font-size: 1.3rem; font-weight: 700; color: white; outline: none; min-height: 32px; white-space: pre-wrap; word-break: break-word; }
+        .header-content:empty:before { content: "Digite o tópico aqui..."; color: rgba(255, 255, 255, 0.3); font-weight: 500; }
+
+        /* PAINEL DO CRONÔMETRO APRIMORADO */
+        .timer-panel {
+            display: flex; align-items: center; gap: 8px; background: rgba(0, 0, 0, 0.3); 
+            padding: 6px; border-radius: 99px; margin-right: 15px; border: 1px solid var(--glass-border);
+        }
+        
         .header-timer {
-            display: flex; align-items: center; background: rgba(0, 0, 0, 0.2); padding: 6px 12px; border-radius: 99px; font-size: 1rem; margin-right: 12px;
-            font-family: monospace; font-weight: 700; cursor: pointer; border: 1px solid transparent;
+            font-size: 1.1rem; font-family: monospace; font-weight: 700; padding: 0 10px;
+            color: var(--text-main);
         }
-        .header-timer.paused { animation: pulse-pause 1.5s infinite; background: rgba(0, 0, 0, 0.4); }
-        .header-timer.over-time { background-color: var(--danger); animation: shake 2s infinite; }
-        .toggle-icon { font-size: 1.5rem; color: white; transition: transform 0.3s ease; }
-        .accordion-header.sticky-top .toggle-icon { transform: rotate(45deg); }
+        .header-timer.over-time { color: #fca5a5; text-shadow: 0 0 10px var(--danger); animation: pulse 2s infinite; }
 
-        /* CORPO DA SANFONA */
-        .accordion-body {
-            display: none; background-color: var(--card-bg); padding: 25px; border-top: none; border-radius: 0 0 12px 12px; margin-bottom: 12px;
+        .timer-btn {
+            background: transparent; color: var(--text-muted); border: none; 
+            display: flex; align-items: center; justify-content: center;
+            padding: 6px; border-radius: 50%; cursor: pointer; transition: all 0.2s;
         }
-        .accordion-body.active { display: block; min-height: calc(100vh - 180px); }
+        .timer-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .timer-btn.active-play { color: var(--success); }
+        .timer-btn.active-pause { color: var(--warning); animation: pulse 1.5s infinite; }
 
-        .time-settings { background: var(--bg-color); padding: 12px 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--border-light); }
-        .time-settings label { font-weight: 600; color: var(--text-muted); font-size: 0.95rem; }
-        .time-settings input { width: 70px; padding: 6px; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-light); border-radius: 6px; font-size: 1rem; text-align: center; outline: none; }
+        .toggle-icon { display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: transform 0.4s ease; }
+        .accordion-item.active .toggle-icon { transform: rotate(180deg); color: var(--primary); }
 
-        /* BARRA DE FERRAMENTAS AMPLIADA E ADAPTÁVEL */
+        /* -------------------------------------------
+           CORPO DA SANFONA & EDITOR
+        ------------------------------------------- */
+        .accordion-body { display: none; padding: 0 24px 24px 24px; }
+        .accordion-item.active .accordion-body { display: block; animation: slideDown 0.4s ease; }
+
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        .time-settings { 
+            background: rgba(0,0,0,0.2); padding: 15px 20px; border-radius: 12px; margin-top: 15px; margin-bottom: 25px; 
+            display: flex; align-items: center; gap: 15px; border: 1px solid var(--glass-border); 
+        }
+        .time-settings label { font-weight: 600; color: var(--text-muted); font-size: 0.95rem; display: flex; align-items: center; gap: 8px;}
+        .time-settings input { 
+            width: 80px; padding: 8px; background: rgba(255,255,255,0.05); color: white; 
+            border: 1px solid var(--glass-border); border-radius: 8px; font-size: 1.1rem; text-align: center; outline: none; 
+        }
+        .time-settings input:focus { border-color: var(--primary); }
+
+        /* BARRA DE FERRAMENTAS PROFISSIONAL */
         .toolbar {
-            display: flex; gap: 5px; padding: 10px; background-color: var(--bg-color); border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border-light);
+            display: flex; gap: 6px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 12px; 
+            margin-bottom: 25px; border: 1px solid var(--glass-border);
         }
         .toolbar button {
-            background: var(--card-bg); border: 1px solid var(--border-light); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 1rem; color: var(--text-main); font-weight: 600; flex-shrink: 0;
+            background: transparent; border: none; padding: 8px; border-radius: 8px; cursor: pointer; 
+            color: var(--text-muted); display: flex; align-items: center; justify-content: center; transition: all 0.2s;
         }
-        .toolbar button:hover { background: var(--primary); border-color: var(--primary); }
-        .toolbar .divider { width: 1px; background-color: var(--border-light); margin: 0 5px; }
+        .toolbar button:hover { background: rgba(255,255,255,0.1); color: white; }
+        .toolbar .divider { width: 1px; background-color: var(--glass-border); margin: 0 6px; }
 
-        /* ÁREA DE TEXTO ESCURA */
-        .editor-area { outline: none; line-height: 1.8; font-size: 1.15rem; color: var(--text-main); padding: 10px 0; }
-        .editor-area:empty:before { content: "Escreva suas anotações aqui..."; color: var(--text-muted); }
+        .editor-area { outline: none; line-height: 1.8; font-size: 1.2rem; color: rgba(255,255,255,0.9); padding: 10px 0; min-height: 200px; }
+        .editor-area:empty:before { content: "Desenvolva seu raciocínio aqui..."; color: rgba(255,255,255,0.2); }
 
-        .box-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 40px; }
-        .btn-action { padding: 10px 20px; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; color: white; }
-        .btn-save { background-color: var(--primary); }
-        .btn-delete { background-color: transparent; color: var(--danger); border: 1px solid var(--danger); }
+        .box-actions { display: flex; justify-content: flex-end; gap: 15px; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--glass-border); }
+        .btn-action { padding: 12px 24px; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;}
+        .btn-save { background-color: var(--primary); color: white; }
+        .btn-save:hover { background-color: var(--primary-hover); box-shadow: 0 0 15px var(--accent-glow); }
+        .btn-delete { background-color: transparent; color: #fca5a5; }
+        .btn-delete:hover { background: rgba(239, 68, 68, 0.1); }
 
         .btn-add {
-            display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 20px; background-color: transparent; color: var(--text-muted);
-            border: 2px dashed var(--border-light); border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 20px; margin-bottom: 60px; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 24px; 
+            background: var(--glass-bg); color: var(--text-muted); border: 1px dashed var(--glass-border); 
+            border-radius: 20px; font-size: 1.15rem; font-weight: 600; cursor: pointer; margin-top: 20px; margin-bottom: 80px; transition: all 0.3s;
         }
-        .btn-add:hover { background-color: var(--card-bg); border-color: var(--primary); color: var(--primary); }
+        .btn-add:hover { background: rgba(255,255,255,0.05); border-color: var(--primary); color: white; box-shadow: 0 0 20px rgba(99,102,241,0.1); }
 
         body.view-mode .toolbar, body.view-mode .box-actions, body.view-mode .btn-add, body.view-mode .time-settings { display: none !important; }
 
-        /* -------------------------------------------
-           MEDIA QUERIES (COMPORTAMENTO RESPONSIVO)
-        ------------------------------------------- */
-        
-        /* MOBILE (Pequenas Telas) */
+        /* RESPONSIVIDADE AVANÇADA */
         @media (max-width: 767px) {
-            .container { padding: 10px 5px; max-width: 100%; }
-            .toolbar { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 12px; /* Scroll horizontal nas ferramentas */ }
-            .toolbar::-webkit-scrollbar { height: 4px; }
-            .toolbar::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-            .header-title-group h1 { display: none; /* Esconde o título principal no celular para dar espaço ao tempo */ }
+            .container { padding: 10px; max-width: 100%; }
+            .toolbar { overflow-x: auto; flex-wrap: nowrap; }
+            .toolbar::-webkit-scrollbar { display: none; }
+            .header-title-group h1 { display: none; }
+            .timer-panel { margin-right: 5px; }
+            .accordion-header { padding: 15px; }
         }
-
-        /* TABLET (Telas Médias) */
         @media (min-width: 768px) and (max-width: 1023px) {
-            .container { padding: 20px; max-width: 90%; }
-            .editor-area { font-size: 1.25rem; /* Fonte maior para distância no tablet */ }
+            .container { padding: 30px; max-width: 90%; }
             .toolbar { flex-wrap: wrap; }
         }
-
-        /* COMPUTADOR (Telas Grandes) */
         @media (min-width: 1024px) {
-            .container { padding: 30px; max-width: 850px; } /* Largura otimizada para leitura em PC */
-            .toolbar { position: sticky; top: calc(var(--main-header-height) + 60px); z-index: 85; box-shadow: 0 4px 6px rgba(0,0,0,0.3); } /* Toolbar flutuante inteligente */
-            .editor-area { font-size: 1.2rem; }
-            .accordion-header:hover { transform: scale(1.01); } /* Efeito sutil ao passar o mouse */
+            .container { padding: 40px; max-width: 900px; }
+            .toolbar { position: sticky; top: calc(var(--main-header-height) + 80px); z-index: 85; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); }
         }
-
-        @keyframes pulse-pause { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 5%, 15% { transform: translateX(-2px); } 10%, 20% { transform: translateX(2px); } 25% { transform: translateX(0); } }
     </style>
 </head>
 <body class="edit-mode">
 
     <div id="auth-screen">
         <div class="auth-card">
+            <i data-lucide="book-open" style="color: var(--primary); width: 48px; height: 48px; margin-bottom: 20px;"></i>
             <h2>Esboço Seguro</h2>
             <div id="auth-error" class="error-msg"></div>
             <input type="email" id="email" class="auth-input" placeholder="Seu E-mail" required>
-            <input type="password" id="password" class="auth-input" placeholder="Sua Senha (mínimo 6 caracteres)" required>
-            <button id="btnLogin" class="auth-btn btn-login">Entrar</button>
-            <button id="btnRegister" class="auth-btn btn-register">Criar Conta</button>
+            <input type="password" id="password" class="auth-input" placeholder="Sua Senha (mín. 6 caracteres)" required>
+            <button id="btnLogin" class="auth-btn btn-login">Acessar Púlpito</button>
+            <button id="btnRegister" class="auth-btn btn-register">Criar Conta Segura</button>
         </div>
     </div>
 
     <header class="main-header" id="main-header">
         <div class="header-title-group">
+            <i data-lucide="book-open" style="color: var(--primary);"></i>
             <h1>App Pregador</h1>
-            <div class="global-timer" title="Tempo restante da pregação">
-                ⏳ Restam: <span id="global-time-display">00:00</span>
+            <div class="global-timer" title="Tempo total restante">
+                <i data-lucide="hourglass" style="width: 16px;"></i>
+                <span id="global-time-display">00:00</span>
             </div>
         </div>
         <div class="header-actions">
-            <button id="toggleModeBtn" class="btn-toggle-mode" onclick="toggleAppMode()">🔓 Editando</button>
-            <button id="btnLogout" class="btn-logout">Sair</button>
+            <button id="toggleModeBtn" class="btn-toggle-mode" onclick="toggleAppMode()">
+                <i data-lucide="unlock" id="mode-icon" style="width: 18px;"></i> Editando
+            </button>
+            <button id="btnLogout" class="btn-icon" title="Sair da Conta">
+                <i data-lucide="log-out" style="width: 20px;"></i>
+            </button>
         </div>
     </header>
 
     <div class="container" id="app-container">
         <div id="blocks-wrapper">
-            <div class="accordion-header active sticky-top" onclick="toggleAccordion(this)" data-elapsed="0" data-estimated="5" data-paused="false">
-                <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
-                <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)">1. Introdução
+            
+            <div class="accordion-item active">
+                <div class="accordion-header sticky-top" onclick="toggleAccordion(this)" data-elapsed="0" data-estimated="5" data-state="playing">
+                    <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
+                    <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)">1. Introdução
 O Início da Mensagem</div>
-                <div class="header-timer" onclick="togglePauseBlockTimer(event, this)" title="Clique para Pausar/Continuar">
-                    <span class="time-display">05:00</span>
+                    
+                    <div class="timer-panel" onclick="event.stopPropagation();">
+                        <button class="timer-btn active-play" onclick="controlTimer(this, 'play')" title="Iniciar/Continuar"><i data-lucide="play" style="width:16px;"></i></button>
+                        <button class="timer-btn" onclick="controlTimer(this, 'pause')" title="Pausar"><i data-lucide="pause" style="width:16px;"></i></button>
+                        <button class="timer-btn" onclick="controlTimer(this, 'reset')" title="Zerar Relógio"><i data-lucide="rotate-ccw" style="width:16px;"></i></button>
+                        <span class="header-timer time-display">05:00</span>
+                    </div>
+
+                    <div class="toggle-icon"><i data-lucide="chevron-down"></i></div>
                 </div>
-                <span class="toggle-icon">+</span>
+                
+                <div class="accordion-body">
+                    <div class="time-settings">
+                        <label><i data-lucide="clock" style="width:18px;"></i> Estimativa (min):</label>
+                        <input type="number" class="time-input" value="5" min="1" oninput="updateTimeEstimates()">
+                    </div>
+                    
+                    <div class="toolbar">
+                        <button type="button" onclick="formatText('bold')" title="Negrito"><i data-lucide="bold"></i></button>
+                        <button type="button" onclick="formatText('italic')" title="Itálico"><i data-lucide="italic"></i></button>
+                        <button type="button" onclick="formatText('underline')" title="Sublinhado"><i data-lucide="underline"></i></button>
+                        <button type="button" onclick="formatText('strikeThrough')" title="Riscado"><i data-lucide="strikethrough"></i></button>
+                        <span class="divider"></span>
+                        <button type="button" onclick="formatText('justifyLeft')" title="Esquerda"><i data-lucide="align-left"></i></button>
+                        <button type="button" onclick="formatText('justifyCenter')" title="Centro"><i data-lucide="align-center"></i></button>
+                        <button type="button" onclick="formatText('justifyRight')" title="Direita"><i data-lucide="align-right"></i></button>
+                        <span class="divider"></span>
+                        <button type="button" onclick="formatText('insertUnorderedList')" title="Lista"><i data-lucide="list"></i></button>
+                        <button type="button" onclick="formatText('insertOrderedList')" title="Numérica"><i data-lucide="list-ordered"></i></button>
+                        <span class="divider"></span>
+                        <button type="button" onclick="formatText('undo')" title="Desfazer"><i data-lucide="undo"></i></button>
+                        <button type="button" onclick="formatText('redo')" title="Refazer"><i data-lucide="redo"></i></button>
+                    </div>
+                    
+                    <div class="editor-area" contenteditable="true">Escreva sua mensagem com clareza...</div>
+                    
+                    <div class="box-actions">
+                        <button class="btn-action btn-delete" onclick="deleteBox(this)"><i data-lucide="trash-2" style="width:18px;"></i> Excluir</button>
+                        <button class="btn-action btn-save" onclick="saveBox(this)"><i data-lucide="save" style="width:18px;"></i> Salvar Etapa</button>
+                    </div>
+                </div>
             </div>
-            <div class="accordion-body active">
-                <div class="time-settings">
-                    <label>⏱️ Tempo estimado (minutos):</label>
-                    <input type="number" class="time-input" value="5" min="1" oninput="updateTimeEstimates()">
-                </div>
-                <div class="toolbar">
-                    <button type="button" onclick="formatText('bold')" title="Negrito"><b>B</b></button>
-                    <button type="button" onclick="formatText('italic')" title="Itálico"><i>I</i></button>
-                    <button type="button" onclick="formatText('underline')" title="Sublinhado"><u>U</u></button>
-                    <button type="button" onclick="formatText('strikeThrough')" title="Riscado"><s>S</s></button>
-                    <span class="divider"></span>
-                    <button type="button" onclick="formatText('justifyLeft')" title="Alinhar à Esquerda">⬅️</button>
-                    <button type="button" onclick="formatText('justifyCenter')" title="Centralizar">↔️</button>
-                    <button type="button" onclick="formatText('justifyRight')" title="Alinhar à Direita">➡️</button>
-                    <span class="divider"></span>
-                    <button type="button" onclick="formatText('insertUnorderedList')" title="Lista com Marcadores">•</button>
-                    <button type="button" onclick="formatText('insertOrderedList')" title="Lista Numerada">1.</button>
-                    <span class="divider"></span>
-                    <button type="button" onclick="formatText('undo')" title="Desfazer">↩️</button>
-                    <button type="button" onclick="formatText('redo')" title="Refazer">↪️</button>
-                </div>
-                <div class="editor-area" contenteditable="true">Escreva sua mensagem aqui...</div>
-                <div class="box-actions">
-                    <button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button>
-                    <button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button>
-                </div>
-            </div>
+
         </div>
-        <button class="btn-add" onclick="addNewBlock()">+ Adicionar Novo Tópico</button>
+        <button class="btn-add" onclick="addNewBlock()"><i data-lucide="plus-circle"></i> Adicionar Novo Tópico</button>
     </div>
 
     <script type="module">
@@ -264,8 +352,6 @@ O Início da Mensagem</div>
         const authScreen = document.getElementById('auth-screen');
         const mainHeader = document.getElementById('main-header');
         const appContainer = document.getElementById('app-container');
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
         const errorMsg = document.getElementById('auth-error');
 
         onAuthStateChanged(auth, (user) => {
@@ -279,67 +365,132 @@ O Início da Mensagem</div>
         });
 
         document.getElementById('btnLogin').addEventListener('click', () => {
-            signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value).catch(() => errorMsg.innerText = "E-mail ou senha incorretos.");
+            signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value)
+                .catch(() => errorMsg.innerText = "Credenciais inválidas.");
         });
 
         document.getElementById('btnRegister').addEventListener('click', () => {
-            if (passwordInput.value.length < 6) { errorMsg.innerText = "A senha deve ter no mínimo 6 caracteres."; return; }
-            createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value).catch(() => errorMsg.innerText = "Erro. O e-mail pode já estar em uso.");
+            if (document.getElementById('password').value.length < 6) { errorMsg.innerText = "A senha exige mín. 6 caracteres."; return; }
+            createUserWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value)
+                .catch(() => errorMsg.innerText = "Erro ao registrar. E-mail pode estar em uso.");
         });
 
-        document.getElementById('btnLogout').addEventListener('click', () => { signOut(auth); emailInput.value = ''; passwordInput.value = ''; });
+        document.getElementById('btnLogout').addEventListener('click', () => { signOut(auth); });
     </script>
 
     <script>
-        let isEditMode = true; let masterClock = null;
+        // Renderiza os ícones maravilhosos do Lucide
+        lucide.createIcons();
 
-        window.startAppLogic = function() { updateStickyHeaders(); updateTimeEstimates(); if (masterClock) clearInterval(masterClock); masterClock = setInterval(() => { tickClock(); }, 1000); };
-        window.stopAppLogic = function() { if (masterClock) clearInterval(masterClock); masterClock = null; };
+        let isEditMode = true; 
+        let masterClock = null;
+
+        window.startAppLogic = function() { 
+            updateStickyHeaders(); updateTimeEstimates(); 
+            if (masterClock) clearInterval(masterClock); 
+            masterClock = setInterval(() => { tickClock(); }, 1000); 
+        };
+        
+        window.stopAppLogic = function() { 
+            if (masterClock) clearInterval(masterClock); masterClock = null; 
+        };
 
         function tickClock() {
-            const activeHeader = document.querySelector('.accordion-header.active');
-            if (activeHeader) {
-                if (activeHeader.getAttribute('data-paused') !== 'true') {
-                    let elapsed = parseInt(activeHeader.getAttribute('data-elapsed') || '0'); activeHeader.setAttribute('data-elapsed', elapsed + 1);
+            const activeItem = document.querySelector('.accordion-item.active');
+            if (activeItem) {
+                const header = activeItem.querySelector('.accordion-header');
+                if (header.getAttribute('data-state') === 'playing') {
+                    let elapsed = parseInt(header.getAttribute('data-elapsed') || '0'); 
+                    header.setAttribute('data-elapsed', elapsed + 1);
                 }
-                renderBlockTimer(activeHeader);
+                renderBlockTimer(header);
             }
-            document.querySelectorAll('.accordion-header:not(.active)').forEach(header => renderBlockTimer(header));
+            document.querySelectorAll('.accordion-item:not(.active) .accordion-header').forEach(header => renderBlockTimer(header));
             renderGlobalTimer();
         }
 
-        window.togglePauseBlockTimer = function(event, timerElement) {
-            event.stopPropagation(); const header = timerElement.closest('.accordion-header');
-            header.setAttribute('data-paused', header.getAttribute('data-paused') !== 'true'); renderBlockTimer(header);
+        // NOVO: Controle de Mídia (Play, Pause, Reset)
+        window.controlTimer = function(btnElement, action) {
+            const header = btnElement.closest('.accordion-header');
+            const panel = btnElement.closest('.timer-panel');
+            const playBtn = panel.querySelector('[title="Iniciar/Continuar"]');
+            const pauseBtn = panel.querySelector('[title="Pausar"]');
+
+            if (action === 'play') {
+                header.setAttribute('data-state', 'playing');
+                playBtn.classList.add('active-play');
+                pauseBtn.classList.remove('active-pause');
+            } else if (action === 'pause') {
+                header.setAttribute('data-state', 'paused');
+                playBtn.classList.remove('active-play');
+                pauseBtn.classList.add('active-pause');
+            } else if (action === 'reset') {
+                header.setAttribute('data-elapsed', '0');
+                header.setAttribute('data-state', 'paused');
+                playBtn.classList.remove('active-play');
+                pauseBtn.classList.remove('active-pause');
+            }
+            renderBlockTimer(header);
         };
 
         function renderBlockTimer(header) {
-            let elapsed = parseInt(header.getAttribute('data-elapsed') || '0'); let estimatedMins = parseInt(header.getAttribute('data-estimated') || '0');
-            let timerContainer = header.querySelector('.header-timer'); let timeDisplay = header.querySelector('.time-display'); let progressBar = header.querySelector('.progress-bar-fill');
+            let elapsed = parseInt(header.getAttribute('data-elapsed') || '0'); 
+            let estimatedMins = parseInt(header.getAttribute('data-estimated') || '0');
+            let timeDisplay = header.querySelector('.time-display'); 
+            let progressBar = header.querySelector('.progress-bar-fill');
             
-            if (header.getAttribute('data-paused') === 'true' && header.classList.contains('active')) timerContainer.classList.add('paused');
-            else timerContainer.classList.remove('paused');
-
             if (estimatedMins > 0) {
-                let remaining = (estimatedMins * 60) - elapsed; let absRemaining = Math.abs(remaining);
-                let m = Math.floor(absRemaining / 60).toString().padStart(2, '0'); let s = (absRemaining % 60).toString().padStart(2, '0');
-                if (remaining < 0) { timeDisplay.innerText = `-${m}:${s}`; timerContainer.classList.add('over-time'); if(progressBar) { progressBar.style.width = `100%`; progressBar.style.backgroundColor = 'var(--danger)'; } } 
-                else { timeDisplay.innerText = `${m}:${s}`; timerContainer.classList.remove('over-time'); if(progressBar) { let p = (elapsed / (estimatedMins * 60)) * 100; progressBar.style.width = `${p}%`; progressBar.style.backgroundColor = p < 70 ? 'var(--success)' : (p < 90 ? 'var(--warning)' : 'var(--danger)'); } }
-            } else { timeDisplay.innerText = `--:--`; timerContainer.classList.remove('over-time'); if(progressBar) progressBar.style.width = `0%`; }
+                let remaining = (estimatedMins * 60) - elapsed; 
+                let absRemaining = Math.abs(remaining);
+                let m = Math.floor(absRemaining / 60).toString().padStart(2, '0'); 
+                let s = (absRemaining % 60).toString().padStart(2, '0');
+                
+                // NOVO: FEEDBACK TÁTIL (Vibra celular)
+                if (remaining === 60 && header.parentElement.classList.contains('active')) {
+                    if(navigator.vibrate) navigator.vibrate(500); // Faltam 1 min
+                }
+                if (remaining === 0 && header.parentElement.classList.contains('active')) {
+                    if(navigator.vibrate) navigator.vibrate([300, 200, 300, 200, 500]); // Acabou
+                }
+
+                if (remaining < 0) { 
+                    timeDisplay.innerText = `-${m}:${s}`; 
+                    timeDisplay.classList.add('over-time'); 
+                    if(progressBar) { progressBar.style.width = `100%`; progressBar.style.backgroundColor = 'var(--danger)'; progressBar.style.boxShadow = '0 0 15px var(--danger)';} 
+                } else { 
+                    timeDisplay.innerText = `${m}:${s}`; 
+                    timeDisplay.classList.remove('over-time'); 
+                    if(progressBar) { 
+                        let p = (elapsed / (estimatedMins * 60)) * 100; 
+                        progressBar.style.width = `${p}%`; 
+                        if (p < 75) { progressBar.style.backgroundColor = 'var(--primary)'; progressBar.style.boxShadow = '0 0 10px var(--primary)';}
+                        else if (p < 90) { progressBar.style.backgroundColor = 'var(--warning)'; progressBar.style.boxShadow = '0 0 10px var(--warning)';}
+                        else { progressBar.style.backgroundColor = 'var(--danger)'; progressBar.style.boxShadow = '0 0 10px var(--danger)';}
+                    } 
+                }
+            } else { 
+                timeDisplay.innerText = `--:--`; timeDisplay.classList.remove('over-time'); 
+                if(progressBar) progressBar.style.width = `0%`; 
+            }
         }
 
         function renderGlobalTimer() {
-            let tElapsed = 0; let tEstMins = 0; document.querySelectorAll('.accordion-header').forEach(h => { tElapsed += parseInt(h.getAttribute('data-elapsed') || '0'); tEstMins += parseInt(h.getAttribute('data-estimated') || '0'); });
+            let tElapsed = 0; let tEstMins = 0; 
+            document.querySelectorAll('.accordion-header').forEach(h => { 
+                tElapsed += parseInt(h.getAttribute('data-elapsed') || '0'); 
+                tEstMins += parseInt(h.getAttribute('data-estimated') || '0'); 
+            });
             let remaining = (tEstMins * 60) - tElapsed; let absR = Math.abs(remaining);
             let m = Math.floor(absR / 60).toString().padStart(2, '0'); let s = (absR % 60).toString().padStart(2, '0');
             const gDisp = document.getElementById('global-time-display');
-            if (remaining < 0) { gDisp.innerText = `-${m}:${s}`; gDisp.parentElement.style.color = 'var(--danger)'; } 
-            else { gDisp.innerText = `${m}:${s}`; gDisp.parentElement.style.color = 'var(--success)'; }
+            if (remaining < 0) { gDisp.innerText = `-${m}:${s}`; gDisp.parentElement.style.color = '#fca5a5'; gDisp.parentElement.style.borderColor = 'rgba(239, 68, 68, 0.3)'; gDisp.parentElement.style.background = 'rgba(239, 68, 68, 0.1)';} 
+            else { gDisp.innerText = `${m}:${s}`; gDisp.parentElement.style.color = 'var(--success)'; gDisp.parentElement.style.borderColor = 'rgba(16, 185, 129, 0.2)'; gDisp.parentElement.style.background = 'rgba(16, 185, 129, 0.1)';}
         }
 
         window.updateTimeEstimates = function() {
             document.querySelectorAll('.accordion-body').forEach(body => {
-                const input = body.querySelector('.time-input'); const header = body.previousElementSibling;
+                const input = body.querySelector('.time-input'); 
+                const header = body.parentElement.querySelector('.accordion-header');
                 if (input && header) header.setAttribute('data-estimated', input.value || '0');
             }); tickClock();
         };
@@ -348,69 +499,109 @@ O Início da Mensagem</div>
             let activeFound = false;
             document.querySelectorAll('.accordion-header').forEach((header) => {
                 header.classList.remove('sticky-top', 'sticky-bottom');
-                if (header.classList.contains('active')) { activeFound = true; header.classList.add('sticky-top'); } 
+                if (header.parentElement.classList.contains('active')) { activeFound = true; header.classList.add('sticky-top'); } 
                 else if (activeFound) { header.classList.add('sticky-bottom'); activeFound = false; }
             });
         }
 
         window.toggleAppMode = function() {
             isEditMode = !isEditMode; const body = document.body; const btn = document.getElementById('toggleModeBtn');
-            if (isEditMode) { body.classList.remove('view-mode'); body.classList.add('edit-mode'); btn.innerHTML = '🔓 Editando'; btn.classList.remove('locked'); document.querySelectorAll('.header-content, .editor-area').forEach(el => el.setAttribute('contenteditable', 'true')); } 
-            else { body.classList.remove('edit-mode'); body.classList.add('view-mode'); btn.innerHTML = '🔒 Leitura'; btn.classList.add('locked'); document.querySelectorAll('.header-content, .editor-area').forEach(el => el.setAttribute('contenteditable', 'false')); }
+            const icon = document.getElementById('mode-icon');
+            if (isEditMode) { 
+                body.classList.remove('view-mode'); body.classList.add('edit-mode'); 
+                btn.innerHTML = '<i data-lucide="unlock" style="width: 18px;"></i> Editando'; btn.classList.remove('locked'); 
+                document.querySelectorAll('.header-content, .editor-area').forEach(el => el.setAttribute('contenteditable', 'true')); 
+            } else { 
+                body.classList.remove('edit-mode'); body.classList.add('view-mode'); 
+                btn.innerHTML = '<i data-lucide="lock" style="width: 18px;"></i> Leitura'; btn.classList.add('locked'); 
+                document.querySelectorAll('.header-content, .editor-area').forEach(el => el.setAttribute('contenteditable', 'false')); 
+            }
+            lucide.createIcons();
         };
 
         window.preventToggleIfEditing = function(event) { if (isEditMode) event.stopPropagation(); };
 
         window.toggleAccordion = function(clickedHeader) {
-            const isActive = clickedHeader.classList.contains('active');
-            document.querySelectorAll('.accordion-header').forEach(h => { h.classList.remove('active'); h.setAttribute('data-paused', 'false'); });
-            document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('active'));
+            const item = clickedHeader.parentElement;
+            const isActive = item.classList.contains('active');
+            
+            // Pausa todos
+            document.querySelectorAll('.accordion-header').forEach(h => {
+                h.setAttribute('data-state', 'paused');
+                const p = h.querySelector('.timer-panel');
+                p.querySelector('[title="Iniciar/Continuar"]').classList.remove('active-play');
+                p.querySelector('[title="Pausar"]').classList.remove('active-pause');
+            });
+            document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+
             if (!isActive) {
-                clickedHeader.classList.add('active'); clickedHeader.nextElementSibling.classList.add('active'); clickedHeader.setAttribute('data-paused', 'false');
+                item.classList.add('active'); 
+                clickedHeader.setAttribute('data-state', 'playing');
+                clickedHeader.querySelector('[title="Iniciar/Continuar"]').classList.add('active-play');
+                
                 updateStickyHeaders(); tickClock();
-                setTimeout(() => { window.scrollTo({top: clickedHeader.getBoundingClientRect().top + window.scrollY - document.querySelector('.main-header').offsetHeight, behavior: 'smooth'}); }, 100); 
+                setTimeout(() => { window.scrollTo({top: clickedHeader.getBoundingClientRect().top + window.scrollY - document.querySelector('.main-header').offsetHeight - 20, behavior: 'smooth'}); }, 100); 
             } else { updateStickyHeaders(); }
         };
 
         window.formatText = function(command) { document.execCommand(command, false, null); };
 
-        window.deleteBox = function(btn) { if(confirm('Excluir tópico?')) { const b = btn.closest('.accordion-body'); b.previousElementSibling.remove(); b.remove(); updateStickyHeaders(); tickClock(); } };
+        window.deleteBox = function(btn) { 
+            if(confirm('Excluir este bloco de forma permanente?')) { 
+                btn.closest('.accordion-item').remove(); updateStickyHeaders(); tickClock(); 
+            } 
+        };
 
-        window.saveBox = function(btn) { const t = btn.innerHTML; btn.innerHTML = '✅ Salvo!'; btn.style.backgroundColor = 'var(--success)'; setTimeout(() => { btn.innerHTML = t; btn.style.backgroundColor = 'var(--primary)'; }, 2000); };
+        window.saveBox = function(btn) { 
+            const t = btn.innerHTML; 
+            btn.innerHTML = '<i data-lucide="check" style="width:18px;"></i> Salvo!'; 
+            btn.style.backgroundColor = 'var(--success)'; lucide.createIcons();
+            setTimeout(() => { btn.innerHTML = t; btn.style.backgroundColor = 'var(--primary)'; lucide.createIcons();}, 2000); 
+        };
 
         window.addNewBlock = function() {
             if (!isEditMode) toggleAppMode();
             const wrapper = document.getElementById('blocks-wrapper'); if (!wrapper) return;
             const HTML = `
-                <div class="accordion-header" onclick="toggleAccordion(this)" data-elapsed="0" data-estimated="10" data-paused="false">
-                    <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
-                    <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)"></div>
-                    <div class="header-timer" onclick="togglePauseBlockTimer(event, this)"><span class="time-display">10:00</span></div><span class="toggle-icon">+</span>
-                </div>
-                <div class="accordion-body">
-                    <div class="time-settings"><label>⏱️ Tempo estimado (minutos):</label><input type="number" class="time-input" value="10" min="1" oninput="updateTimeEstimates()"></div>
-                    <div class="toolbar">
-                        <button type="button" onclick="formatText('bold')" title="Negrito"><b>B</b></button>
-                        <button type="button" onclick="formatText('italic')" title="Itálico"><i>I</i></button>
-                        <button type="button" onclick="formatText('underline')" title="Sublinhado"><u>U</u></button>
-                        <button type="button" onclick="formatText('strikeThrough')" title="Riscado"><s>S</s></button>
-                        <span class="divider"></span>
-                        <button type="button" onclick="formatText('justifyLeft')" title="Esquerda">⬅️</button>
-                        <button type="button" onclick="formatText('justifyCenter')" title="Centro">↔️</button>
-                        <button type="button" onclick="formatText('justifyRight')" title="Direita">➡️</button>
-                        <span class="divider"></span>
-                        <button type="button" onclick="formatText('insertUnorderedList')" title="Lista">•</button>
-                        <button type="button" onclick="formatText('insertOrderedList')" title="Numérica">1.</button>
-                        <span class="divider"></span>
-                        <button type="button" onclick="formatText('undo')" title="Desfazer">↩️</button>
-                        <button type="button" onclick="formatText('redo')" title="Refazer">↪️</button>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)" data-elapsed="0" data-estimated="10" data-state="paused">
+                        <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
+                        <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)"></div>
+                        <div class="timer-panel" onclick="event.stopPropagation();">
+                            <button class="timer-btn" onclick="controlTimer(this, 'play')" title="Iniciar/Continuar"><i data-lucide="play" style="width:16px;"></i></button>
+                            <button class="timer-btn" onclick="controlTimer(this, 'pause')" title="Pausar"><i data-lucide="pause" style="width:16px;"></i></button>
+                            <button class="timer-btn" onclick="controlTimer(this, 'reset')" title="Zerar Relógio"><i data-lucide="rotate-ccw" style="width:16px;"></i></button>
+                            <span class="header-timer time-display">10:00</span>
+                        </div>
+                        <div class="toggle-icon"><i data-lucide="chevron-down"></i></div>
                     </div>
-                    <div class="editor-area" contenteditable="true"></div>
-                    <div class="box-actions"><button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button><button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button></div>
+                    <div class="accordion-body">
+                        <div class="time-settings"><label><i data-lucide="clock" style="width:18px;"></i> Estimativa (min):</label><input type="number" class="time-input" value="10" min="1" oninput="updateTimeEstimates()"></div>
+                        <div class="toolbar">
+                            <button type="button" onclick="formatText('bold')" title="Negrito"><i data-lucide="bold"></i></button>
+                            <button type="button" onclick="formatText('italic')" title="Itálico"><i data-lucide="italic"></i></button>
+                            <button type="button" onclick="formatText('underline')" title="Sublinhado"><i data-lucide="underline"></i></button>
+                            <button type="button" onclick="formatText('strikeThrough')" title="Riscado"><i data-lucide="strikethrough"></i></button>
+                            <span class="divider"></span>
+                            <button type="button" onclick="formatText('justifyLeft')" title="Esquerda"><i data-lucide="align-left"></i></button>
+                            <button type="button" onclick="formatText('justifyCenter')" title="Centro"><i data-lucide="align-center"></i></button>
+                            <button type="button" onclick="formatText('justifyRight')" title="Direita"><i data-lucide="align-right"></i></button>
+                            <span class="divider"></span>
+                            <button type="button" onclick="formatText('insertUnorderedList')" title="Lista"><i data-lucide="list"></i></button>
+                            <button type="button" onclick="formatText('insertOrderedList')" title="Numérica"><i data-lucide="list-ordered"></i></button>
+                            <span class="divider"></span>
+                            <button type="button" onclick="formatText('undo')" title="Desfazer"><i data-lucide="undo"></i></button>
+                            <button type="button" onclick="formatText('redo')" title="Refazer"><i data-lucide="redo"></i></button>
+                        </div>
+                        <div class="editor-area" contenteditable="true"></div>
+                        <div class="box-actions"><button class="btn-action btn-delete" onclick="deleteBox(this)"><i data-lucide="trash-2" style="width:18px;"></i> Excluir</button><button class="btn-action btn-save" onclick="saveBox(this)"><i data-lucide="save" style="width:18px;"></i> Salvar Etapa</button></div>
+                    </div>
                 </div>`;
             wrapper.insertAdjacentHTML('beforeend', HTML);
-            const headers = wrapper.querySelectorAll('.accordion-header'); const last = headers[headers.length - 1];
-            toggleAccordion(last); last.querySelector('.header-content').focus();
+            lucide.createIcons(); // Atualiza icones do novo bloco
+            const items = wrapper.querySelectorAll('.accordion-item'); 
+            const lastHeader = items[items.length - 1].querySelector('.accordion-header');
+            toggleAccordion(lastHeader); lastHeader.querySelector('.header-content').focus();
         };
     </script>
 </body>
