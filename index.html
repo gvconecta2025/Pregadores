@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pregadores - Premium V12.0</title>
+    <title>Pregadores - Cloud V13.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
@@ -24,30 +24,21 @@
             --main-header-height: 75px;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            color: var(--text-main);
-            margin: 0; padding: 0; line-height: 1.6; min-height: 100vh;
-        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-gradient); background-attachment: fixed; color: var(--text-main); margin: 0; padding: 0; line-height: 1.6; min-height: 100vh; }
 
-        /* -------------------------------------------
-           TELA DE LOGIN
-        ------------------------------------------- */
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .spin { animation: spin 1s linear infinite; }
+
+        /* TELA DE LOGIN */
         #auth-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; box-sizing: border-box; }
         .auth-card { background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: 50px 40px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); width: 100%; max-width: 420px; text-align: center; border: 1px solid var(--glass-border); }
         .auth-card h2 { color: white; margin-top: 0; margin-bottom: 30px; font-weight: 800; font-size: 1.8rem; letter-spacing: -0.5px;}
-        
         .auth-input { width: 100%; padding: 16px 20px; background: rgba(0,0,0,0.2); color: white; border: 1px solid var(--glass-border); border-radius: 12px; font-size: 1.05rem; box-sizing: border-box; outline: none; transition: all 0.3s ease; }
         .auth-input:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--accent-glow); }
-        .auth-input::placeholder { color: var(--text-muted); }
-        
         .password-wrapper { position: relative; margin-bottom: 20px; }
         .password-wrapper .auth-input { margin-bottom: 0; padding-right: 50px; }
         .btn-toggle-pwd { position: absolute; right: 15px; top: 15px; background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center;}
         .btn-toggle-pwd:hover { color: white; }
-
         .auth-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-bottom: 12px; transition: all 0.3s ease; }
         .btn-login { background-color: var(--primary); color: white; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
         .btn-login:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
@@ -57,61 +48,27 @@
 
         #main-header, #app-container { display: none; }
 
-        /* -------------------------------------------
-           MENU LATERAL (SIDEBAR) & OVERLAY
-        ------------------------------------------- */
-        .sidebar-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
-            z-index: 199; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-        }
+        /* MENU LATERAL (SIDEBAR) & OVERLAY */
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); z-index: 199; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .sidebar-overlay.show { opacity: 1; pointer-events: auto; }
-
-        .sidebar {
-            position: fixed; top: 0; left: -320px; width: 320px; height: 100vh;
-            background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-right: 1px solid var(--glass-border); z-index: 200;
-            display: flex; flex-direction: column; box-shadow: 10px 0 40px rgba(0,0,0,0.7);
-            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        .sidebar { position: fixed; top: 0; left: -320px; width: 320px; height: 100vh; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); z-index: 200; display: flex; flex-direction: column; box-shadow: 10px 0 40px rgba(0,0,0,0.7); transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .sidebar.open { left: 0; }
-
-        .sidebar-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 24px; border-bottom: 1px solid var(--glass-border);
-        }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 24px; border-bottom: 1px solid var(--glass-border); }
         .sidebar-header h2 { margin: 0; font-size: 1.2rem; color: white; font-weight: 700; letter-spacing: -0.5px;}
-        
         .sidebar-body { padding: 24px; flex-grow: 1; overflow-y: auto; }
-        .btn-new-sermon {
-            width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.05rem; font-weight: 700; 
-            cursor: pointer; margin-bottom: 30px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-        }
+        .btn-new-sermon { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.05rem; font-weight: 700; cursor: pointer; margin-bottom: 30px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
         .btn-new-sermon:hover { background: var(--primary-hover); transform: translateY(-2px); }
-
         .sermon-list-title { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 15px; display: block; }
         .sermon-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
-        .sermon-item {
-            padding: 14px 16px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px;
-            color: var(--text-muted); font-weight: 500; transition: all 0.2s; border: 1px solid transparent; font-size: 0.95rem;
-        }
+        .sermon-item { padding: 14px 16px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--text-muted); font-weight: 500; transition: all 0.2s; border: 1px solid transparent; font-size: 0.95rem; }
         .sermon-item:hover { background: rgba(255,255,255,0.05); color: white; }
         .sermon-item.active { background: rgba(99, 102, 241, 0.15); color: var(--primary); border-color: rgba(99, 102, 241, 0.3); font-weight: 600; }
 
-        /* -------------------------------------------
-           CABEÇALHO PRINCIPAL E MENU DA CONTA
-        ------------------------------------------- */
-        .main-header {
-            background: rgba(2, 6, 23, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            height: var(--main-header-height); padding: 0 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--glass-border); box-sizing: border-box;
-        }
+        /* CABEÇALHO PRINCIPAL E MENU DA CONTA */
+        .main-header { background: rgba(2, 6, 23, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); height: var(--main-header-height); padding: 0 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--glass-border); box-sizing: border-box; }
         .header-title-group { display: flex; align-items: center; gap: 15px; }
-        
-        /* Botão Hamburger */
         .btn-hamburger { background: transparent; color: white; border: 1px solid var(--glass-border); padding: 8px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .btn-hamburger:hover { background: rgba(255,255,255,0.1); }
-
         .main-header h1 { margin: 0; font-size: 1.4rem; color: white; font-weight: 800; letter-spacing: -0.5px; }
         .global-timer { background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 8px 16px; border-radius: 99px; font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(16, 185, 129, 0.2); box-shadow: 0 0 10px rgba(16, 185, 129, 0.1); }
         
@@ -121,23 +78,15 @@
         .btn-icon { background: transparent; color: var(--text-muted); border: 1px solid var(--glass-border); padding: 10px; border-radius: 50%; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;}
         .btn-icon:hover { color: white; border-color: rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.1); }
 
-        /* Menu Dropdown "Minha Conta" */
         .user-menu-wrapper { position: relative; }
-        .user-dropdown {
-            display: none; position: absolute; top: calc(100% + 15px); right: 0;
-            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-            width: 260px; overflow: hidden; z-index: 200; animation: fadeIn 0.2s ease;
-        }
+        .user-dropdown { display: none; position: absolute; top: calc(100% + 15px); right: 0; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); width: 260px; overflow: hidden; z-index: 200; animation: fadeIn 0.2s ease; }
         .user-dropdown.show { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        
         .user-dropdown-header { padding: 20px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.02); }
         .user-avatar { width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, #a855f7 100%); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.3rem; flex-shrink: 0; box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
         .user-info { display: flex; flex-direction: column; overflow: hidden; }
         .user-title { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 2px;}
         .user-email { font-size: 0.95rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
-        
         .user-dropdown-body { padding: 10px; }
         .dropdown-item { width: 100%; text-align: left; padding: 12px 15px; background: transparent; border: none; border-radius: 10px; color: var(--text-muted); font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.2s; }
         .dropdown-item:hover { background: rgba(255,255,255,0.05); color: white; }
@@ -147,30 +96,13 @@
         .container { width: 100%; margin: 0 auto; box-sizing: border-box; padding-top: 20px; }
         #blocks-wrapper { display: block; }
 
-        /* -------------------------------------------
-           CABEÇAS E CORPOS (EFEITO ÍMAN)
-        ------------------------------------------- */
-        .accordion-header {
-            background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border); border-radius: 20px;
-            display: flex; align-items: center; padding: 20px 24px; cursor: pointer;
-            position: relative; margin-bottom: 20px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .accordion-header.active {
-            border-color: rgba(99, 102, 241, 0.4); border-bottom: 1px solid transparent; 
-            border-radius: 20px 20px 0 0; margin-bottom: 0; background: rgba(30, 41, 59, 0.95);
-            box-shadow: 0 -10px 30px rgba(99, 102, 241, 0.15);
-        }
-
+        /* CABEÇAS E CORPOS (EFEITO ÍMAN) */
+        .accordion-header { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; display: flex; align-items: center; padding: 20px 24px; cursor: pointer; position: relative; margin-bottom: 20px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accordion-header.active { border-color: rgba(99, 102, 241, 0.4); border-bottom: 1px solid transparent; border-radius: 20px 20px 0 0; margin-bottom: 0; background: rgba(30, 41, 59, 0.95); box-shadow: 0 -10px 30px rgba(99, 102, 241, 0.15); }
         .accordion-header.sticky-top { position: -webkit-sticky; position: sticky; top: var(--main-header-height); z-index: 90; }
         .accordion-header.sticky-bottom { position: -webkit-sticky; position: sticky; bottom: 0; z-index: 80; border-radius: 20px 20px 0 0; margin-bottom: 0; box-shadow: 0 -15px 30px rgba(0,0,0,0.6); background: rgba(15, 23, 42, 0.98); }
 
-        .accordion-body { 
-            display: none; padding: 0 24px 24px 24px; 
-            background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(99, 102, 241, 0.4); border-top: none;
-            border-radius: 0 0 20px 20px; margin-bottom: 20px; box-shadow: 0 20px 30px rgba(99, 102, 241, 0.15);
-        }
+        .accordion-body { display: none; padding: 0 24px 24px 24px; background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(99, 102, 241, 0.4); border-top: none; border-radius: 0 0 20px 20px; margin-bottom: 20px; box-shadow: 0 20px 30px rgba(99, 102, 241, 0.15); }
         .accordion-body.active { display: block; animation: slideDown 0.4s ease; min-height: calc(100vh - 200px); }
 
         .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: rgba(0,0,0,0.3); border-radius: 0 0 20px 20px; overflow: hidden; }
@@ -194,7 +126,6 @@
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        /* PAINÉIS INTERNOS */
         .time-settings { background: rgba(0,0,0,0.2); padding: 15px 20px; border-radius: 12px; margin-top: 15px; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; border: 1px solid var(--glass-border); }
         .time-settings label { font-weight: 600; color: var(--text-muted); font-size: 0.95rem; display: flex; align-items: center; gap: 8px;}
         .time-settings input { width: 80px; padding: 8px; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--glass-border); border-radius: 8px; font-size: 1.1rem; text-align: center; outline: none; }
@@ -220,7 +151,6 @@
 
         body.view-mode .toolbar, body.view-mode .box-actions, body.view-mode .btn-add, body.view-mode .time-settings { display: none !important; }
 
-        /* RESPONSIVIDADE */
         @media (max-width: 767px) {
             .container { padding: 10px; max-width: 100%; }
             .toolbar { overflow-x: auto; flex-wrap: nowrap; }
@@ -231,14 +161,8 @@
             .toggle-icon { position: absolute; right: 20px; top: 24px; }
             .timer-panel { width: 100%; margin-right: 0; justify-content: space-between; padding: 8px 15px; box-sizing: border-box; }
         }
-        @media (min-width: 768px) and (max-width: 1023px) {
-            .container { padding: 30px; max-width: 90%; }
-            .toolbar { flex-wrap: wrap; }
-        }
-        @media (min-width: 1024px) {
-            .container { padding: 40px; max-width: 75%; }
-            .toolbar { position: sticky; top: calc(var(--main-header-height) + 80px); z-index: 85; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); }
-        }
+        @media (min-width: 768px) and (max-width: 1023px) { .container { padding: 30px; max-width: 90%; } .toolbar { flex-wrap: wrap; } }
+        @media (min-width: 1024px) { .container { padding: 40px; max-width: 75%; } .toolbar { position: sticky; top: calc(var(--main-header-height) + 80px); z-index: 85; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); } }
     </style>
 </head>
 <body class="edit-mode">
@@ -251,15 +175,13 @@
             <button id="btnCloseSidebar" class="btn-icon" title="Fechar Menu"><i data-lucide="x" style="width: 20px;"></i></button>
         </div>
         <div class="sidebar-body">
-            <button class="btn-new-sermon" onclick="alert('No futuro, isto criará um esboço novo em branco!')">
+            <button class="btn-new-sermon" onclick="window.startNewSermon()">
                 <i data-lucide="plus"></i> Novo Esboço
             </button>
             <span class="sermon-list-title">Pregações Guardadas</span>
-            <ul class="sermon-list">
-                <li class="sermon-item active"><i data-lucide="file-text" style="width: 18px;"></i> A Fé de Abraão</li>
-                <li class="sermon-item" onclick="alert('Carregará o esboço...')"><i data-lucide="file-text" style="width: 18px;"></i> O Amor de Deus</li>
-                <li class="sermon-item" onclick="alert('Carregará o esboço...')"><i data-lucide="file-text" style="width: 18px;"></i> O Bom Samaritano</li>
-                <li class="sermon-item" onclick="alert('Carregará o esboço...')"><i data-lucide="file-text" style="width: 18px;"></i> João 3:16</li>
+            
+            <ul class="sermon-list" id="dynamic-sermon-list">
+                <li class="sermon-item" style="opacity: 0.5;">A carregar esboços...</li>
             </ul>
         </div>
     </aside>
@@ -270,7 +192,6 @@
             <h2>Pregadores</h2>
             <div id="auth-error" class="error-msg"></div>
             <input type="email" id="email" class="auth-input" placeholder="O seu E-mail" required>
-            
             <div class="password-wrapper">
                 <input type="password" id="password" class="auth-input" placeholder="A sua Senha (mín. 6 caracteres)" required>
                 <button type="button" id="btnTogglePwd" class="btn-toggle-pwd" title="Mostrar/Ocultar Senha">
@@ -278,7 +199,6 @@
                     <i data-lucide="eye-off" id="eye-hide" style="display: none;"></i>
                 </button>
             </div>
-
             <button id="btnLogin" class="auth-btn btn-login">Acessar</button>
             <button id="btnRegister" class="auth-btn btn-register">Criar Conta Segura</button>
         </div>
@@ -297,26 +217,24 @@
             </div>
         </div>
         <div class="header-actions">
-            <button id="toggleModeBtn" class="btn-toggle-mode" onclick="toggleAppMode()">
+            <button id="toggleModeBtn" class="btn-toggle-mode" onclick="window.toggleAppMode()">
                 <i data-lucide="unlock" id="mode-icon" style="width: 18px;"></i> Editando
             </button>
-            
             <div class="user-menu-wrapper">
                 <button id="btnUserMenu" class="btn-icon" title="Minha Conta">
                     <i data-lucide="user" style="width: 20px;"></i>
                 </button>
-                
                 <div id="userDropdown" class="user-dropdown">
                     <div class="user-dropdown-header">
                         <div class="user-avatar" id="userAvatar">?</div>
                         <div class="user-info">
                             <span class="user-title">Minha Conta</span>
-                            <span class="user-email" id="displayUserEmail">carregando...</span>
+                            <span class="user-email" id="displayUserEmail">a carregar...</span>
                         </div>
                     </div>
                     <div class="user-dropdown-body">
                         <button id="btnSwitchUser" class="dropdown-item">
-                            <i data-lucide="users" style="width: 16px;"></i> Trocar de Usuário
+                            <i data-lucide="users" style="width: 16px;"></i> Trocar de Utilizador
                         </button>
                         <button id="btnLogout" class="dropdown-item text-danger">
                             <i data-lucide="log-out" style="width: 16px;"></i> Sair da Conta
@@ -324,63 +242,19 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </header>
 
     <div class="container" id="app-container">
         <div id="blocks-wrapper">
-            
-            <div class="accordion-header active sticky-top" onclick="toggleAccordion(this)" data-elapsed="0" data-estimated="5" data-state="playing">
-                <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
-                <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)">1. Introdução
-O Início da Mensagem</div>
-                
-                <div class="timer-panel" onclick="event.stopPropagation();">
-                    <button class="timer-btn active-play" onclick="controlTimer(this, 'play')" title="Iniciar/Continuar"><i data-lucide="play" style="width:16px;"></i></button>
-                    <button class="timer-btn" onclick="controlTimer(this, 'pause')" title="Pausar"><i data-lucide="pause" style="width:16px;"></i></button>
-                    <button class="timer-btn" onclick="controlTimer(this, 'reset')" title="Zerar Relógio"><i data-lucide="rotate-ccw" style="width:16px;"></i></button>
-                    <button class="timer-btn" onclick="editTimer(this)" title="Editar Tempo"><i data-lucide="pencil" style="width:14px;"></i></button>
-                    <span class="header-timer time-display">05:00</span>
-                </div>
-                <div class="toggle-icon"><i data-lucide="chevron-down"></i></div>
             </div>
-            
-            <div class="accordion-body active">
-                <div class="time-settings">
-                    <label><i data-lucide="clock" style="width:18px;"></i> Estimativa (min):</label>
-                    <input type="number" class="time-input" value="5" min="1" oninput="updateTimeEstimates()">
-                </div>
-                <div class="toolbar">
-                    <button type="button" onclick="formatText('bold')" title="Negrito"><i data-lucide="bold"></i></button>
-                    <button type="button" onclick="formatText('italic')" title="Itálico"><i data-lucide="italic"></i></button>
-                    <button type="button" onclick="formatText('underline')" title="Sublinhado"><i data-lucide="underline"></i></button>
-                    <button type="button" onclick="formatText('strikeThrough')" title="Riscado"><i data-lucide="strikethrough"></i></button>
-                    <span class="divider"></span>
-                    <button type="button" onclick="formatText('justifyLeft')" title="Esquerda"><i data-lucide="align-left"></i></button>
-                    <button type="button" onclick="formatText('justifyCenter')" title="Centro"><i data-lucide="align-center"></i></button>
-                    <button type="button" onclick="formatText('justifyRight')" title="Direita"><i data-lucide="align-right"></i></button>
-                    <span class="divider"></span>
-                    <button type="button" onclick="formatText('insertUnorderedList')" title="Lista"><i data-lucide="list"></i></button>
-                    <button type="button" onclick="formatText('insertOrderedList')" title="Numérica"><i data-lucide="list-ordered"></i></button>
-                    <span class="divider"></span>
-                    <button type="button" onclick="formatText('undo')" title="Desfazer"><i data-lucide="undo"></i></button>
-                    <button type="button" onclick="formatText('redo')" title="Refazer"><i data-lucide="redo"></i></button>
-                </div>
-                <div class="editor-area" contenteditable="true">Escreva a sua mensagem com clareza...</div>
-                <div class="box-actions">
-                    <button class="btn-action btn-delete" onclick="deleteBox(this)"><i data-lucide="trash-2" style="width:18px;"></i> Excluir</button>
-                    <button class="btn-action btn-save" onclick="saveBox(this)"><i data-lucide="save" style="width:18px;"></i> Salvar Etapa</button>
-                </div>
-            </div>
-
-        </div>
-        <button class="btn-add" onclick="addNewBlock()"><i data-lucide="plus-circle"></i> Adicionar Novo Tópico</button>
+        <button class="btn-add" onclick="window.addNewBlock()"><i data-lucide="plus-circle"></i> Adicionar Novo Tópico</button>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, getDocs, addDoc, serverTimestamp, query } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDthpfYhfEWo_owFkHEPBd8ThKuPGstUoY",
@@ -394,233 +268,286 @@ O Início da Mensagem</div>
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
+        let currentUser = null;
+        let currentSermonId = null; // Guarda o ID do esboço atual
+
+        // INTERFACE BÁSICA DE LOGIN
         const authScreen = document.getElementById('auth-screen');
         const mainHeader = document.getElementById('main-header');
         const appContainer = document.getElementById('app-container');
         const errorMsg = document.getElementById('auth-error');
-        
         const displayUserEmail = document.getElementById('displayUserEmail');
         const userAvatar = document.getElementById('userAvatar');
-        const userDropdown = document.getElementById('userDropdown');
-
+        
         document.getElementById('btnTogglePwd').addEventListener('click', function() {
             const pwdInput = document.getElementById('password');
-            const showIcon = document.getElementById('eye-show');
-            const hideIcon = document.getElementById('eye-hide');
-            if (pwdInput.type === 'password') {
-                pwdInput.type = 'text'; showIcon.style.display = 'none'; hideIcon.style.display = 'block';
+            if (pwdInput.type === 'password') { pwdInput.type = 'text'; document.getElementById('eye-show').style.display = 'none'; document.getElementById('eye-hide').style.display = 'block'; } 
+            else { pwdInput.type = 'password'; document.getElementById('eye-show').style.display = 'block'; document.getElementById('eye-hide').style.display = 'none'; }
+        });
+
+        // -----------------------------------------------------
+        // NÚCLEO DA SINCRONIZAÇÃO NA NUVEM (FIRESTORE)
+        // -----------------------------------------------------
+        
+        // 1. CARREGAR LISTA DE ESBOÇOS (SIDEBAR)
+        window.loadSermonsList = async function() {
+            if (!currentUser) return;
+            const sermonListEl = document.getElementById('dynamic-sermon-list');
+            sermonListEl.innerHTML = '<li class="sermon-item" style="opacity: 0.5;"><i data-lucide="loader" class="spin" style="width: 18px;"></i> A sincronizar...</li>';
+            lucide.createIcons();
+            
+            try {
+                const sermonsColl = collection(db, "users", currentUser.uid, "sermons");
+                const q = query(sermonsColl);
+                const snapshot = await getDocs(q);
+                
+                sermonListEl.innerHTML = '';
+                if (snapshot.empty) {
+                    sermonListEl.innerHTML = '<li class="sermon-item" style="opacity: 0.5;">Nenhum esboço guardado.</li>';
+                    return;
+                }
+
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const li = document.createElement('li');
+                    li.className = `sermon-item ${docSnap.id === currentSermonId ? 'active' : ''}`;
+                    li.innerHTML = `<i data-lucide="file-text" style="width: 18px;"></i> ${data.title || 'Sem Título'}`;
+                    li.onclick = () => window.loadSingleSermon(docSnap.id, data);
+                    sermonListEl.appendChild(li);
+                });
+                lucide.createIcons();
+            } catch(e) {
+                console.error(e);
+                sermonListEl.innerHTML = '<li class="sermon-item" style="color: #fca5a5;">Erro ao carregar dados.</li>';
+            }
+        };
+
+        // 2. GUARDAR O ESBOÇO ATUAL
+        window.saveCurrentSermon = async function(btnElement) {
+            if (!currentUser) return;
+
+            let originalText = "";
+            if (btnElement) {
+                originalText = btnElement.innerHTML;
+                btnElement.innerHTML = '<i data-lucide="loader" class="spin" style="width:18px;"></i> Guardando...';
+                lucide.createIcons();
+            }
+
+            try {
+                const blocks = [];
+                document.querySelectorAll('.accordion-item').forEach(item => {
+                    const header = item.querySelector('.header-content').innerText;
+                    const estimated = item.querySelector('.accordion-header').getAttribute('data-estimated');
+                    const content = item.querySelector('.editor-area').innerHTML;
+                    blocks.push({ header, estimated, content });
+                });
+
+                // O título do esboço será a primeira linha do primeiro bloco
+                const sermonTitle = blocks.length > 0 ? blocks[0].header.split('\n')[0] : "Esboço Sem Título";
+
+                const sermonData = { title: sermonTitle, blocks: blocks, updatedAt: serverTimestamp() };
+                const userRef = doc(db, "users", currentUser.uid);
+                const sermonsColl = collection(userRef, "sermons");
+
+                if (currentSermonId) {
+                    // Atualiza existente
+                    await setDoc(doc(sermonsColl, currentSermonId), sermonData, { merge: true });
+                } else {
+                    // Cria novo
+                    const docRef = await addDoc(sermonsColl, { ...sermonData, createdAt: serverTimestamp() });
+                    currentSermonId = docRef.id;
+                }
+
+                if (btnElement) {
+                    btnElement.innerHTML = '<i data-lucide="check" style="width:18px;"></i> Guardado!';
+                    btnElement.style.backgroundColor = 'var(--success)';
+                    lucide.createIcons();
+                    setTimeout(() => { btnElement.innerHTML = originalText; btnElement.style.backgroundColor = 'var(--primary)'; lucide.createIcons(); }, 2000);
+                }
+                
+                window.loadSermonsList();
+
+            } catch (error) {
+                console.error(error);
+                alert("Erro ao guardar na nuvem. Verifique a sua ligação.");
+                if (btnElement) btnElement.innerHTML = originalText;
+            }
+        };
+
+        // 3. CARREGAR UM ESBOÇO ESPECÍFICO PARA A TELA
+        window.loadSingleSermon = function(id, data) {
+            currentSermonId = id;
+            const wrapper = document.getElementById('blocks-wrapper');
+            wrapper.innerHTML = '';
+            
+            if (data.blocks && data.blocks.length > 0) {
+                data.blocks.forEach((block, index) => {
+                    wrapper.insertAdjacentHTML('beforeend', window.generateBlockHTML(block.header, block.estimated, block.content, index === 0));
+                });
             } else {
-                pwdInput.type = 'password'; showIcon.style.display = 'block'; hideIcon.style.display = 'none';
+                window.addNewBlock();
             }
-        });
+            
+            lucide.createIcons();
+            window.updateStickyHeaders();
+            window.tickClock();
+            
+            if (document.getElementById('sidebar').classList.contains('open')) window.toggleSidebar();
+            window.loadSermonsList();
+        };
 
-        document.getElementById('btnUserMenu').addEventListener('click', (e) => {
-            userDropdown.classList.toggle('show'); e.stopPropagation();
-        });
+        // 4. COMEÇAR UM NOVO ESBOÇO
+        window.startNewSermon = function() {
+            currentSermonId = null;
+            const wrapper = document.getElementById('blocks-wrapper');
+            wrapper.innerHTML = '';
+            window.addNewBlock(true);
+            
+            if (document.getElementById('sidebar').classList.contains('open')) window.toggleSidebar();
+            window.loadSermonsList();
+        };
 
-        document.addEventListener('click', (e) => {
-            if(userDropdown.classList.contains('show') && !e.target.closest('.user-menu-wrapper')) {
-                userDropdown.classList.remove('show');
-            }
-        });
-
+        // AUTENTICAÇÃO
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                currentUser = user;
                 displayUserEmail.innerText = user.email;
                 userAvatar.innerText = user.email.charAt(0).toUpperCase();
 
                 authScreen.style.display = 'none'; mainHeader.style.display = 'flex'; appContainer.style.display = 'block'; errorMsg.innerText = '';
+                
+                window.loadSermonsList(); // Puxa os dados da nuvem
+                if(!currentSermonId) window.startNewSermon(); // Garante que a tela não fica vazia na 1ª vez
+                
                 window.startAppLogic();
             } else {
+                currentUser = null; currentSermonId = null;
                 authScreen.style.display = 'flex'; mainHeader.style.display = 'none'; appContainer.style.display = 'none';
                 window.stopAppLogic();
             }
         });
 
-        document.getElementById('btnLogin').addEventListener('click', () => {
-            signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value)
-                .catch(() => errorMsg.innerText = "Credenciais inválidas.");
-        });
+        document.getElementById('btnLogin').addEventListener('click', () => { signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value).catch(() => errorMsg.innerText = "Credenciais inválidas."); });
+        document.getElementById('btnRegister').addEventListener('click', () => { if (document.getElementById('password').value.length < 6) { errorMsg.innerText = "A senha exige mín. 6 caracteres."; return; } createUserWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value).catch(() => errorMsg.innerText = "Erro ao registar. O e-mail pode já estar em uso."); });
 
-        document.getElementById('btnRegister').addEventListener('click', () => {
-            if (document.getElementById('password').value.length < 6) { errorMsg.innerText = "A senha exige mín. 6 caracteres."; return; }
-            createUserWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value)
-                .catch(() => errorMsg.innerText = "Erro ao registar. O e-mail pode já estar em uso.");
-        });
-
-        const performLogout = () => { 
-            signOut(auth); userDropdown.classList.remove('show');
-            document.getElementById('email').value = ''; document.getElementById('password').value = '';
-        };
-
+        const performLogout = () => { signOut(auth); document.getElementById('userDropdown').classList.remove('show'); document.getElementById('email').value = ''; document.getElementById('password').value = ''; };
         document.getElementById('btnLogout').addEventListener('click', performLogout);
         document.getElementById('btnSwitchUser').addEventListener('click', performLogout);
     </script>
 
     <script>
         lucide.createIcons();
-
+        
         // CONTROLO DO MENU LATERAL (SIDEBAR)
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
-        const btnOpenSidebar = document.getElementById('btnOpenSidebar');
-        const btnCloseSidebar = document.getElementById('btnCloseSidebar');
-
-        function toggleSidebar() {
-            const isOpen = sidebar.classList.contains('open');
-            if (isOpen) {
-                sidebar.classList.remove('open');
-                sidebarOverlay.classList.remove('show');
-            } else {
-                sidebar.classList.add('open');
-                sidebarOverlay.classList.add('show');
-            }
+        window.toggleSidebar = function() {
+            if (sidebar.classList.contains('open')) { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('show'); } 
+            else { sidebar.classList.add('open'); sidebarOverlay.classList.add('show'); }
         }
+        document.getElementById('btnOpenSidebar').addEventListener('click', window.toggleSidebar);
+        document.getElementById('btnCloseSidebar').addEventListener('click', window.toggleSidebar);
+        sidebarOverlay.addEventListener('click', window.toggleSidebar);
 
-        btnOpenSidebar.addEventListener('click', toggleSidebar);
-        btnCloseSidebar.addEventListener('click', toggleSidebar);
-        sidebarOverlay.addEventListener('click', toggleSidebar);
+        // CONTROLO DO MENU DO UTILIZADOR
+        const userDropdown = document.getElementById('userDropdown');
+        document.getElementById('btnUserMenu').addEventListener('click', (e) => { userDropdown.classList.toggle('show'); e.stopPropagation(); });
+        document.addEventListener('click', (e) => { if(userDropdown.classList.contains('show') && !e.target.closest('.user-menu-wrapper')) { userDropdown.classList.remove('show'); } });
 
         // LÓGICA PRINCIPAL DO APP
         let isEditMode = true; 
         let masterClock = null;
 
         window.startAppLogic = function() { 
-            updateStickyHeaders(); updateTimeEstimates(); 
+            window.updateStickyHeaders(); window.updateTimeEstimates(); 
             if (masterClock) clearInterval(masterClock); 
-            masterClock = setInterval(() => { tickClock(); }, 1000); 
+            masterClock = setInterval(() => { window.tickClock(); }, 1000); 
         };
-        
-        window.stopAppLogic = function() { 
-            if (masterClock) clearInterval(masterClock); masterClock = null; 
-        };
+        window.stopAppLogic = function() { if (masterClock) clearInterval(masterClock); masterClock = null; };
 
-        function tickClock() {
+        window.tickClock = function() {
             const activeHeader = document.querySelector('.accordion-header.active');
             if (activeHeader) {
                 if (activeHeader.getAttribute('data-state') === 'playing') {
-                    let elapsed = parseInt(activeHeader.getAttribute('data-elapsed') || '0'); 
-                    activeHeader.setAttribute('data-elapsed', elapsed + 1);
+                    let elapsed = parseInt(activeHeader.getAttribute('data-elapsed') || '0'); activeHeader.setAttribute('data-elapsed', elapsed + 1);
                 }
-                renderBlockTimer(activeHeader);
+                window.renderBlockTimer(activeHeader);
             }
-            document.querySelectorAll('.accordion-header:not(.active)').forEach(header => renderBlockTimer(header));
-            renderGlobalTimer();
-        }
+            document.querySelectorAll('.accordion-header:not(.active)').forEach(header => window.renderBlockTimer(header));
+            window.renderGlobalTimer();
+        };
 
         window.controlTimer = function(btnElement, action) {
             const header = btnElement.closest('.accordion-header');
             const panel = btnElement.closest('.timer-panel');
-            const playBtn = panel.querySelector('[title="Iniciar/Continuar"]');
-            const pauseBtn = panel.querySelector('[title="Pausar"]');
-
-            if (action === 'play') {
-                header.setAttribute('data-state', 'playing');
-                playBtn.classList.add('active-play');
-                pauseBtn.classList.remove('active-pause');
-            } else if (action === 'pause') {
-                header.setAttribute('data-state', 'paused');
-                playBtn.classList.remove('active-play');
-                pauseBtn.classList.add('active-pause');
-            } else if (action === 'reset') {
-                header.setAttribute('data-elapsed', '0');
-                header.setAttribute('data-state', 'paused');
-                playBtn.classList.remove('active-play');
-                pauseBtn.classList.remove('active-pause');
-            }
-            renderBlockTimer(header);
+            const playBtn = panel.querySelector('[title="Iniciar/Continuar"]'); const pauseBtn = panel.querySelector('[title="Pausar"]');
+            if (action === 'play') { header.setAttribute('data-state', 'playing'); playBtn.classList.add('active-play'); pauseBtn.classList.remove('active-pause'); } 
+            else if (action === 'pause') { header.setAttribute('data-state', 'paused'); playBtn.classList.remove('active-play'); pauseBtn.classList.add('active-pause'); } 
+            else if (action === 'reset') { header.setAttribute('data-elapsed', '0'); header.setAttribute('data-state', 'paused'); playBtn.classList.remove('active-play'); pauseBtn.classList.remove('active-pause'); }
+            window.renderBlockTimer(header);
         };
 
         window.editTimer = function(btnElement) {
             const header = btnElement.closest('.accordion-header');
             const currentEst = header.getAttribute('data-estimated') || '0';
             const newEst = prompt("Definir novo tempo estimado (em minutos):", currentEst);
-
             if (newEst !== null && newEst.trim() !== "" && !isNaN(newEst) && newEst > 0) {
                 header.setAttribute('data-estimated', newEst);
                 const body = header.nextElementSibling;
-                if (body && body.classList.contains('accordion-body')) {
-                    const input = body.querySelector('.time-input');
-                    if (input) input.value = newEst;
-                }
-                renderBlockTimer(header);
-                renderGlobalTimer();
+                if (body && body.classList.contains('accordion-body')) { const input = body.querySelector('.time-input'); if (input) input.value = newEst; }
+                window.renderBlockTimer(header); window.renderGlobalTimer();
             }
         };
 
-        function renderBlockTimer(header) {
-            let elapsed = parseInt(header.getAttribute('data-elapsed') || '0'); 
-            let estimatedMins = parseInt(header.getAttribute('data-estimated') || '0');
-            let timeDisplay = header.querySelector('.time-display'); 
-            let progressBar = header.querySelector('.progress-bar-fill');
-            
+        window.renderBlockTimer = function(header) {
+            let elapsed = parseInt(header.getAttribute('data-elapsed') || '0'); let estimatedMins = parseInt(header.getAttribute('data-estimated') || '0');
+            let timeDisplay = header.querySelector('.time-display'); let progressBar = header.querySelector('.progress-bar-fill');
             if (estimatedMins > 0) {
-                let remaining = (estimatedMins * 60) - elapsed; 
-                let absRemaining = Math.abs(remaining);
-                let m = Math.floor(absRemaining / 60).toString().padStart(2, '0'); 
-                let s = (absRemaining % 60).toString().padStart(2, '0');
-                
-                if (remaining === 60 && header.classList.contains('active')) {
-                    if(navigator.vibrate) navigator.vibrate(500);
-                }
-                if (remaining === 0 && header.classList.contains('active')) {
-                    if(navigator.vibrate) navigator.vibrate([300, 200, 300, 200, 500]);
-                }
-
+                let remaining = (estimatedMins * 60) - elapsed; let absRemaining = Math.abs(remaining);
+                let m = Math.floor(absRemaining / 60).toString().padStart(2, '0'); let s = (absRemaining % 60).toString().padStart(2, '0');
+                if (remaining === 60 && header.classList.contains('active')) { if(navigator.vibrate) navigator.vibrate(500); }
+                if (remaining === 0 && header.classList.contains('active')) { if(navigator.vibrate) navigator.vibrate([300, 200, 300, 200, 500]); }
                 if (remaining < 0) { 
-                    timeDisplay.innerText = `-${m}:${s}`; 
-                    timeDisplay.classList.add('over-time'); 
+                    timeDisplay.innerText = `-${m}:${s}`; timeDisplay.classList.add('over-time'); 
                     if(progressBar) { progressBar.style.width = `100%`; progressBar.style.backgroundColor = 'var(--danger)'; progressBar.style.boxShadow = '0 0 15px var(--danger)';} 
                 } else { 
-                    timeDisplay.innerText = `${m}:${s}`; 
-                    timeDisplay.classList.remove('over-time'); 
-                    if(progressBar) { 
-                        let p = (elapsed / (estimatedMins * 60)) * 100; 
-                        progressBar.style.width = `${p}%`; 
+                    timeDisplay.innerText = `${m}:${s}`; timeDisplay.classList.remove('over-time'); 
+                    if(progressBar) { let p = (elapsed / (estimatedMins * 60)) * 100; progressBar.style.width = `${p}%`; 
                         if (p < 75) { progressBar.style.backgroundColor = 'var(--primary)'; progressBar.style.boxShadow = '0 0 10px var(--primary)';}
                         else if (p < 90) { progressBar.style.backgroundColor = 'var(--warning)'; progressBar.style.boxShadow = '0 0 10px var(--warning)';}
                         else { progressBar.style.backgroundColor = 'var(--danger)'; progressBar.style.boxShadow = '0 0 10px var(--danger)';}
                     } 
                 }
-            } else { 
-                timeDisplay.innerText = `--:--`; timeDisplay.classList.remove('over-time'); 
-                if(progressBar) progressBar.style.width = `0%`; 
-            }
-        }
+            } else { timeDisplay.innerText = `--:--`; timeDisplay.classList.remove('over-time'); if(progressBar) progressBar.style.width = `0%`; }
+        };
 
-        function renderGlobalTimer() {
+        window.renderGlobalTimer = function() {
             let tElapsed = 0; let tEstMins = 0; 
-            document.querySelectorAll('.accordion-header').forEach(h => { 
-                tElapsed += parseInt(h.getAttribute('data-elapsed') || '0'); 
-                tEstMins += parseInt(h.getAttribute('data-estimated') || '0'); 
-            });
+            document.querySelectorAll('.accordion-header').forEach(h => { tElapsed += parseInt(h.getAttribute('data-elapsed') || '0'); tEstMins += parseInt(h.getAttribute('data-estimated') || '0'); });
             let remaining = (tEstMins * 60) - tElapsed; let absR = Math.abs(remaining);
             let m = Math.floor(absR / 60).toString().padStart(2, '0'); let s = (absR % 60).toString().padStart(2, '0');
             const gDisp = document.getElementById('global-time-display');
             if (remaining < 0) { gDisp.innerText = `-${m}:${s}`; gDisp.parentElement.style.color = '#fca5a5'; gDisp.parentElement.style.borderColor = 'rgba(239, 68, 68, 0.3)'; gDisp.parentElement.style.background = 'rgba(239, 68, 68, 0.1)';} 
             else { gDisp.innerText = `${m}:${s}`; gDisp.parentElement.style.color = 'var(--success)'; gDisp.parentElement.style.borderColor = 'rgba(16, 185, 129, 0.2)'; gDisp.parentElement.style.background = 'rgba(16, 185, 129, 0.1)';}
-        }
+        };
 
         window.updateTimeEstimates = function() {
             document.querySelectorAll('.accordion-body').forEach(body => {
-                const input = body.querySelector('.time-input'); 
-                const header = body.previousElementSibling;
+                const input = body.querySelector('.time-input'); const header = body.previousElementSibling;
                 if (input && header) header.setAttribute('data-estimated', input.value || '0');
-            }); tickClock();
+            }); window.tickClock();
         };
 
-        function updateStickyHeaders() {
+        window.updateStickyHeaders = function() {
             let activeFound = false;
             document.querySelectorAll('.accordion-header').forEach((header) => {
                 header.classList.remove('sticky-top', 'sticky-bottom');
-                if (header.classList.contains('active')) { 
-                    activeFound = true; header.classList.add('sticky-top'); 
-                } else if (activeFound) { 
-                    header.classList.add('sticky-bottom'); activeFound = false; 
-                }
+                if (header.classList.contains('active')) { activeFound = true; header.classList.add('sticky-top'); } 
+                else if (activeFound) { header.classList.add('sticky-bottom'); activeFound = false; }
             });
-        }
+        };
 
         window.toggleAppMode = function() {
             isEditMode = !isEditMode; const body = document.body; const btn = document.getElementById('toggleModeBtn');
@@ -642,86 +569,89 @@ O Início da Mensagem</div>
             const isActive = clickedHeader.classList.contains('active');
             
             document.querySelectorAll('.accordion-header').forEach(h => {
-                h.classList.remove('active');
-                h.setAttribute('data-state', 'paused');
+                h.classList.remove('active'); h.setAttribute('data-state', 'paused');
                 const p = h.querySelector('.timer-panel');
-                p.querySelector('[title="Iniciar/Continuar"]').classList.remove('active-play');
-                p.querySelector('[title="Pausar"]').classList.remove('active-pause');
+                p.querySelector('[title="Iniciar/Continuar"]').classList.remove('active-play'); p.querySelector('[title="Pausar"]').classList.remove('active-pause');
             });
             document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('active'));
 
             if (!isActive) {
-                clickedHeader.classList.add('active'); 
-                clickedHeader.nextElementSibling.classList.add('active'); 
-
+                clickedHeader.classList.add('active'); clickedHeader.nextElementSibling.classList.add('active'); 
                 clickedHeader.setAttribute('data-state', 'playing');
                 clickedHeader.querySelector('[title="Iniciar/Continuar"]').classList.add('active-play');
                 
-                updateStickyHeaders(); tickClock();
+                window.updateStickyHeaders(); window.tickClock();
                 setTimeout(() => { window.scrollTo({top: clickedHeader.getBoundingClientRect().top + window.scrollY - document.querySelector('.main-header').offsetHeight - 20, behavior: 'smooth'}); }, 100); 
-            } else { updateStickyHeaders(); }
+            } else { window.updateStickyHeaders(); }
         };
 
         window.formatText = function(command) { document.execCommand(command, false, null); };
 
         window.deleteBox = function(btn) { 
             if(confirm('Excluir este bloco de forma permanente?')) { 
-                const body = btn.closest('.accordion-body');
-                const header = body.previousElementSibling;
-                body.remove(); header.remove();
-                updateStickyHeaders(); tickClock(); 
+                const body = btn.closest('.accordion-body'); const header = body.previousElementSibling;
+                body.remove(); header.remove(); window.updateStickyHeaders(); window.tickClock(); 
             } 
         };
 
-        window.saveBox = function(btn) { 
-            const t = btn.innerHTML; 
-            btn.innerHTML = '<i data-lucide="check" style="width:18px;"></i> Salvo!'; 
-            btn.style.backgroundColor = 'var(--success)'; lucide.createIcons();
-            setTimeout(() => { btn.innerHTML = t; btn.style.backgroundColor = 'var(--primary)'; lucide.createIcons();}, 2000); 
+        // GERA O HTML BASE DE UM BLOCO
+        window.generateBlockHTML = function(headerText = "", estimated = 5, contentText = "", isActive = false) {
+            return `
+                <div class="accordion-item">
+                    <div class="accordion-header ${isActive ? 'active sticky-top' : ''}" onclick="window.toggleAccordion(this)" data-elapsed="0" data-estimated="${estimated}" data-state="${isActive ? 'playing' : 'paused'}">
+                        <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
+                        <div class="header-content" contenteditable="true" onclick="window.preventToggleIfEditing(event)">${headerText}</div>
+                        <div class="timer-panel" onclick="event.stopPropagation();">
+                            <button class="timer-btn ${isActive ? 'active-play' : ''}" onclick="window.controlTimer(this, 'play')" title="Iniciar/Continuar"><i data-lucide="play" style="width:16px;"></i></button>
+                            <button class="timer-btn" onclick="window.controlTimer(this, 'pause')" title="Pausar"><i data-lucide="pause" style="width:16px;"></i></button>
+                            <button class="timer-btn" onclick="window.controlTimer(this, 'reset')" title="Zerar Relógio"><i data-lucide="rotate-ccw" style="width:16px;"></i></button>
+                            <button class="timer-btn" onclick="window.editTimer(this)" title="Editar Tempo"><i data-lucide="pencil" style="width:14px;"></i></button>
+                            <span class="header-timer time-display">${estimated.toString().padStart(2, '0')}:00</span>
+                        </div>
+                        <div class="toggle-icon"><i data-lucide="chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-body ${isActive ? 'active' : ''}">
+                        <div class="time-settings"><label><i data-lucide="clock" style="width:18px;"></i> Estimativa (min):</label><input type="number" class="time-input" value="${estimated}" min="1" oninput="window.updateTimeEstimates()"></div>
+                        <div class="toolbar">
+                            <button type="button" onclick="window.formatText('bold')" title="Negrito"><i data-lucide="bold"></i></button>
+                            <button type="button" onclick="window.formatText('italic')" title="Itálico"><i data-lucide="italic"></i></button>
+                            <button type="button" onclick="window.formatText('underline')" title="Sublinhado"><i data-lucide="underline"></i></button>
+                            <button type="button" onclick="window.formatText('strikeThrough')" title="Riscado"><i data-lucide="strikethrough"></i></button>
+                            <span class="divider"></span>
+                            <button type="button" onclick="window.formatText('justifyLeft')" title="Esquerda"><i data-lucide="align-left"></i></button>
+                            <button type="button" onclick="window.formatText('justifyCenter')" title="Centro"><i data-lucide="align-center"></i></button>
+                            <button type="button" onclick="window.formatText('justifyRight')" title="Direita"><i data-lucide="align-right"></i></button>
+                            <span class="divider"></span>
+                            <button type="button" onclick="window.formatText('insertUnorderedList')" title="Lista"><i data-lucide="list"></i></button>
+                            <button type="button" onclick="window.formatText('insertOrderedList')" title="Numérica"><i data-lucide="list-ordered"></i></button>
+                            <span class="divider"></span>
+                            <button type="button" onclick="window.formatText('undo')" title="Desfazer"><i data-lucide="undo"></i></button>
+                            <button type="button" onclick="window.formatText('redo')" title="Refazer"><i data-lucide="redo"></i></button>
+                        </div>
+                        <div class="editor-area" contenteditable="true">${contentText}</div>
+                        <div class="box-actions">
+                            <button class="btn-action btn-delete" onclick="window.deleteBox(this)"><i data-lucide="trash-2" style="width:18px;"></i> Excluir</button>
+                            <button class="btn-action btn-save" onclick="window.saveCurrentSermon(this)"><i data-lucide="cloud-upload" style="width:18px;"></i> Salvar na Nuvem</button>
+                        </div>
+                    </div>
+                </div>`;
         };
 
-        window.addNewBlock = function() {
-            if (!isEditMode) toggleAppMode();
+        window.addNewBlock = function(isFirst = false) {
+            if (!isEditMode) window.toggleAppMode();
             const wrapper = document.getElementById('blocks-wrapper'); if (!wrapper) return;
-            const HTML = `
-                <div class="accordion-header" onclick="toggleAccordion(this)" data-elapsed="0" data-estimated="10" data-state="paused">
-                    <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
-                    <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)"></div>
-                    <div class="timer-panel" onclick="event.stopPropagation();">
-                        <button class="timer-btn" onclick="controlTimer(this, 'play')" title="Iniciar/Continuar"><i data-lucide="play" style="width:16px;"></i></button>
-                        <button class="timer-btn" onclick="controlTimer(this, 'pause')" title="Pausar"><i data-lucide="pause" style="width:16px;"></i></button>
-                        <button class="timer-btn" onclick="controlTimer(this, 'reset')" title="Zerar Relógio"><i data-lucide="rotate-ccw" style="width:16px;"></i></button>
-                        <button class="timer-btn" onclick="editTimer(this)" title="Editar Tempo"><i data-lucide="pencil" style="width:14px;"></i></button>
-                        <span class="header-timer time-display">10:00</span>
-                    </div>
-                    <div class="toggle-icon"><i data-lucide="chevron-down"></i></div>
-                </div>
-                <div class="accordion-body">
-                    <div class="time-settings"><label><i data-lucide="clock" style="width:18px;"></i> Estimativa (min):</label><input type="number" class="time-input" value="10" min="1" oninput="updateTimeEstimates()"></div>
-                    <div class="toolbar">
-                        <button type="button" onclick="formatText('bold')" title="Negrito"><i data-lucide="bold"></i></button>
-                        <button type="button" onclick="formatText('italic')" title="Itálico"><i data-lucide="italic"></i></button>
-                        <button type="button" onclick="formatText('underline')" title="Sublinhado"><i data-lucide="underline"></i></button>
-                        <button type="button" onclick="formatText('strikeThrough')" title="Riscado"><i data-lucide="strikethrough"></i></button>
-                        <span class="divider"></span>
-                        <button type="button" onclick="formatText('justifyLeft')" title="Esquerda"><i data-lucide="align-left"></i></button>
-                        <button type="button" onclick="formatText('justifyCenter')" title="Centro"><i data-lucide="align-center"></i></button>
-                        <button type="button" onclick="formatText('justifyRight')" title="Direita"><i data-lucide="align-right"></i></button>
-                        <span class="divider"></span>
-                        <button type="button" onclick="formatText('insertUnorderedList')" title="Lista"><i data-lucide="list"></i></button>
-                        <button type="button" onclick="formatText('insertOrderedList')" title="Numérica"><i data-lucide="list-ordered"></i></button>
-                        <span class="divider"></span>
-                        <button type="button" onclick="formatText('undo')" title="Desfazer"><i data-lucide="undo"></i></button>
-                        <button type="button" onclick="formatText('redo')" title="Refazer"><i data-lucide="redo"></i></button>
-                    </div>
-                    <div class="editor-area" contenteditable="true"></div>
-                    <div class="box-actions"><button class="btn-action btn-delete" onclick="deleteBox(this)"><i data-lucide="trash-2" style="width:18px;"></i> Excluir</button><button class="btn-action btn-save" onclick="saveBox(this)"><i data-lucide="save" style="width:18px;"></i> Salvar Etapa</button></div>
-                </div>`;
-            wrapper.insertAdjacentHTML('beforeend', HTML);
+            
+            const headerText = isFirst ? "1. Introdução\nO Início da Mensagem" : "";
+            wrapper.insertAdjacentHTML('beforeend', window.generateBlockHTML(headerText, 5, "", true));
+            
             lucide.createIcons(); 
             const headers = wrapper.querySelectorAll('.accordion-header'); 
             const lastHeader = headers[headers.length - 1];
-            toggleAccordion(lastHeader); lastHeader.querySelector('.header-content').focus();
+            
+            if(!isFirst) {
+                window.toggleAccordion(lastHeader); 
+                lastHeader.querySelector('.header-content').focus();
+            }
         };
     </script>
 </body>
