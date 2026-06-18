@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App para Pregadores - Beta V7</title>
+    <title>App para Pregadores - Beta V8</title>
     <style>
         :root {
             --bg-color: #f1f5f9;
@@ -28,7 +28,80 @@
             line-height: 1.5;
         }
 
-        /* Cabeçalho Principal e Relógio Global */
+        /* -------------------------------------------
+           TELA DE LOGIN (NOVO)
+        ------------------------------------------- */
+        #auth-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .auth-card {
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .auth-card h2 {
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .auth-input:focus { border-color: var(--primary); }
+
+        .auth-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: opacity 0.2s;
+        }
+        .auth-btn:hover { opacity: 0.9; }
+        
+        .btn-login { background-color: var(--primary); color: white; }
+        .btn-register { background-color: transparent; color: var(--primary); border: 2px solid var(--primary); }
+        
+        .error-msg {
+            color: var(--danger);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            min-height: 20px;
+            font-weight: 600;
+        }
+
+        /* Ocultar o app principal inicialmente */
+        #main-header, #app-container { display: none; }
+
+        /* -------------------------------------------
+           CABEÇALHO E APP PRINCIPAL
+        ------------------------------------------- */
         .main-header {
             background-color: var(--card-bg);
             height: var(--main-header-height);
@@ -44,322 +117,150 @@
             box-sizing: border-box;
         }
 
-        .header-title-group {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+        .header-title-group { display: flex; align-items: center; gap: 15px; }
+        .main-header h1 { margin: 0; font-size: 1.25rem; color: var(--primary); font-weight: 800; }
 
-        .main-header h1 {
-            margin: 0;
-            font-size: 1.25rem;
-            color: var(--primary);
-            font-weight: 800;
-        }
-
-        /* RELÓGIO MESTRE (TEMPO TOTAL) */
         .global-timer {
-            background-color: #1e293b;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-family: monospace;
+            background-color: #1e293b; color: white; padding: 6px 12px;
+            border-radius: 6px; font-size: 0.9rem; font-weight: 700;
+            display: flex; align-items: center; gap: 6px; font-family: monospace;
         }
+
+        .header-actions { display: flex; gap: 10px; }
 
         .btn-toggle-mode {
-            background-color: var(--success);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 9999px;
-            font-weight: 600;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background-color: var(--success); color: white; border: none;
+            padding: 8px 16px; border-radius: 9999px; font-weight: 600;
+            font-size: 0.875rem; cursor: pointer; transition: all 0.3s ease;
         }
         .btn-toggle-mode.locked { background-color: var(--text-muted); }
 
-        .container {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 16px 10px;
-            box-sizing: border-box;
+        .btn-logout {
+            background-color: #f1f5f9; color: var(--danger); border: 1px solid #cbd5e1;
+            padding: 8px 16px; border-radius: 9999px; font-weight: 600;
+            font-size: 0.875rem; cursor: pointer; transition: all 0.3s ease;
         }
+        .btn-logout:hover { background-color: #fee2e2; border-color: var(--danger); }
 
+        .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 16px 10px; box-sizing: border-box; }
         #blocks-wrapper { display: flex; flex-direction: column; }
 
         /* CABEÇAS (Títulos) */
         .accordion-header {
-            background-color: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            padding: 16px 20px;
-            cursor: pointer;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            transition: border-radius 0.2s ease, margin 0.2s ease;
-            position: relative; /* Para a barra de progresso */
+            background-color: var(--primary); color: white; display: flex;
+            align-items: center; padding: 16px 20px; cursor: pointer;
+            border-radius: 12px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: border-radius 0.2s ease, margin 0.2s ease; position: relative;
         }
 
         .accordion-header.sticky-top {
-            position: -webkit-sticky;
-            position: sticky;
-            top: var(--main-header-height);
-            z-index: 90;
-            border-radius: 12px 12px 0 0;
-            margin-bottom: 0;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+            position: -webkit-sticky; position: sticky; top: var(--main-header-height);
+            z-index: 90; border-radius: 12px 12px 0 0; margin-bottom: 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
         }
 
         .accordion-header.sticky-bottom {
-            position: -webkit-sticky;
-            position: sticky;
-            bottom: 0;
-            z-index: 80;
+            position: -webkit-sticky; position: sticky; bottom: 0; z-index: 80;
             box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.15);
         }
 
-        /* BARRA DE PROGRESSO SUTIL */
         .progress-bar-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 0 0 12px 12px;
-            overflow: hidden;
-            pointer-events: none;
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 4px;
+            background: rgba(255,255,255,0.15); border-radius: 0 0 12px 12px; overflow: hidden; pointer-events: none;
         }
         .accordion-header.sticky-top .progress-bar-container { border-radius: 0; }
-        
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background-color: var(--success);
-            transition: width 1s linear, background-color 0.5s ease;
-        }
+        .progress-bar-fill { height: 100%; width: 0%; background-color: var(--success); transition: width 1s linear, background-color 0.5s ease; }
 
         .header-content {
-            flex-grow: 1;
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: white;
-            outline: none;
-            min-height: 28px;
-            white-space: pre-wrap;
-            word-break: break-word;
+            flex-grow: 1; font-size: 1.15rem; font-weight: 700; color: white;
+            outline: none; min-height: 28px; white-space: pre-wrap; word-break: break-word;
         }
+        .header-content:empty:before { content: "Digite o tópico aqui..."; color: rgba(255, 255, 255, 0.7); font-weight: 500; }
 
-        .header-content:empty:before {
-            content: "Digite o tópico aqui...";
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 500;
-        }
-
-        /* VISOR DO CRONÔMETRO DE BLOCO */
         .header-timer {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 6px 12px;
-            border-radius: 99px;
-            font-size: 1rem;
-            margin-right: 12px;
-            font-family: monospace;
-            font-weight: 700;
-            white-space: nowrap;
-            transition: all 0.3s;
-            cursor: pointer; /* Indica que é clicável */
-            border: 1px solid transparent;
+            display: flex; align-items: center; background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px; border-radius: 99px; font-size: 1rem; margin-right: 12px;
+            font-family: monospace; font-weight: 700; white-space: nowrap; transition: all 0.3s;
+            cursor: pointer; border: 1px solid transparent;
         }
+        .header-timer:hover { background: rgba(255, 255, 255, 0.3); border-color: rgba(255,255,255,0.5); }
+        .header-timer.paused { animation: pulse-pause 1.5s infinite; background: rgba(255, 255, 255, 0.1); }
+        .header-timer.over-time { background-color: var(--danger); color: white; animation: shake 2s infinite; }
 
-        .header-timer:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255,255,255,0.5);
-        }
+        @keyframes pulse-pause { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 5%, 15% { transform: translateX(-2px); } 10%, 20% { transform: translateX(2px); } 25% { transform: translateX(0); } }
 
-        /* Animação quando pausado manualmente */
-        .header-timer.paused {
-            animation: pulse-pause 1.5s infinite;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        @keyframes pulse-pause {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        /* Animação quando o tempo esgota */
-        .header-timer.over-time {
-            background-color: var(--danger);
-            color: white;
-            animation: shake 2s infinite;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            5%, 15% { transform: translateX(-2px); }
-            10%, 20% { transform: translateX(2px); }
-            25% { transform: translateX(0); }
-        }
-
-        .toggle-icon {
-            font-size: 1.5rem;
-            color: white;
-            transition: transform 0.3s ease;
-            line-height: 1;
-        }
+        .toggle-icon { font-size: 1.5rem; color: white; transition: transform 0.3s ease; line-height: 1; }
         .accordion-header.sticky-top .toggle-icon { transform: rotate(45deg); }
 
         /* CORPO DA SANFONA */
         .accordion-body {
-            display: none;
-            background-color: var(--card-bg);
-            padding: 20px;
-            border: 1px solid var(--border-light);
-            border-top: none;
-            border-radius: 0 0 12px 12px;
-            margin-bottom: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: none; background-color: var(--card-bg); padding: 20px;
+            border: 1px solid var(--border-light); border-top: none; border-radius: 0 0 12px 12px;
+            margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
+        .accordion-body.active { display: block; min-height: calc(100vh - 180px); }
 
-        .accordion-body.active { 
-            display: block; 
-            min-height: calc(100vh - 180px);
-        }
-
-        /* CONFIGURAÇÃO DE TEMPO NO MODO EDIÇÃO */
         .time-settings {
-            background: #f8fafc;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid var(--border-light);
+            background: #f8fafc; padding: 12px 15px; border-radius: 8px; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 10px; border: 1px solid var(--border-light);
         }
-        
         .time-settings label { font-weight: 600; color: var(--text-main); font-size: 0.95rem; }
-        
-        .time-settings input {
-            width: 70px;
-            padding: 6px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 1rem;
-            text-align: center;
-            outline: none;
-        }
-        .time-settings input:focus { border-color: var(--primary); }
+        .time-settings input { width: 70px; padding: 6px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; text-align: center; outline: none; }
 
-        /* Editor e Ferramentas */
-        .toolbar {
-            display: flex;
-            gap: 8px;
-            padding: 0 0 12px 0;
-            border-bottom: 1px solid var(--border-light);
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .toolbar button {
-            background: #f1f5f9;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: #475569;
-            font-weight: 600;
-        }
+        .toolbar { display: flex; gap: 8px; padding: 0 0 12px 0; border-bottom: 1px solid var(--border-light); margin-bottom: 16px; flex-wrap: wrap; }
+        .toolbar button { background: #f1f5f9; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; color: #475569; font-weight: 600; }
         .toolbar button:hover { background: #e2e8f0; color: var(--text-main); }
 
-        .editor-area {
-            outline: none;
-            line-height: 1.7;
-            font-size: 1.1rem;
-            color: var(--text-main);
-            padding: 10px 0;
-        }
+        .editor-area { outline: none; line-height: 1.7; font-size: 1.1rem; color: var(--text-main); padding: 10px 0; }
+        .editor-area:empty:before { content: "Escreva suas anotações aqui..."; color: var(--text-muted); }
 
-        .editor-area:empty:before {
-            content: "Escreva suas anotações aqui...";
-            color: var(--text-muted);
-        }
-
-        .box-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-top: 30px;
-        }
-
-        .btn-action {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: white;
-        }
+        .box-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 30px; }
+        .btn-action { padding: 10px 20px; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; color: white; }
         .btn-save { background-color: var(--primary); }
         .btn-delete { background-color: white; color: var(--danger); border: 1px solid var(--danger); }
 
         .btn-add {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 18px;
-            background-color: transparent;
-            color: var(--primary);
-            border: 2px dashed var(--primary);
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 20px;
-            margin-bottom: 60px;
+            display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+            padding: 18px; background-color: transparent; color: var(--primary); border: 2px dashed var(--primary);
+            border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 20px; margin-bottom: 60px;
         }
         .btn-add:hover { background-color: #e0e7ff; }
 
-        body.view-mode .toolbar, 
-        body.view-mode .box-actions, 
-        body.view-mode .btn-add,
-        body.view-mode .time-settings { display: none !important; }
+        body.view-mode .toolbar, body.view-mode .box-actions, body.view-mode .btn-add, body.view-mode .time-settings { display: none !important; }
     </style>
 </head>
 <body class="edit-mode">
 
-    <header class="main-header">
+    <div id="auth-screen">
+        <div class="auth-card">
+            <h2>Esboço Protegido</h2>
+            <div id="auth-error" class="error-msg"></div>
+            <input type="email" id="email" class="auth-input" placeholder="Seu E-mail" required>
+            <input type="password" id="password" class="auth-input" placeholder="Sua Senha (mínimo 6 letras)" required>
+            <button id="btnLogin" class="auth-btn btn-login">Entrar</button>
+            <button id="btnRegister" class="auth-btn btn-register">Criar Conta</button>
+        </div>
+    </div>
+
+    <header class="main-header" id="main-header">
         <div class="header-title-group">
             <h1>Meu Esboço</h1>
             <div class="global-timer" title="Tempo restante da pregação">
                 ⏳ Restam: <span id="global-time-display">00:00</span>
             </div>
         </div>
-        <button id="toggleModeBtn" class="btn-toggle-mode" onclick="toggleAppMode()">🔓 Editando</button>
+        <div class="header-actions">
+            <button id="toggleModeBtn" class="btn-toggle-mode" onclick="toggleAppMode()">🔓 Editando</button>
+            <button id="btnLogout" class="btn-logout">Sair</button>
+        </div>
     </header>
 
     <div class="container" id="app-container">
-        
         <div id="blocks-wrapper">
             <div class="accordion-header active sticky-top" onclick="toggleAccordion(this)" data-elapsed="0" data-estimated="5" data-paused="false">
                 <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
                 <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)">1. Introdução
-Leitura de João 3:16</div>
+Leitura do Texto Sagrado</div>
                 <div class="header-timer" onclick="togglePauseBlockTimer(event, this)" title="Clique para Pausar/Continuar">
                     <span class="time-display">05:00</span>
                 </div>
@@ -376,60 +277,113 @@ Leitura de João 3:16</div>
                     <button type="button" onclick="formatText('underline')"><u>U</u></button>
                     <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
                 </div>
-                <div class="editor-area" contenteditable="true">Escreva a introdução aqui...</div>
-                <div class="box-actions">
-                    <button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button>
-                    <button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button>
-                </div>
-            </div>
-
-            <div class="accordion-header sticky-bottom" onclick="toggleAccordion(this)" data-elapsed="0" data-estimated="15" data-paused="false">
-                <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
-                <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)">2. Desenvolvimento
-O Amor de Deus</div>
-                <div class="header-timer" onclick="togglePauseBlockTimer(event, this)" title="Clique para Pausar/Continuar">
-                    <span class="time-display">15:00</span>
-                </div>
-                <span class="toggle-icon">+</span>
-            </div>
-            <div class="accordion-body">
-                <div class="time-settings">
-                    <label>⏱️ Tempo estimado (minutos):</label>
-                    <input type="number" class="time-input" value="15" min="1" oninput="updateTimeEstimates()">
-                </div>
-                <div class="toolbar">
-                    <button type="button" onclick="formatText('bold')"><b>B</b></button>
-                    <button type="button" onclick="formatText('italic')"><i>I</i></button>
-                    <button type="button" onclick="formatText('underline')"><u>U</u></button>
-                    <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
-                </div>
-                <div class="editor-area" contenteditable="true">Aprofunde o assunto aqui...</div>
+                <div class="editor-area" contenteditable="true">Comece seu novo esboço aqui...</div>
                 <div class="box-actions">
                     <button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button>
                     <button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button>
                 </div>
             </div>
         </div>
-
         <button class="btn-add" onclick="addNewBlock()">+ Adicionar Novo Tópico</button>
-
     </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDthpfYhfEWo_owFkHEPBd8ThKuPGstUoY",
+            authDomain: "pregadores-6c330.firebaseapp.com",
+            projectId: "pregadores-6c330",
+            storageBucket: "pregadores-6c330.firebasestorage.app",
+            messagingSenderId: "918085682020",
+            appId: "1:918085682020:web:fe7861fe330068d1a73071",
+            measurementId: "G-FZLWTMHQ83"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Elementos da UI
+        const authScreen = document.getElementById('auth-screen');
+        const mainHeader = document.getElementById('main-header');
+        const appContainer = document.getElementById('app-container');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const errorMsg = document.getElementById('auth-error');
+
+        // Monitora o status: Logou ou Deslogou?
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuário Logado: Esconde Login, Mostra App
+                authScreen.style.display = 'none';
+                mainHeader.style.display = 'flex';
+                appContainer.style.display = 'block';
+                errorMsg.innerText = '';
+                
+                // Dispara a lógica interna do app (Cronômetros, etc)
+                window.startAppLogic();
+            } else {
+                // Usuário Não Logado: Mostra Login, Esconde App
+                authScreen.style.display = 'flex';
+                mainHeader.style.display = 'none';
+                appContainer.style.display = 'none';
+                
+                // Para o cronômetro para não rodar no fundo
+                window.stopAppLogic();
+            }
+        });
+
+        // Botão Entrar
+        document.getElementById('btnLogin').addEventListener('click', () => {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            signInWithEmailAndPassword(auth, email, password)
+                .catch((error) => {
+                    errorMsg.innerText = "E-mail ou senha incorretos.";
+                });
+        });
+
+        // Botão Criar Conta
+        document.getElementById('btnRegister').addEventListener('click', () => {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            if (password.length < 6) {
+                errorMsg.innerText = "A senha deve ter no mínimo 6 caracteres.";
+                return;
+            }
+            createUserWithEmailAndPassword(auth, email, password)
+                .catch((error) => {
+                    errorMsg.innerText = "Erro ao criar conta. O e-mail pode já estar em uso.";
+                });
+        });
+
+        // Botão Sair
+        document.getElementById('btnLogout').addEventListener('click', () => {
+            signOut(auth);
+            emailInput.value = '';
+            passwordInput.value = '';
+        });
+    </script>
 
     <script>
         let isEditMode = true;
         let masterClock = null;
 
-        // INICIA O RELÓGIO MESTRE (Bate a cada 1 segundo)
-        function startMasterClock() {
+        // Funções para ligar/desligar o App controladas pelo Firebase
+        window.startAppLogic = function() {
+            updateStickyHeaders();
+            updateTimeEstimates(); 
             if (masterClock) clearInterval(masterClock);
-            masterClock = setInterval(() => {
-                tickClock();
-            }, 1000);
-        }
+            masterClock = setInterval(() => { tickClock(); }, 1000);
+        };
 
-        // FUNÇÃO QUE RODA A CADA SEGUNDO
+        window.stopAppLogic = function() {
+            if (masterClock) clearInterval(masterClock);
+            masterClock = null;
+        };
+
         function tickClock() {
-            // 1. Atualiza o bloco ativo
             const activeHeader = document.querySelector('.accordion-header.active');
             if (activeHeader) {
                 const isPaused = activeHeader.getAttribute('data-paused') === 'true';
@@ -441,34 +395,27 @@ O Amor de Deus</div>
                 renderBlockTimer(activeHeader);
             }
             
-            // 2. Atualiza os blocos inativos (apenas visualmente, não soma tempo)
             const inactiveHeaders = document.querySelectorAll('.accordion-header:not(.active)');
             inactiveHeaders.forEach(header => renderBlockTimer(header));
-
-            // 3. Atualiza o Relógio Global no topo
             renderGlobalTimer();
         }
 
-        // CONTROLE MANUAL: PAUSAR / CONTINUAR
-        function togglePauseBlockTimer(event, timerElement) {
-            event.stopPropagation(); // Impede que a sanfona abra/feche ao clicar no relógio
+        window.togglePauseBlockTimer = function(event, timerElement) {
+            event.stopPropagation();
             const header = timerElement.closest('.accordion-header');
             const isPaused = header.getAttribute('data-paused') === 'true';
             header.setAttribute('data-paused', !isPaused);
             renderBlockTimer(header);
-        }
+        };
 
-        // ATUALIZA O VISOR DA CONTAGEM REGRESSIVA E A BARRA DE PROGRESSO
         function renderBlockTimer(header) {
             let elapsed = parseInt(header.getAttribute('data-elapsed') || '0');
             let estimatedMins = parseInt(header.getAttribute('data-estimated') || '0');
-            
             let timerContainer = header.querySelector('.header-timer');
             let timeDisplay = header.querySelector('.time-display');
             let progressBar = header.querySelector('.progress-bar-fill');
             let isPaused = header.getAttribute('data-paused') === 'true';
 
-            // Efeito visual de Pausa
             if (isPaused && header.classList.contains('active')) {
                 timerContainer.classList.add('paused');
             } else {
@@ -479,24 +426,16 @@ O Amor de Deus</div>
                 let totalSeconds = estimatedMins * 60;
                 let remaining = totalSeconds - elapsed;
                 let absRemaining = Math.abs(remaining);
-                
                 let m = Math.floor(absRemaining / 60).toString().padStart(2, '0');
                 let s = (absRemaining % 60).toString().padStart(2, '0');
                 
                 if (remaining < 0) {
-                    // Tempo Esgotado
                     timeDisplay.innerText = `-${m}:${s}`;
                     timerContainer.classList.add('over-time');
-                    if(progressBar) {
-                        progressBar.style.width = `100%`;
-                        progressBar.style.backgroundColor = 'var(--danger)';
-                    }
+                    if(progressBar) { progressBar.style.width = `100%`; progressBar.style.backgroundColor = 'var(--danger)'; }
                 } else {
-                    // Contagem Regressiva Normal
                     timeDisplay.innerText = `${m}:${s}`;
                     timerContainer.classList.remove('over-time');
-                    
-                    // Barra de Progresso Dinâmica
                     let progressPercent = (elapsed / totalSeconds) * 100;
                     if(progressBar) {
                         progressBar.style.width = `${progressPercent}%`;
@@ -506,196 +445,116 @@ O Amor de Deus</div>
                     }
                 }
             } else {
-                // Se o usuário colocou estimativa zero, mostra traços
                 timeDisplay.innerText = `--:--`;
                 timerContainer.classList.remove('over-time');
                 if(progressBar) progressBar.style.width = `0%`;
             }
         }
 
-        // ATUALIZA O RELÓGIO GLOBAL (TEMPO TOTAL DE PREGAÇÃO)
         function renderGlobalTimer() {
             const headers = document.querySelectorAll('.accordion-header');
-            let totalElapsed = 0;
-            let totalEstimatedMins = 0;
-            
+            let totalElapsed = 0; let totalEstimatedMins = 0;
             headers.forEach(h => {
                 totalElapsed += parseInt(h.getAttribute('data-elapsed') || '0');
                 totalEstimatedMins += parseInt(h.getAttribute('data-estimated') || '0');
             });
-            
             const globalDisplay = document.getElementById('global-time-display');
-            let totalSeconds = totalEstimatedMins * 60;
-            let remaining = totalSeconds - totalElapsed;
-            let absRemaining = Math.abs(remaining);
-            
-            let m = Math.floor(absRemaining / 60).toString().padStart(2, '0');
-            let s = (absRemaining % 60).toString().padStart(2, '0');
-            
-            if (remaining < 0) {
-                globalDisplay.innerText = `-${m}:${s}`;
-                globalDisplay.parentElement.style.color = '#fca5a5'; // Vermelho claro
-            } else {
-                globalDisplay.innerText = `${m}:${s}`;
-                globalDisplay.parentElement.style.color = 'white';
-            }
+            let totalSeconds = totalEstimatedMins * 60; let remaining = totalSeconds - totalElapsed; let absRemaining = Math.abs(remaining);
+            let m = Math.floor(absRemaining / 60).toString().padStart(2, '0'); let s = (absRemaining % 60).toString().padStart(2, '0');
+            if (remaining < 0) { globalDisplay.innerText = `-${m}:${s}`; globalDisplay.parentElement.style.color = '#fca5a5'; } 
+            else { globalDisplay.innerText = `${m}:${s}`; globalDisplay.parentElement.style.color = 'white'; }
         }
 
-        // SALVA A ESTIMATIVA DIGITADA E ATUALIZA OS ATRIBUTOS DA CABEÇA
-        function updateTimeEstimates() {
+        window.updateTimeEstimates = function() {
             const bodies = document.querySelectorAll('.accordion-body');
             bodies.forEach(body => {
                 const input = body.querySelector('.time-input');
                 const header = body.previousElementSibling;
-                if (input && header) {
-                    header.setAttribute('data-estimated', input.value || '0');
-                }
+                if (input && header) header.setAttribute('data-estimated', input.value || '0');
             });
-            // Força uma atualização imediata da tela
             tickClock();
-        }
+        };
 
         function updateStickyHeaders() {
             const headers = document.querySelectorAll('.accordion-header');
             let activeFound = false;
-
             headers.forEach((header) => {
                 header.classList.remove('sticky-top', 'sticky-bottom');
-                if (header.classList.contains('active')) {
-                    activeFound = true;
-                    header.classList.add('sticky-top');
-                } else if (activeFound) {
-                    header.classList.add('sticky-bottom');
-                    activeFound = false; 
-                }
+                if (header.classList.contains('active')) { activeFound = true; header.classList.add('sticky-top'); } 
+                else if (activeFound) { header.classList.add('sticky-bottom'); activeFound = false; }
             });
         }
 
-        function toggleAppMode() {
+        window.toggleAppMode = function() {
             isEditMode = !isEditMode;
             const body = document.body;
             const btn = document.getElementById('toggleModeBtn');
             const editables = document.querySelectorAll('.header-content, .editor-area');
-
             if (isEditMode) {
-                body.classList.remove('view-mode');
-                body.classList.add('edit-mode');
-                btn.innerHTML = '🔓 Editando';
-                btn.classList.remove('locked');
+                body.classList.remove('view-mode'); body.classList.add('edit-mode');
+                btn.innerHTML = '🔓 Editando'; btn.classList.remove('locked');
                 editables.forEach(el => el.setAttribute('contenteditable', 'true'));
             } else {
-                body.classList.remove('edit-mode');
-                body.classList.add('view-mode');
-                btn.innerHTML = '🔒 Leitura';
-                btn.classList.add('locked');
+                body.classList.remove('edit-mode'); body.classList.add('view-mode');
+                btn.innerHTML = '🔒 Leitura'; btn.classList.add('locked');
                 editables.forEach(el => el.setAttribute('contenteditable', 'false'));
             }
-        }
+        };
 
-        function preventToggleIfEditing(event) {
-            if (isEditMode) event.stopPropagation();
-        }
+        window.preventToggleIfEditing = function(event) { if (isEditMode) event.stopPropagation(); };
 
-        function toggleAccordion(clickedHeader) {
+        window.toggleAccordion = function(clickedHeader) {
             const isCurrentlyActive = clickedHeader.classList.contains('active');
-
-            // Fecha todos
-            document.querySelectorAll('.accordion-header').forEach(h => {
-                h.classList.remove('active');
-                h.setAttribute('data-paused', 'false'); // Reseta a pausa ao fechar
-            });
+            document.querySelectorAll('.accordion-header').forEach(h => { h.classList.remove('active'); h.setAttribute('data-paused', 'false'); });
             document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('active'));
-
             if (!isCurrentlyActive) {
-                clickedHeader.classList.add('active');
-                clickedHeader.nextElementSibling.classList.add('active');
-                clickedHeader.setAttribute('data-paused', 'false'); // Garante que começa rodando
-
-                updateStickyHeaders();
-                tickClock(); // Atualiza a tela imediatamente
-
+                clickedHeader.classList.add('active'); clickedHeader.nextElementSibling.classList.add('active');
+                clickedHeader.setAttribute('data-paused', 'false');
+                updateStickyHeaders(); tickClock();
                 setTimeout(() => {
                     const mainHeaderHeight = document.querySelector('.main-header').offsetHeight;
                     const y = clickedHeader.getBoundingClientRect().top + window.scrollY - mainHeaderHeight;
                     window.scrollTo({top: y, behavior: 'smooth'});
                 }, 100); 
-            } else {
-                updateStickyHeaders();
-            }
-        }
+            } else { updateStickyHeaders(); }
+        };
 
-        function formatText(command) { document.execCommand(command, false, null); }
+        window.formatText = function(command) { document.execCommand(command, false, null); };
 
-        function deleteBox(btn) {
+        window.deleteBox = function(btn) {
             if(confirm('Tem certeza que deseja excluir este tópico?')) {
-                const body = btn.closest('.accordion-body');
-                const header = body.previousElementSibling;
-                body.remove();
-                header.remove();
-                updateStickyHeaders();
-                tickClock();
+                const body = btn.closest('.accordion-body'); const header = body.previousElementSibling;
+                body.remove(); header.remove(); updateStickyHeaders(); tickClock();
             }
-        }
+        };
 
-        function saveBox(btn) {
-            const textoOriginal = btn.innerHTML;
-            btn.innerHTML = '✅ Salvo!';
-            btn.style.backgroundColor = 'var(--success)';
-            setTimeout(() => {
-                btn.innerHTML = textoOriginal;
-                btn.style.backgroundColor = 'var(--primary)'; 
-            }, 2000);
-        }
+        window.saveBox = function(btn) {
+            const textoOriginal = btn.innerHTML; btn.innerHTML = '✅ Salvo!'; btn.style.backgroundColor = 'var(--success)';
+            setTimeout(() => { btn.innerHTML = textoOriginal; btn.style.backgroundColor = 'var(--primary)'; }, 2000);
+        };
 
-        function addNewBlock() {
+        window.addNewBlock = function() {
             if (!isEditMode) toggleAppMode();
-
             const wrapper = document.getElementById('blocks-wrapper');
             if (!wrapper) return;
-            
             const newBlockHTML = `
                 <div class="accordion-header" onclick="toggleAccordion(this)" data-elapsed="0" data-estimated="10" data-paused="false">
                     <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
                     <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)"></div>
-                    <div class="header-timer" onclick="togglePauseBlockTimer(event, this)" title="Clique para Pausar/Continuar">
-                        <span class="time-display">10:00</span>
-                    </div>
+                    <div class="header-timer" onclick="togglePauseBlockTimer(event, this)" title="Clique para Pausar/Continuar"><span class="time-display">10:00</span></div>
                     <span class="toggle-icon">+</span>
                 </div>
                 <div class="accordion-body">
-                    <div class="time-settings">
-                        <label>⏱️ Tempo estimado (minutos):</label>
-                        <input type="number" class="time-input" value="10" min="1" oninput="updateTimeEstimates()">
-                    </div>
-                    <div class="toolbar">
-                        <button type="button" onclick="formatText('bold')"><b>B</b></button>
-                        <button type="button" onclick="formatText('italic')"><i>I</i></button>
-                        <button type="button" onclick="formatText('underline')"><u>U</u></button>
-                        <button type="button" onclick="formatText('insertUnorderedList')">• Lista</button>
-                    </div>
+                    <div class="time-settings"><label>⏱️ Tempo estimado (minutos):</label><input type="number" class="time-input" value="10" min="1" oninput="updateTimeEstimates()"></div>
+                    <div class="toolbar"><button type="button" onclick="formatText('bold')"><b>B</b></button><button type="button" onclick="formatText('italic')"><i>I</i></button><button type="button" onclick="formatText('underline')"><u>U</u></button><button type="button" onclick="formatText('insertUnorderedList')">• Lista</button></div>
                     <div class="editor-area" contenteditable="true"></div>
-                    <div class="box-actions">
-                        <button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button>
-                        <button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button>
-                    </div>
-                </div>
-            `;
-            
+                    <div class="box-actions"><button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button><button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button></div>
+                </div>`;
             wrapper.insertAdjacentHTML('beforeend', newBlockHTML);
-
             const newHeaders = wrapper.querySelectorAll('.accordion-header');
             const lastHeader = newHeaders[newHeaders.length - 1];
-            
-            toggleAccordion(lastHeader);
-            lastHeader.querySelector('.header-content').focus();
-        }
-
-        // Inicializa o app no primeiro carregamento
-        document.addEventListener('DOMContentLoaded', () => {
-            updateStickyHeaders();
-            updateTimeEstimates(); 
-            startMasterClock(); // Liga o motor principal do tempo
-        });
+            toggleAccordion(lastHeader); lastHeader.querySelector('.header-content').focus();
+        };
     </script>
 </body>
 </html>
