@@ -103,4 +103,315 @@
             font-family: monospace; font-weight: 700; cursor: pointer; border: 1px solid transparent;
         }
         .header-timer.paused { animation: pulse-pause 1.5s infinite; background: rgba(0, 0, 0, 0.4); }
-        .header-timer.over-
+        .header-timer.over-time { background-color: var(--danger); animation: shake 2s infinite; }
+        .toggle-icon { font-size: 1.5rem; color: white; transition: transform 0.3s ease; }
+        .accordion-header.sticky-top .toggle-icon { transform: rotate(45deg); }
+
+        /* CORPO DA SANFONA */
+        .accordion-body {
+            display: none; background-color: var(--card-bg); padding: 25px; border-top: none; border-radius: 0 0 12px 12px; margin-bottom: 12px;
+        }
+        .accordion-body.active { display: block; min-height: calc(100vh - 180px); }
+
+        .time-settings { background: var(--bg-color); padding: 12px 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--border-light); }
+        .time-settings label { font-weight: 600; color: var(--text-muted); font-size: 0.95rem; }
+        .time-settings input { width: 70px; padding: 6px; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-light); border-radius: 6px; font-size: 1rem; text-align: center; outline: none; }
+
+        /* BARRA DE FERRAMENTAS AMPLIADA E ADAPTÁVEL */
+        .toolbar {
+            display: flex; gap: 5px; padding: 10px; background-color: var(--bg-color); border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border-light);
+        }
+        .toolbar button {
+            background: var(--card-bg); border: 1px solid var(--border-light); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 1rem; color: var(--text-main); font-weight: 600; flex-shrink: 0;
+        }
+        .toolbar button:hover { background: var(--primary); border-color: var(--primary); }
+        .toolbar .divider { width: 1px; background-color: var(--border-light); margin: 0 5px; }
+
+        /* ÁREA DE TEXTO ESCURA */
+        .editor-area { outline: none; line-height: 1.8; font-size: 1.15rem; color: var(--text-main); padding: 10px 0; }
+        .editor-area:empty:before { content: "Escreva suas anotações aqui..."; color: var(--text-muted); }
+
+        .box-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 40px; }
+        .btn-action { padding: 10px 20px; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; color: white; }
+        .btn-save { background-color: var(--primary); }
+        .btn-delete { background-color: transparent; color: var(--danger); border: 1px solid var(--danger); }
+
+        .btn-add {
+            display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 20px; background-color: transparent; color: var(--text-muted);
+            border: 2px dashed var(--border-light); border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 20px; margin-bottom: 60px; transition: all 0.2s;
+        }
+        .btn-add:hover { background-color: var(--card-bg); border-color: var(--primary); color: var(--primary); }
+
+        body.view-mode .toolbar, body.view-mode .box-actions, body.view-mode .btn-add, body.view-mode .time-settings { display: none !important; }
+
+        /* -------------------------------------------
+           MEDIA QUERIES (COMPORTAMENTO RESPONSIVO)
+        ------------------------------------------- */
+        
+        /* MOBILE (Pequenas Telas) */
+        @media (max-width: 767px) {
+            .container { padding: 10px 5px; max-width: 100%; }
+            .toolbar { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 12px; /* Scroll horizontal nas ferramentas */ }
+            .toolbar::-webkit-scrollbar { height: 4px; }
+            .toolbar::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+            .header-title-group h1 { display: none; /* Esconde o título principal no celular para dar espaço ao tempo */ }
+        }
+
+        /* TABLET (Telas Médias) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .container { padding: 20px; max-width: 90%; }
+            .editor-area { font-size: 1.25rem; /* Fonte maior para distância no tablet */ }
+            .toolbar { flex-wrap: wrap; }
+        }
+
+        /* COMPUTADOR (Telas Grandes) */
+        @media (min-width: 1024px) {
+            .container { padding: 30px; max-width: 850px; } /* Largura otimizada para leitura em PC */
+            .toolbar { position: sticky; top: calc(var(--main-header-height) + 60px); z-index: 85; box-shadow: 0 4px 6px rgba(0,0,0,0.3); } /* Toolbar flutuante inteligente */
+            .editor-area { font-size: 1.2rem; }
+            .accordion-header:hover { transform: scale(1.01); } /* Efeito sutil ao passar o mouse */
+        }
+
+        @keyframes pulse-pause { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 5%, 15% { transform: translateX(-2px); } 10%, 20% { transform: translateX(2px); } 25% { transform: translateX(0); } }
+    </style>
+</head>
+<body class="edit-mode">
+
+    <div id="auth-screen">
+        <div class="auth-card">
+            <h2>Esboço Seguro</h2>
+            <div id="auth-error" class="error-msg"></div>
+            <input type="email" id="email" class="auth-input" placeholder="Seu E-mail" required>
+            <input type="password" id="password" class="auth-input" placeholder="Sua Senha (mínimo 6 caracteres)" required>
+            <button id="btnLogin" class="auth-btn btn-login">Entrar</button>
+            <button id="btnRegister" class="auth-btn btn-register">Criar Conta</button>
+        </div>
+    </div>
+
+    <header class="main-header" id="main-header">
+        <div class="header-title-group">
+            <h1>App Pregador</h1>
+            <div class="global-timer" title="Tempo restante da pregação">
+                ⏳ Restam: <span id="global-time-display">00:00</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button id="toggleModeBtn" class="btn-toggle-mode" onclick="toggleAppMode()">🔓 Editando</button>
+            <button id="btnLogout" class="btn-logout">Sair</button>
+        </div>
+    </header>
+
+    <div class="container" id="app-container">
+        <div id="blocks-wrapper">
+            <div class="accordion-header active sticky-top" onclick="toggleAccordion(this)" data-elapsed="0" data-estimated="5" data-paused="false">
+                <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
+                <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)">1. Introdução
+O Início da Mensagem</div>
+                <div class="header-timer" onclick="togglePauseBlockTimer(event, this)" title="Clique para Pausar/Continuar">
+                    <span class="time-display">05:00</span>
+                </div>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="accordion-body active">
+                <div class="time-settings">
+                    <label>⏱️ Tempo estimado (minutos):</label>
+                    <input type="number" class="time-input" value="5" min="1" oninput="updateTimeEstimates()">
+                </div>
+                <div class="toolbar">
+                    <button type="button" onclick="formatText('bold')" title="Negrito"><b>B</b></button>
+                    <button type="button" onclick="formatText('italic')" title="Itálico"><i>I</i></button>
+                    <button type="button" onclick="formatText('underline')" title="Sublinhado"><u>U</u></button>
+                    <button type="button" onclick="formatText('strikeThrough')" title="Riscado"><s>S</s></button>
+                    <span class="divider"></span>
+                    <button type="button" onclick="formatText('justifyLeft')" title="Alinhar à Esquerda">⬅️</button>
+                    <button type="button" onclick="formatText('justifyCenter')" title="Centralizar">↔️</button>
+                    <button type="button" onclick="formatText('justifyRight')" title="Alinhar à Direita">➡️</button>
+                    <span class="divider"></span>
+                    <button type="button" onclick="formatText('insertUnorderedList')" title="Lista com Marcadores">•</button>
+                    <button type="button" onclick="formatText('insertOrderedList')" title="Lista Numerada">1.</button>
+                    <span class="divider"></span>
+                    <button type="button" onclick="formatText('undo')" title="Desfazer">↩️</button>
+                    <button type="button" onclick="formatText('redo')" title="Refazer">↪️</button>
+                </div>
+                <div class="editor-area" contenteditable="true">Escreva sua mensagem aqui...</div>
+                <div class="box-actions">
+                    <button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button>
+                    <button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button>
+                </div>
+            </div>
+        </div>
+        <button class="btn-add" onclick="addNewBlock()">+ Adicionar Novo Tópico</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDthpfYhfEWo_owFkHEPBd8ThKuPGstUoY",
+            authDomain: "pregadores-6c330.firebaseapp.com",
+            projectId: "pregadores-6c330",
+            storageBucket: "pregadores-6c330.firebasestorage.app",
+            messagingSenderId: "918085682020",
+            appId: "1:918085682020:web:fe7861fe330068d1a73071",
+            measurementId: "G-FZLWTMHQ83"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const authScreen = document.getElementById('auth-screen');
+        const mainHeader = document.getElementById('main-header');
+        const appContainer = document.getElementById('app-container');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const errorMsg = document.getElementById('auth-error');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                authScreen.style.display = 'none'; mainHeader.style.display = 'flex'; appContainer.style.display = 'block'; errorMsg.innerText = '';
+                window.startAppLogic();
+            } else {
+                authScreen.style.display = 'flex'; mainHeader.style.display = 'none'; appContainer.style.display = 'none';
+                window.stopAppLogic();
+            }
+        });
+
+        document.getElementById('btnLogin').addEventListener('click', () => {
+            signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value).catch(() => errorMsg.innerText = "E-mail ou senha incorretos.");
+        });
+
+        document.getElementById('btnRegister').addEventListener('click', () => {
+            if (passwordInput.value.length < 6) { errorMsg.innerText = "A senha deve ter no mínimo 6 caracteres."; return; }
+            createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value).catch(() => errorMsg.innerText = "Erro. O e-mail pode já estar em uso.");
+        });
+
+        document.getElementById('btnLogout').addEventListener('click', () => { signOut(auth); emailInput.value = ''; passwordInput.value = ''; });
+    </script>
+
+    <script>
+        let isEditMode = true; let masterClock = null;
+
+        window.startAppLogic = function() { updateStickyHeaders(); updateTimeEstimates(); if (masterClock) clearInterval(masterClock); masterClock = setInterval(() => { tickClock(); }, 1000); };
+        window.stopAppLogic = function() { if (masterClock) clearInterval(masterClock); masterClock = null; };
+
+        function tickClock() {
+            const activeHeader = document.querySelector('.accordion-header.active');
+            if (activeHeader) {
+                if (activeHeader.getAttribute('data-paused') !== 'true') {
+                    let elapsed = parseInt(activeHeader.getAttribute('data-elapsed') || '0'); activeHeader.setAttribute('data-elapsed', elapsed + 1);
+                }
+                renderBlockTimer(activeHeader);
+            }
+            document.querySelectorAll('.accordion-header:not(.active)').forEach(header => renderBlockTimer(header));
+            renderGlobalTimer();
+        }
+
+        window.togglePauseBlockTimer = function(event, timerElement) {
+            event.stopPropagation(); const header = timerElement.closest('.accordion-header');
+            header.setAttribute('data-paused', header.getAttribute('data-paused') !== 'true'); renderBlockTimer(header);
+        };
+
+        function renderBlockTimer(header) {
+            let elapsed = parseInt(header.getAttribute('data-elapsed') || '0'); let estimatedMins = parseInt(header.getAttribute('data-estimated') || '0');
+            let timerContainer = header.querySelector('.header-timer'); let timeDisplay = header.querySelector('.time-display'); let progressBar = header.querySelector('.progress-bar-fill');
+            
+            if (header.getAttribute('data-paused') === 'true' && header.classList.contains('active')) timerContainer.classList.add('paused');
+            else timerContainer.classList.remove('paused');
+
+            if (estimatedMins > 0) {
+                let remaining = (estimatedMins * 60) - elapsed; let absRemaining = Math.abs(remaining);
+                let m = Math.floor(absRemaining / 60).toString().padStart(2, '0'); let s = (absRemaining % 60).toString().padStart(2, '0');
+                if (remaining < 0) { timeDisplay.innerText = `-${m}:${s}`; timerContainer.classList.add('over-time'); if(progressBar) { progressBar.style.width = `100%`; progressBar.style.backgroundColor = 'var(--danger)'; } } 
+                else { timeDisplay.innerText = `${m}:${s}`; timerContainer.classList.remove('over-time'); if(progressBar) { let p = (elapsed / (estimatedMins * 60)) * 100; progressBar.style.width = `${p}%`; progressBar.style.backgroundColor = p < 70 ? 'var(--success)' : (p < 90 ? 'var(--warning)' : 'var(--danger)'); } }
+            } else { timeDisplay.innerText = `--:--`; timerContainer.classList.remove('over-time'); if(progressBar) progressBar.style.width = `0%`; }
+        }
+
+        function renderGlobalTimer() {
+            let tElapsed = 0; let tEstMins = 0; document.querySelectorAll('.accordion-header').forEach(h => { tElapsed += parseInt(h.getAttribute('data-elapsed') || '0'); tEstMins += parseInt(h.getAttribute('data-estimated') || '0'); });
+            let remaining = (tEstMins * 60) - tElapsed; let absR = Math.abs(remaining);
+            let m = Math.floor(absR / 60).toString().padStart(2, '0'); let s = (absR % 60).toString().padStart(2, '0');
+            const gDisp = document.getElementById('global-time-display');
+            if (remaining < 0) { gDisp.innerText = `-${m}:${s}`; gDisp.parentElement.style.color = 'var(--danger)'; } 
+            else { gDisp.innerText = `${m}:${s}`; gDisp.parentElement.style.color = 'var(--success)'; }
+        }
+
+        window.updateTimeEstimates = function() {
+            document.querySelectorAll('.accordion-body').forEach(body => {
+                const input = body.querySelector('.time-input'); const header = body.previousElementSibling;
+                if (input && header) header.setAttribute('data-estimated', input.value || '0');
+            }); tickClock();
+        };
+
+        function updateStickyHeaders() {
+            let activeFound = false;
+            document.querySelectorAll('.accordion-header').forEach((header) => {
+                header.classList.remove('sticky-top', 'sticky-bottom');
+                if (header.classList.contains('active')) { activeFound = true; header.classList.add('sticky-top'); } 
+                else if (activeFound) { header.classList.add('sticky-bottom'); activeFound = false; }
+            });
+        }
+
+        window.toggleAppMode = function() {
+            isEditMode = !isEditMode; const body = document.body; const btn = document.getElementById('toggleModeBtn');
+            if (isEditMode) { body.classList.remove('view-mode'); body.classList.add('edit-mode'); btn.innerHTML = '🔓 Editando'; btn.classList.remove('locked'); document.querySelectorAll('.header-content, .editor-area').forEach(el => el.setAttribute('contenteditable', 'true')); } 
+            else { body.classList.remove('edit-mode'); body.classList.add('view-mode'); btn.innerHTML = '🔒 Leitura'; btn.classList.add('locked'); document.querySelectorAll('.header-content, .editor-area').forEach(el => el.setAttribute('contenteditable', 'false')); }
+        };
+
+        window.preventToggleIfEditing = function(event) { if (isEditMode) event.stopPropagation(); };
+
+        window.toggleAccordion = function(clickedHeader) {
+            const isActive = clickedHeader.classList.contains('active');
+            document.querySelectorAll('.accordion-header').forEach(h => { h.classList.remove('active'); h.setAttribute('data-paused', 'false'); });
+            document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('active'));
+            if (!isActive) {
+                clickedHeader.classList.add('active'); clickedHeader.nextElementSibling.classList.add('active'); clickedHeader.setAttribute('data-paused', 'false');
+                updateStickyHeaders(); tickClock();
+                setTimeout(() => { window.scrollTo({top: clickedHeader.getBoundingClientRect().top + window.scrollY - document.querySelector('.main-header').offsetHeight, behavior: 'smooth'}); }, 100); 
+            } else { updateStickyHeaders(); }
+        };
+
+        window.formatText = function(command) { document.execCommand(command, false, null); };
+
+        window.deleteBox = function(btn) { if(confirm('Excluir tópico?')) { const b = btn.closest('.accordion-body'); b.previousElementSibling.remove(); b.remove(); updateStickyHeaders(); tickClock(); } };
+
+        window.saveBox = function(btn) { const t = btn.innerHTML; btn.innerHTML = '✅ Salvo!'; btn.style.backgroundColor = 'var(--success)'; setTimeout(() => { btn.innerHTML = t; btn.style.backgroundColor = 'var(--primary)'; }, 2000); };
+
+        window.addNewBlock = function() {
+            if (!isEditMode) toggleAppMode();
+            const wrapper = document.getElementById('blocks-wrapper'); if (!wrapper) return;
+            const HTML = `
+                <div class="accordion-header" onclick="toggleAccordion(this)" data-elapsed="0" data-estimated="10" data-paused="false">
+                    <div class="progress-bar-container"><div class="progress-bar-fill"></div></div>
+                    <div class="header-content" contenteditable="true" onclick="preventToggleIfEditing(event)"></div>
+                    <div class="header-timer" onclick="togglePauseBlockTimer(event, this)"><span class="time-display">10:00</span></div><span class="toggle-icon">+</span>
+                </div>
+                <div class="accordion-body">
+                    <div class="time-settings"><label>⏱️ Tempo estimado (minutos):</label><input type="number" class="time-input" value="10" min="1" oninput="updateTimeEstimates()"></div>
+                    <div class="toolbar">
+                        <button type="button" onclick="formatText('bold')" title="Negrito"><b>B</b></button>
+                        <button type="button" onclick="formatText('italic')" title="Itálico"><i>I</i></button>
+                        <button type="button" onclick="formatText('underline')" title="Sublinhado"><u>U</u></button>
+                        <button type="button" onclick="formatText('strikeThrough')" title="Riscado"><s>S</s></button>
+                        <span class="divider"></span>
+                        <button type="button" onclick="formatText('justifyLeft')" title="Esquerda">⬅️</button>
+                        <button type="button" onclick="formatText('justifyCenter')" title="Centro">↔️</button>
+                        <button type="button" onclick="formatText('justifyRight')" title="Direita">➡️</button>
+                        <span class="divider"></span>
+                        <button type="button" onclick="formatText('insertUnorderedList')" title="Lista">•</button>
+                        <button type="button" onclick="formatText('insertOrderedList')" title="Numérica">1.</button>
+                        <span class="divider"></span>
+                        <button type="button" onclick="formatText('undo')" title="Desfazer">↩️</button>
+                        <button type="button" onclick="formatText('redo')" title="Refazer">↪️</button>
+                    </div>
+                    <div class="editor-area" contenteditable="true"></div>
+                    <div class="box-actions"><button class="btn-action btn-delete" onclick="deleteBox(this)">Excluir</button><button class="btn-action btn-save" onclick="saveBox(this)">Salvar</button></div>
+                </div>`;
+            wrapper.insertAdjacentHTML('beforeend', HTML);
+            const headers = wrapper.querySelectorAll('.accordion-header'); const last = headers[headers.length - 1];
+            toggleAccordion(last); last.querySelector('.header-content').focus();
+        };
+    </script>
+</body>
+</html>
