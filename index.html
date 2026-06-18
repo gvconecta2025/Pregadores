@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pregadores - App Instalável V14.1</title>
+    <title>Pregadores - App Instalável V14.2</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0f172a">
@@ -85,12 +85,13 @@
         .global-timer span.text-restam { display: inline; }
 
         .header-actions { display: flex; gap: 12px; align-items: center; }
-        .btn-toggle-mode { background-color: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 99px; font-weight: 600; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.3s; }
+        .btn-toggle-mode { background-color: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 99px; font-weight: 600; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s; }
         .btn-toggle-mode.locked { background-color: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--glass-border); }
         
-        .user-menu-wrapper { position: relative; }
+        .user-menu-wrapper { position: relative; display: flex; align-items: center; justify-content: center;}
         .btn-icon { background: transparent; color: var(--text-muted); border: 1px solid var(--glass-border); padding: 10px; border-radius: 50%; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center;}
         .btn-icon:hover { color: white; border-color: rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.1); }
+        .user-avatar-btn { padding: 0; overflow: hidden; border-color: var(--primary); }
         
         .user-dropdown { display: none; position: absolute; top: calc(100% + 15px); right: 0; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); width: 260px; overflow: hidden; z-index: 200; animation: fadeIn 0.2s ease; }
         .user-dropdown.show { display: block; }
@@ -108,7 +109,7 @@
 
         .container { width: 100%; margin: 0 auto; box-sizing: border-box; padding-top: 20px; }
         
-        /* TÍTULO EDITÁVEL DO ESBOÇO (RENOMEAR) */
+        /* TÍTULO EDITÁVEL DO ESBOÇO */
         .sermon-main-title {
             width: 100%; background: transparent; border: none; border-bottom: 2px solid transparent;
             color: white; font-size: 2.2rem; font-weight: 800; margin-bottom: 25px; padding: 10px 0;
@@ -117,20 +118,20 @@
         .sermon-main-title:focus { border-bottom-color: var(--primary); }
         .sermon-main-title::placeholder { color: rgba(255,255,255,0.2); }
 
-        #blocks-wrapper { display: block; } /* Block garante que o position: sticky funciona! */
+        #blocks-wrapper { display: block; }
 
-        /* CABEÇAS E CORPOS (EFEITO ÍMAN) */
+        /* CABEÇAS E CORPOS */
         .accordion-header { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; display: flex; align-items: center; padding: 20px 24px; cursor: pointer; position: relative; margin-bottom: 20px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .accordion-header.active { border-color: rgba(99, 102, 241, 0.4); border-bottom: 1px solid transparent; border-radius: 20px 20px 0 0; margin-bottom: 0; background: rgba(30, 41, 59, 0.95); box-shadow: 0 -10px 30px rgba(99, 102, 241, 0.15); }
         
-        /* A MAGIA DO ÍMÃ EM 3 TELAS */
         .accordion-header.sticky-top { position: -webkit-sticky; position: sticky; top: var(--main-header-height); z-index: 90; }
         .accordion-header.sticky-bottom { position: -webkit-sticky; position: sticky; bottom: 0; z-index: 80; border-radius: 20px 20px 0 0; margin-bottom: 0; box-shadow: 0 -15px 30px rgba(0,0,0,0.6); background: rgba(15, 23, 42, 0.98); }
 
         .accordion-body { display: none; padding: 0 24px 24px 24px; background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(99, 102, 241, 0.4); border-top: none; border-radius: 0 0 20px 20px; margin-bottom: 20px; box-shadow: 0 20px 30px rgba(99, 102, 241, 0.15); }
         .accordion-body.active { display: block; animation: slideDown 0.4s ease; min-height: calc(100vh - 200px); }
 
-        .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: rgba(0,0,0,0.3); border-radius: 0 0 20px 20px; overflow: hidden; }
+        /* BARRA DE PROGRESSO MAIS ESPESSA (8px) */
+        .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 8px; background: rgba(0,0,0,0.3); border-radius: 0 0 20px 20px; overflow: hidden; }
         .accordion-header.active .progress-bar-container { border-radius: 0; }
         .accordion-header.sticky-bottom .progress-bar-container { display: none; } 
         .progress-bar-fill { height: 100%; width: 0%; background-color: var(--primary); transition: width 1s linear, background-color 0.5s ease; box-shadow: 0 0 10px var(--primary); }
@@ -177,16 +178,26 @@
         body.view-mode .toolbar, body.view-mode .box-actions, body.view-mode .btn-add, body.view-mode .time-settings, body.view-mode .sermon-main-title { pointer-events: none; border-bottom-color: transparent;}
         body.view-mode .sermon-main-title::placeholder { color: transparent; }
 
-        /* RESPONSIVIDADE EM 3 TELAS */
+        /* RESPONSIVIDADE OTIMIZADA PARA MOBILE */
         @media (max-width: 767px) {
             .container { padding: 10px; max-width: 100%; }
             .toolbar { overflow-x: auto; flex-wrap: nowrap; }
             .toolbar::-webkit-scrollbar { display: none; }
             
-            /* Nome Pregadores sempre visível */
-            .main-header h1 { font-size: 1.1rem; }
-            .global-timer span.text-restam { display: none; } /* Oculta palavra Restam para caber no celular */
+            /* Ajustes no Cabeçalho para Caber Tudo */
+            .main-header { padding: 0 15px; } /* Reduz a margem lateral */
+            .header-title-group h1 { font-size: 1.1rem; margin-right: 5px;}
+            .global-timer span.text-restam { display: none; }
+            .global-timer { padding: 6px 10px; font-size: 0.9rem;}
             
+            .header-actions { gap: 8px; }
+            /* Oculta texto e transforma o botão num círculo perfeito com o ícone */
+            .btn-toggle-mode .mode-text { display: none; }
+            .btn-toggle-mode { padding: 10px; border-radius: 50%; justify-content: center; width: 42px; height: 42px; }
+            .user-avatar-btn { width: 42px; height: 42px; }
+            .user-avatar { width: 40px; height: 40px; font-size: 1.1rem; }
+            
+            /* Ajustes nos Blocos */
             .accordion-header { flex-wrap: wrap; padding: 20px 15px; }
             .header-content { width: calc(100% - 30px); margin-bottom: 15px; font-size: 1.2rem; }
             .toggle-icon { position: absolute; right: 20px; top: 24px; }
@@ -254,15 +265,15 @@
         </div>
         <div class="header-actions">
             <button id="toggleModeBtn" class="btn-toggle-mode" onclick="window.toggleAppMode()">
-                <i data-lucide="unlock" id="mode-icon" style="width: 18px;"></i> Editando
+                <i data-lucide="unlock" id="mode-icon" style="width: 18px;"></i> <span class="mode-text">Editando</span>
             </button>
             <div class="user-menu-wrapper">
-                <button id="btnUserMenu" class="btn-icon" title="Minha Conta">
-                    <i data-lucide="user" style="width: 20px;"></i>
+                <button id="btnUserMenu" class="btn-icon user-avatar-btn" title="Minha Conta">
+                    <div class="user-avatar" id="userAvatar">?</div>
                 </button>
                 <div id="userDropdown" class="user-dropdown">
                     <div class="user-dropdown-header">
-                        <div class="user-avatar" id="userAvatar">?</div>
+                        <div class="user-avatar" id="userAvatarDropdown">?</div>
                         <div class="user-info">
                             <span class="user-title">Minha Conta</span>
                             <span class="user-email" id="displayUserEmail">a carregar...</span>
@@ -321,6 +332,7 @@
         const emailInput = document.getElementById('email');
         const displayUserEmail = document.getElementById('displayUserEmail');
         const userAvatar = document.getElementById('userAvatar');
+        const userAvatarDropdown = document.getElementById('userAvatarDropdown');
         
         document.getElementById('btnTogglePwd').addEventListener('click', function() {
             const pwdInput = document.getElementById('password');
@@ -334,7 +346,6 @@
             sendPasswordResetEmail(auth, email).then(() => { errorMsg.style.color = "var(--success)"; errorMsg.innerText = "E-mail de recuperação enviado! Verifique a sua caixa de correio."; }).catch(() => { errorMsg.style.color = "#fca5a5"; errorMsg.innerText = "Erro ao enviar e-mail. Verifique se o e-mail está correto."; });
         });
 
-        // FIRESTORE SYNC
         window.loadSermonsList = async function() {
             if (!currentUser) return;
             const sermonListEl = document.getElementById('dynamic-sermon-list');
@@ -374,7 +385,6 @@
                     blocks.push({ header, estimated, content });
                 });
                 
-                // NOVO: Pega o título do input gigante
                 const sermonTitle = document.getElementById('sermon-title').value.trim() || "Esboço Sem Título";
                 const sermonData = { title: sermonTitle, blocks: blocks, updatedAt: serverTimestamp() };
                 
@@ -391,7 +401,7 @@
 
         window.loadSingleSermon = function(id, data) {
             currentSermonId = id; 
-            document.getElementById('sermon-title').value = data.title || ""; // Carrega o título
+            document.getElementById('sermon-title').value = data.title || ""; 
             const wrapper = document.getElementById('blocks-wrapper'); wrapper.innerHTML = '';
             
             if (data.blocks && data.blocks.length > 0) { data.blocks.forEach((block, index) => { wrapper.insertAdjacentHTML('beforeend', window.generateBlockHTML(block.header, block.estimated, block.content, index === 0)); }); } 
@@ -403,7 +413,7 @@
 
         window.startNewSermon = function() {
             currentSermonId = null; 
-            document.getElementById('sermon-title').value = ""; // Limpa o título
+            document.getElementById('sermon-title').value = ""; 
             const wrapper = document.getElementById('blocks-wrapper'); wrapper.innerHTML = '';
             window.addNewBlock(true);
             if (document.getElementById('sidebar').classList.contains('open')) window.toggleSidebar();
@@ -412,7 +422,12 @@
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                currentUser = user; displayUserEmail.innerText = user.email; userAvatar.innerText = user.email.charAt(0).toUpperCase();
+                currentUser = user; 
+                displayUserEmail.innerText = user.email; 
+                const letter = user.email.charAt(0).toUpperCase();
+                userAvatar.innerText = letter;
+                userAvatarDropdown.innerText = letter;
+
                 authScreen.style.display = 'none'; mainHeader.style.display = 'flex'; appContainer.style.display = 'block'; errorMsg.innerText = '';
                 window.loadSermonsList(); 
                 if(!currentSermonId) window.startNewSermon(); 
@@ -435,7 +450,6 @@
     <script>
         lucide.createIcons();
         
-        // PWA INSTALAÇÃO
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault(); deferredPrompt = e;
@@ -554,11 +568,11 @@
             isEditMode = !isEditMode; const body = document.body; const btn = document.getElementById('toggleModeBtn');
             if (isEditMode) { 
                 body.classList.remove('view-mode'); body.classList.add('edit-mode'); 
-                btn.innerHTML = '<i data-lucide="unlock" style="width: 18px;"></i> Editando'; btn.classList.remove('locked'); 
+                btn.innerHTML = '<i data-lucide="unlock" id="mode-icon" style="width: 18px;"></i> <span class="mode-text">Editando</span>'; btn.classList.remove('locked'); 
                 document.querySelectorAll('.header-content, .editor-area').forEach(el => el.setAttribute('contenteditable', 'true')); 
             } else { 
                 body.classList.remove('edit-mode'); body.classList.add('view-mode'); 
-                btn.innerHTML = '<i data-lucide="lock" style="width: 18px;"></i> Leitura'; btn.classList.add('locked'); 
+                btn.innerHTML = '<i data-lucide="lock" id="mode-icon" style="width: 18px;"></i> <span class="mode-text">Leitura</span>'; btn.classList.add('locked'); 
                 document.querySelectorAll('.header-content, .editor-area').forEach(el => el.setAttribute('contenteditable', 'false')); 
             }
             lucide.createIcons();
@@ -621,7 +635,7 @@
                             <button type="button" onclick="window.formatText('justifyRight')" title="Direita"><i data-lucide="align-right"></i></button>
                             <span class="divider"></span>
                             <button type="button" onclick="window.formatText('insertUnorderedList')" title="Lista"><i data-lucide="list"></i></button>
-                            <button type="button" onclick="formatText('insertOrderedList')" title="Numérica"><i data-lucide="list-ordered"></i></button>
+                            <button type="button" onclick="window.formatText('insertOrderedList')" title="Numérica"><i data-lucide="list-ordered"></i></button>
                             <span class="divider"></span>
                             <button type="button" onclick="window.formatText('undo')" title="Desfazer"><i data-lucide="undo"></i></button>
                             <button type="button" onclick="window.formatText('redo')" title="Refazer"><i data-lucide="redo"></i></button>
