@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pregadores - App Instalável V14.2</title>
+    <title>Pregadores - App V14.3</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0f172a">
@@ -54,36 +54,31 @@
 
         #main-header, #app-container { display: none; }
 
-        /* MENU LATERAL (SIDEBAR) & OVERLAY */
-        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); z-index: 199; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        /* MENU LATERAL (SIDEBAR) */
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 199; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .sidebar-overlay.show { opacity: 1; pointer-events: auto; }
-        .sidebar { position: fixed; top: 0; left: -320px; width: 320px; height: 100vh; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); z-index: 200; display: flex; flex-direction: column; box-shadow: 10px 0 40px rgba(0,0,0,0.7); transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar { position: fixed; top: 0; left: -320px; width: 320px; height: 100vh; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); z-index: 200; display: flex; flex-direction: column; box-shadow: 10px 0 40px rgba(0,0,0,0.7); transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .sidebar.open { left: 0; }
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 24px; border-bottom: 1px solid var(--glass-border); }
         .sidebar-header h2 { margin: 0; font-size: 1.2rem; color: white; font-weight: 700; letter-spacing: -0.5px;}
         .sidebar-body { padding: 24px; flex-grow: 1; overflow-y: auto; }
-        
         .btn-install-pwa { width: 100%; padding: 14px; background: var(--success); color: white; border: none; border-radius: 12px; display: none; align-items: center; justify-content: center; gap: 10px; font-size: 1.05rem; font-weight: 700; cursor: pointer; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); animation: pulse 2s infinite;}
-        
         .btn-new-sermon { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.05rem; font-weight: 700; cursor: pointer; margin-bottom: 30px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
-        .btn-new-sermon:hover { background: var(--primary-hover); transform: translateY(-2px); }
-        
-        .sermon-list-title { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 15px; display: block; }
+        .sermon-list-title { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 15px; display: block; }
         .sermon-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
         .sermon-item { padding: 14px 16px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--text-muted); font-weight: 500; transition: all 0.2s; border: 1px solid transparent; font-size: 0.95rem; }
         .sermon-item:hover { background: rgba(255,255,255,0.05); color: white; }
         .sermon-item.active { background: rgba(99, 102, 241, 0.15); color: var(--primary); border-color: rgba(99, 102, 241, 0.3); font-weight: 600; }
 
-        /* CABEÇALHO PRINCIPAL E MENU DA CONTA */
-        .main-header { background: rgba(2, 6, 23, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); height: var(--main-header-height); padding: 0 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--glass-border); box-sizing: border-box; }
+        /* CABEÇALHO PRINCIPAL E DROPDOWN */
+        .main-header { background: rgba(2, 6, 23, 0.7); backdrop-filter: blur(20px); height: var(--main-header-height); padding: 0 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--glass-border); box-sizing: border-box; }
         .header-title-group { display: flex; align-items: center; gap: 15px; }
         .btn-hamburger { background: transparent; color: white; border: 1px solid var(--glass-border); padding: 8px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .btn-hamburger:hover { background: rgba(255,255,255,0.1); }
         .main-header h1 { margin: 0; font-size: 1.4rem; color: white; font-weight: 800; letter-spacing: -0.5px; white-space: nowrap;}
-        
         .global-timer { background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 8px 16px; border-radius: 99px; font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(16, 185, 129, 0.2); box-shadow: 0 0 10px rgba(16, 185, 129, 0.1); }
         .global-timer span.text-restam { display: inline; }
-
+        
         .header-actions { display: flex; gap: 12px; align-items: center; }
         .btn-toggle-mode { background-color: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 99px; font-weight: 600; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s; }
         .btn-toggle-mode.locked { background-color: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--glass-border); }
@@ -99,7 +94,7 @@
         .user-dropdown-header { padding: 20px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.02); }
         .user-avatar { width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, #a855f7 100%); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.3rem; flex-shrink: 0; }
         .user-info { display: flex; flex-direction: column; overflow: hidden; }
-        .user-title { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 2px;}
+        .user-title { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 2px;}
         .user-email { font-size: 0.95rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
         .user-dropdown-body { padding: 10px; }
         .dropdown-item { width: 100%; text-align: left; padding: 12px 15px; background: transparent; border: none; border-radius: 10px; color: var(--text-muted); font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.2s; }
@@ -108,29 +103,26 @@
         .dropdown-item.text-danger:hover { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
 
         .container { width: 100%; margin: 0 auto; box-sizing: border-box; padding-top: 20px; }
-        
-        /* TÍTULO EDITÁVEL DO ESBOÇO */
-        .sermon-main-title {
-            width: 100%; background: transparent; border: none; border-bottom: 2px solid transparent;
-            color: white; font-size: 2.2rem; font-weight: 800; margin-bottom: 25px; padding: 10px 0;
-            outline: none; letter-spacing: -1px; transition: border-color 0.3s; font-family: 'Inter', sans-serif;
-        }
+        .sermon-main-title { width: 100%; background: transparent; border: none; border-bottom: 2px solid transparent; color: white; font-size: 2.2rem; font-weight: 800; margin-bottom: 25px; padding: 10px 0; outline: none; letter-spacing: -1px; transition: border-color 0.3s; font-family: 'Inter', sans-serif; }
         .sermon-main-title:focus { border-bottom-color: var(--primary); }
         .sermon-main-title::placeholder { color: rgba(255,255,255,0.2); }
 
+        /* GARANTIA DO EFEITO ÍMAN (STICKY) */
         #blocks-wrapper { display: block; }
 
-        /* CABEÇAS E CORPOS */
-        .accordion-header { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; display: flex; align-items: center; padding: 20px 24px; cursor: pointer; position: relative; margin-bottom: 20px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accordion-header { background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; display: flex; align-items: center; padding: 20px 24px; cursor: pointer; position: relative; margin-bottom: 20px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .accordion-header.active { border-color: rgba(99, 102, 241, 0.4); border-bottom: 1px solid transparent; border-radius: 20px 20px 0 0; margin-bottom: 0; background: rgba(30, 41, 59, 0.95); box-shadow: 0 -10px 30px rgba(99, 102, 241, 0.15); }
         
+        /* Posições Magnéticas */
         .accordion-header.sticky-top { position: -webkit-sticky; position: sticky; top: var(--main-header-height); z-index: 90; }
         .accordion-header.sticky-bottom { position: -webkit-sticky; position: sticky; bottom: 0; z-index: 80; border-radius: 20px 20px 0 0; margin-bottom: 0; box-shadow: 0 -15px 30px rgba(0,0,0,0.6); background: rgba(15, 23, 42, 0.98); }
 
-        .accordion-body { display: none; padding: 0 24px 24px 24px; background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(99, 102, 241, 0.4); border-top: none; border-radius: 0 0 20px 20px; margin-bottom: 20px; box-shadow: 0 20px 30px rgba(99, 102, 241, 0.15); }
-        .accordion-body.active { display: block; animation: slideDown 0.4s ease; min-height: calc(100vh - 200px); }
+        .accordion-body { display: none; padding: 0 24px 24px 24px; background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(99, 102, 241, 0.4); border-top: none; border-radius: 0 0 20px 20px; margin-bottom: 20px; box-shadow: 0 20px 30px rgba(99, 102, 241, 0.15); }
+        
+        /* ALTURA MÍNIMA QUE FORÇA O PRÓXIMO BLOCO PARA O RODAPÉ (MESMO VAZIO) */
+        .accordion-body.active { display: block; animation: slideDown 0.4s ease; min-height: calc(100vh - 160px); }
 
-        /* BARRA DE PROGRESSO MAIS ESPESSA (8px) */
+        /* BARRA DE PROGRESSO ESPESSA */
         .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 8px; background: rgba(0,0,0,0.3); border-radius: 0 0 20px 20px; overflow: hidden; }
         .accordion-header.active .progress-bar-container { border-radius: 0; }
         .accordion-header.sticky-bottom .progress-bar-container { display: none; } 
@@ -175,27 +167,38 @@
         .btn-add { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 24px; background: var(--glass-bg); color: var(--text-muted); border: 1px dashed var(--glass-border); border-radius: 20px; font-size: 1.15rem; font-weight: 600; cursor: pointer; margin-top: 10px; margin-bottom: 80px; transition: all 0.3s; }
         .btn-add:hover { background: rgba(255,255,255,0.05); border-color: var(--primary); color: white; box-shadow: 0 0 20px rgba(99,102,241,0.1); }
 
-        body.view-mode .toolbar, body.view-mode .box-actions, body.view-mode .btn-add, body.view-mode .time-settings, body.view-mode .sermon-main-title { pointer-events: none; border-bottom-color: transparent;}
+        /* REGRAS DO MODO LEITURA "LIMPO E REDONDINHO" */
+        body.view-mode .toolbar, 
+        body.view-mode .box-actions, 
+        body.view-mode .btn-add, 
+        body.view-mode .time-settings { display: none !important; }
+        
+        body.view-mode .sermon-main-title { pointer-events: none; border-bottom-color: transparent; }
         body.view-mode .sermon-main-title::placeholder { color: transparent; }
+        
+        body.view-mode .accordion-body { border: none !important; background: transparent !important; box-shadow: none !important; padding-top: 10px; }
+        body.view-mode .accordion-header.active { border-color: transparent !important; box-shadow: none !important; background: transparent !important; }
+        body.view-mode .accordion-item { border-color: transparent !important; background: transparent !important; }
 
-        /* RESPONSIVIDADE OTIMIZADA PARA MOBILE */
+        /* RESPONSIVIDADE ELEGANTES PARA MOBILE */
         @media (max-width: 767px) {
             .container { padding: 10px; max-width: 100%; }
             .toolbar { overflow-x: auto; flex-wrap: nowrap; }
             .toolbar::-webkit-scrollbar { display: none; }
             
-            /* Ajustes no Cabeçalho para Caber Tudo */
-            .main-header { padding: 0 15px; } /* Reduz a margem lateral */
-            .header-title-group h1 { font-size: 1.1rem; margin-right: 5px;}
-            .global-timer span.text-restam { display: none; }
-            .global-timer { padding: 6px 10px; font-size: 0.9rem;}
+            /* Solução Elegante do Cabeçalho Mobile */
+            .main-header { padding: 0 15px; }
+            .main-header h1 { display: none; } /* Esconde a palavra Pregadores no celular */
+            .header-title-group { gap: 8px; }
             
-            .header-actions { gap: 8px; }
-            /* Oculta texto e transforma o botão num círculo perfeito com o ícone */
-            .btn-toggle-mode .mode-text { display: none; }
-            .btn-toggle-mode { padding: 10px; border-radius: 50%; justify-content: center; width: 42px; height: 42px; }
-            .user-avatar-btn { width: 42px; height: 42px; }
-            .user-avatar { width: 40px; height: 40px; font-size: 1.1rem; }
+            .global-timer span.text-restam { display: none; }
+            .global-timer { padding: 6px 12px; font-size: 0.95rem;}
+            
+            .header-actions { gap: 10px; }
+            .btn-toggle-mode .mode-text { display: none; } /* Esconde a palavra Editando/Leitura */
+            .btn-toggle-mode { padding: 10px; border-radius: 50%; justify-content: center; width: 44px; height: 44px; }
+            .user-avatar-btn { width: 44px; height: 44px; }
+            .user-avatar { width: 42px; height: 42px; font-size: 1.2rem; }
             
             /* Ajustes nos Blocos */
             .accordion-header { flex-wrap: wrap; padding: 20px 15px; }
@@ -264,7 +267,7 @@
             </div>
         </div>
         <div class="header-actions">
-            <button id="toggleModeBtn" class="btn-toggle-mode" onclick="window.toggleAppMode()">
+            <button id="toggleModeBtn" class="btn-toggle-mode" onclick="window.toggleAppMode()" title="Travar/Destravar Edição">
                 <i data-lucide="unlock" id="mode-icon" style="width: 18px;"></i> <span class="mode-text">Editando</span>
             </button>
             <div class="user-menu-wrapper">
@@ -319,7 +322,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Offline Persistência
         enableIndexedDbPersistence(db).catch((err) => console.log("Persistência offline falhou:", err.code));
 
         let currentUser = null;
@@ -372,10 +374,17 @@
             } catch(e) { console.error(e); }
         };
 
-        window.saveCurrentSermon = async function(btnElement) {
+        // Função global de Salvamento
+        window.saveCurrentSermon = async function(btnElement = null, isAutoSave = false) {
             if (!currentUser) return;
             let originalText = "";
-            if (btnElement) { originalText = btnElement.innerHTML; btnElement.innerHTML = '<i data-lucide="loader" class="spin" style="width:18px;"></i> Guardando...'; lucide.createIcons(); }
+            
+            if (btnElement && !isAutoSave) { 
+                originalText = btnElement.innerHTML; 
+                btnElement.innerHTML = '<i data-lucide="loader" class="spin" style="width:18px;"></i> Guardando...'; 
+                lucide.createIcons(); 
+            }
+
             try {
                 const blocks = [];
                 document.querySelectorAll('.accordion-item').forEach(item => {
@@ -394,9 +403,20 @@
                 if (currentSermonId) { await setDoc(doc(sermonsColl, currentSermonId), sermonData, { merge: true }); } 
                 else { const docRef = await addDoc(sermonsColl, { ...sermonData, createdAt: serverTimestamp() }); currentSermonId = docRef.id; }
 
-                if (btnElement) { btnElement.innerHTML = '<i data-lucide="check" style="width:18px;"></i> Guardado!'; btnElement.style.backgroundColor = 'var(--success)'; lucide.createIcons(); setTimeout(() => { btnElement.innerHTML = originalText; btnElement.style.backgroundColor = 'var(--primary)'; lucide.createIcons(); }, 2000); }
+                if (btnElement && !isAutoSave) { 
+                    btnElement.innerHTML = '<i data-lucide="check" style="width:18px;"></i> Guardado!'; 
+                    btnElement.style.backgroundColor = 'var(--success)'; lucide.createIcons(); 
+                    setTimeout(() => { btnElement.innerHTML = originalText; btnElement.style.backgroundColor = 'var(--primary)'; lucide.createIcons(); }, 2000); 
+                }
+                
+                // Recarrega a lista do menu lateral silenciosamente
                 window.loadSermonsList();
-            } catch (error) { alert("Erro ao guardar na nuvem. Verifique a sua ligação."); if (btnElement) btnElement.innerHTML = originalText; }
+                if(isAutoSave) console.log("Salvamento Automático Concluído!");
+                
+            } catch (error) { 
+                if(!isAutoSave) alert("Erro ao guardar na nuvem. Verifique a sua ligação."); 
+                if (btnElement && !isAutoSave) btnElement.innerHTML = originalText; 
+            }
         };
 
         window.loadSingleSermon = function(id, data) {
@@ -429,6 +449,8 @@
                 userAvatarDropdown.innerText = letter;
 
                 authScreen.style.display = 'none'; mainHeader.style.display = 'flex'; appContainer.style.display = 'block'; errorMsg.innerText = '';
+                
+                // Puxa a lista sincronizada ao entrar
                 window.loadSermonsList(); 
                 if(!currentSermonId) window.startNewSermon(); 
                 window.startAppLogic();
@@ -571,6 +593,9 @@
                 btn.innerHTML = '<i data-lucide="unlock" id="mode-icon" style="width: 18px;"></i> <span class="mode-text">Editando</span>'; btn.classList.remove('locked'); 
                 document.querySelectorAll('.header-content, .editor-area').forEach(el => el.setAttribute('contenteditable', 'true')); 
             } else { 
+                // SALVAMENTO AUTOMÁTICO AO TRAVAR PARA MODO LEITURA
+                window.saveCurrentSermon(null, true); 
+                
                 body.classList.remove('edit-mode'); body.classList.add('view-mode'); 
                 btn.innerHTML = '<i data-lucide="lock" id="mode-icon" style="width: 18px;"></i> <span class="mode-text">Leitura</span>'; btn.classList.add('locked'); 
                 document.querySelectorAll('.header-content, .editor-area').forEach(el => el.setAttribute('contenteditable', 'false')); 
