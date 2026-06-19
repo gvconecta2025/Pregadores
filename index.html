@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pregadores - App V14.3</title>
+    <title>Pregadores - App V14.4</title>
     
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0f172a">
@@ -113,16 +113,12 @@
         .accordion-header { background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; display: flex; align-items: center; padding: 20px 24px; cursor: pointer; position: relative; margin-bottom: 20px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .accordion-header.active { border-color: rgba(99, 102, 241, 0.4); border-bottom: 1px solid transparent; border-radius: 20px 20px 0 0; margin-bottom: 0; background: rgba(30, 41, 59, 0.95); box-shadow: 0 -10px 30px rgba(99, 102, 241, 0.15); }
         
-        /* Posições Magnéticas */
         .accordion-header.sticky-top { position: -webkit-sticky; position: sticky; top: var(--main-header-height); z-index: 90; }
         .accordion-header.sticky-bottom { position: -webkit-sticky; position: sticky; bottom: 0; z-index: 80; border-radius: 20px 20px 0 0; margin-bottom: 0; box-shadow: 0 -15px 30px rgba(0,0,0,0.6); background: rgba(15, 23, 42, 0.98); }
 
         .accordion-body { display: none; padding: 0 24px 24px 24px; background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(99, 102, 241, 0.4); border-top: none; border-radius: 0 0 20px 20px; margin-bottom: 20px; box-shadow: 0 20px 30px rgba(99, 102, 241, 0.15); }
-        
-        /* ALTURA MÍNIMA QUE FORÇA O PRÓXIMO BLOCO PARA O RODAPÉ (MESMO VAZIO) */
         .accordion-body.active { display: block; animation: slideDown 0.4s ease; min-height: calc(100vh - 160px); }
 
-        /* BARRA DE PROGRESSO ESPESSA */
         .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 8px; background: rgba(0,0,0,0.3); border-radius: 0 0 20px 20px; overflow: hidden; }
         .accordion-header.active .progress-bar-container { border-radius: 0; }
         .accordion-header.sticky-bottom .progress-bar-container { display: none; } 
@@ -167,20 +163,15 @@
         .btn-add { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 24px; background: var(--glass-bg); color: var(--text-muted); border: 1px dashed var(--glass-border); border-radius: 20px; font-size: 1.15rem; font-weight: 600; cursor: pointer; margin-top: 10px; margin-bottom: 80px; transition: all 0.3s; }
         .btn-add:hover { background: rgba(255,255,255,0.05); border-color: var(--primary); color: white; box-shadow: 0 0 20px rgba(99,102,241,0.1); }
 
-        /* REGRAS DO MODO LEITURA "LIMPO E REDONDINHO" */
-        body.view-mode .toolbar, 
-        body.view-mode .box-actions, 
-        body.view-mode .btn-add, 
-        body.view-mode .time-settings { display: none !important; }
-        
+        /* REGRAS DO MODO LEITURA */
+        body.view-mode .toolbar, body.view-mode .box-actions, body.view-mode .btn-add, body.view-mode .time-settings { display: none !important; }
         body.view-mode .sermon-main-title { pointer-events: none; border-bottom-color: transparent; }
         body.view-mode .sermon-main-title::placeholder { color: transparent; }
-        
         body.view-mode .accordion-body { border: none !important; background: transparent !important; box-shadow: none !important; padding-top: 10px; }
         body.view-mode .accordion-header.active { border-color: transparent !important; box-shadow: none !important; background: transparent !important; }
         body.view-mode .accordion-item { border-color: transparent !important; background: transparent !important; }
 
-        /* RESPONSIVIDADE ELEGANTES PARA MOBILE */
+        /* RESPONSIVIDADE OTIMIZADA PARA MOBILE */
         @media (max-width: 767px) {
             .container { padding: 10px; max-width: 100%; }
             .toolbar { overflow-x: auto; flex-wrap: nowrap; }
@@ -188,14 +179,14 @@
             
             /* Solução Elegante do Cabeçalho Mobile */
             .main-header { padding: 0 15px; }
-            .main-header h1 { display: none; } /* Esconde a palavra Pregadores no celular */
+            .main-header h1 { display: none; }
             .header-title-group { gap: 8px; }
             
             .global-timer span.text-restam { display: none; }
             .global-timer { padding: 6px 12px; font-size: 0.95rem;}
             
             .header-actions { gap: 10px; }
-            .btn-toggle-mode .mode-text { display: none; } /* Esconde a palavra Editando/Leitura */
+            .btn-toggle-mode .mode-text { display: none; }
             .btn-toggle-mode { padding: 10px; border-radius: 50%; justify-content: center; width: 44px; height: 44px; }
             .user-avatar-btn { width: 44px; height: 44px; }
             .user-avatar { width: 42px; height: 42px; font-size: 1.2rem; }
@@ -224,12 +215,10 @@
             <button id="btnInstallPwa" class="btn-install-pwa">
                 <i data-lucide="download"></i> Instalar App Pregadores
             </button>
-            
             <button class="btn-new-sermon" onclick="window.startNewSermon()">
                 <i data-lucide="plus"></i> Novo Esboço
             </button>
             <span class="sermon-list-title">Pregações Guardadas</span>
-            
             <ul class="sermon-list" id="dynamic-sermon-list">
                 <li class="sermon-item" style="opacity: 0.5;">A carregar esboços...</li>
             </ul>
@@ -374,7 +363,6 @@
             } catch(e) { console.error(e); }
         };
 
-        // Função global de Salvamento
         window.saveCurrentSermon = async function(btnElement = null, isAutoSave = false) {
             if (!currentUser) return;
             let originalText = "";
@@ -409,10 +397,7 @@
                     setTimeout(() => { btnElement.innerHTML = originalText; btnElement.style.backgroundColor = 'var(--primary)'; lucide.createIcons(); }, 2000); 
                 }
                 
-                // Recarrega a lista do menu lateral silenciosamente
                 window.loadSermonsList();
-                if(isAutoSave) console.log("Salvamento Automático Concluído!");
-                
             } catch (error) { 
                 if(!isAutoSave) alert("Erro ao guardar na nuvem. Verifique a sua ligação."); 
                 if (btnElement && !isAutoSave) btnElement.innerHTML = originalText; 
@@ -450,7 +435,6 @@
 
                 authScreen.style.display = 'none'; mainHeader.style.display = 'flex'; appContainer.style.display = 'block'; errorMsg.innerText = '';
                 
-                // Puxa a lista sincronizada ao entrar
                 window.loadSermonsList(); 
                 if(!currentSermonId) window.startNewSermon(); 
                 window.startAppLogic();
@@ -593,9 +577,7 @@
                 btn.innerHTML = '<i data-lucide="unlock" id="mode-icon" style="width: 18px;"></i> <span class="mode-text">Editando</span>'; btn.classList.remove('locked'); 
                 document.querySelectorAll('.header-content, .editor-area').forEach(el => el.setAttribute('contenteditable', 'true')); 
             } else { 
-                // SALVAMENTO AUTOMÁTICO AO TRAVAR PARA MODO LEITURA
-                window.saveCurrentSermon(null, true); 
-                
+                window.saveCurrentSermon(null, true); // Auto-save ao travar
                 body.classList.remove('edit-mode'); body.classList.add('view-mode'); 
                 btn.innerHTML = '<i data-lucide="lock" id="mode-icon" style="width: 18px;"></i> <span class="mode-text">Leitura</span>'; btn.classList.add('locked'); 
                 document.querySelectorAll('.header-content, .editor-area').forEach(el => el.setAttribute('contenteditable', 'false')); 
@@ -687,7 +669,20 @@
     
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js'); });
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then(registration => {
+            registration.onupdatefound = () => {
+              const installingWorker = registration.installing;
+              installingWorker.onstatechange = () => {
+                if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  // NOVO CACHE ENCONTRADO! Força o recarregamento instantâneo.
+                  console.log("Nova versão do app disponível! A atualizar...");
+                  window.location.reload(true);
+                }
+              };
+            };
+          });
+        });
       }
     </script>
 </body>
